@@ -1,7 +1,9 @@
 package com.cgvsu;
 
+import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
+import com.cgvsu.triangulation.Triangle;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -87,11 +89,14 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
+
             mesh = ObjReader.read(fileContent, writeToConsole);
             // todo: обработка ошибок
         } catch (IOException exception) {
 
         }
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(mesh.getPolygons());
+        mesh.setPolygons(triangles);
     }
 
     @FXML

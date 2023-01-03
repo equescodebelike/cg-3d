@@ -13,8 +13,17 @@ public class Model {
     private List<Vector2f> textureVertices;
     private List<Vector3f> normals;
     private List<Polygon> polygons;
+    private List<Polygon> trianglePolygons;
 
-    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons) {
+    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons, final List<Polygon> trianglePolygons) {
+        this.vertices = vertices;
+        this.textureVertices = textureVertices;
+        this.normals = normals;
+        this.polygons = polygons;
+        this.trianglePolygons = trianglePolygons;
+    }
+
+    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons) { // tests
         this.vertices = vertices;
         this.textureVertices = textureVertices;
         this.normals = normals;
@@ -26,6 +35,15 @@ public class Model {
         textureVertices = new ArrayList<>();
         normals = new ArrayList<>();
         polygons = new ArrayList<>();
+        trianglePolygons = new ArrayList<>();
+    }
+
+    public List<Polygon> getTrianglePolygons() {
+        return trianglePolygons;
+    }
+
+    public void setTrianglePolygons(List<Polygon> trianglePolygons) {
+        this.trianglePolygons = trianglePolygons;
     }
 
     public List<Vector3f> getVertices() {
