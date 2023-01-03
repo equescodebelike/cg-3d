@@ -28,6 +28,10 @@ import com.cgvsu.render_engine.Camera;
 public class GuiController {
 
     final private float TRANSLATION = 0.5F;
+    // private boolean isStructure = false; mesh
+    // public static boolean isLight = true; light
+    // private boolean isTexture = false; texture
+    private boolean writeToConsole = true;
 
     @FXML
     AnchorPane anchorPane;
@@ -38,7 +42,7 @@ public class GuiController {
     private Model mesh = null;
 
     private Camera camera = new Camera(
-            new Vector3f(0, 00, 100),
+            new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
             1.0F, 1, 0.01F, 100);
 
@@ -69,7 +73,7 @@ public class GuiController {
     }
 
     @FXML
-    private void onOpenModelMenuItemClick() {
+    private void openModelMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
@@ -83,7 +87,7 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-            mesh = ObjReader.read(fileContent);
+            mesh = ObjReader.read(fileContent, writeToConsole);
             // todo: обработка ошибок
         } catch (IOException exception) {
 
@@ -91,7 +95,7 @@ public class GuiController {
     }
 
     @FXML
-    private void onSaveModelMenuItemClick() {
+    private void saveModelMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Model");
@@ -114,6 +118,11 @@ public class GuiController {
             // Handle exception
         }
 
+    }
+
+    @FXML
+    private void displayConsole() {
+        writeToConsole = !writeToConsole;
     }
 
     @FXML

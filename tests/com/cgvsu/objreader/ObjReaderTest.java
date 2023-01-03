@@ -30,7 +30,7 @@ class ObjReaderTest {
         ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("ab", "o", "ba"));
         try {
             ObjReader.parseVertex(wordsInLineWithoutToken, 10);
-        } catch (ObjReaderException exception) {
+        } catch (ObjReaderExceptions.ObjReaderException exception) {
             String expectedError = "Error parsing OBJ file on line: 10. Failed to parse float value.";
             Assertions.assertEquals(expectedError, exception.getMessage());
         }
@@ -41,8 +41,8 @@ class ObjReaderTest {
         ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("1.0", "2.0"));
         try {
             ObjReader.parseVertex(wordsInLineWithoutToken, 10);
-        } catch (ObjReaderException exception) {
-            String expectedError = "Error parsing OBJ file on line: 10. Too few vertex arguments.";
+        } catch (ObjReaderExceptions.ObjReaderException exception) {
+            String expectedError = "Error parsing OBJ file on line: 10. Wrong number of vertex arguments.";
             Assertions.assertEquals(expectedError, exception.getMessage());
         }
     }
@@ -58,7 +58,7 @@ class ObjReaderTest {
         ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("1.0", "2.0", "3.0", "4.0"));
         try {
             ObjReader.parseVertex(wordsInLineWithoutToken, 10);
-        } catch (ObjReaderException exception) {
+        } catch (ObjReaderExceptions exception) {
             String expectedError = "";
             Assertions.assertEquals(expectedError, exception.getMessage());
         }

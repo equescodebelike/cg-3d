@@ -53,12 +53,12 @@ public class ObjWriter {
     }
 
     protected static void writePolygons(final ArrayList<Polygon> polygons, ArrayList<String> outListFileContent) {
-        for (int i = 0; i < polygons.size(); i++) {
-            writeOnePolygon(polygons, i, outListFileContent);
+        for (Polygon polygon : polygons) {
+            writeOnePolygon(polygon, outListFileContent);
         }
     }
 
-    protected static void writeOnePolygon(final ArrayList<Polygon> polygons, int i, ArrayList<String> outListFileContent) {
+    protected static void writeOnePolygon(final Polygon polygon, ArrayList<String> outListFileContent) {
 
         // f 1/2/3 v/vt/vn
 
@@ -66,32 +66,32 @@ public class ObjWriter {
         strPolygon.append(OBJ_FACE_TOKEN + " ");
 
         try {
-            if (polygons.get(i).getSizePolygonsTextureVertexIndices() == 0 &&
-                    polygons.get(i).getSizePolygonsNormalIndices() == 0) {
-                for (int j = 0; j < polygons.get(i).getSizePolygonsVertexIndices(); j++) {
-                    strPolygon.append(polygons.get(i).getVertexIndices().get(j) + 1).append(" ");
+            if (polygon.getSizePolygonsTextureVertexIndices() == 0 &&
+                    polygon.getSizePolygonsNormalIndices() == 0) {
+                for (int j = 0; j < polygon.getSizePolygonsVertexIndices(); j++) {
+                    strPolygon.append(polygon.getVertexIndices().get(j) + 1).append(" ");
                 }
-            } else if (polygons.get(i).getSizePolygonsTextureVertexIndices() != 0 &&
-                    polygons.get(i).getSizePolygonsNormalIndices() == 0) {
-                for (int j = 0; j < polygons.get(i).getSizePolygonsTextureVertexIndices(); j++) {
-                    strPolygon.append(polygons.get(i).getVertexIndices().get(j) + 1).append("/").
-                            append(polygons.get(i).getTextureVertexIndices().get(j) + 1).append(" ");
+            } else if (polygon.getSizePolygonsTextureVertexIndices() != 0 &&
+                    polygon.getSizePolygonsNormalIndices() == 0) {
+                for (int j = 0; j < polygon.getSizePolygonsTextureVertexIndices(); j++) {
+                    strPolygon.append(polygon.getVertexIndices().get(j) + 1).append("/").
+                            append(polygon.getTextureVertexIndices().get(j) + 1).append(" ");
                 }
-            } else if (polygons.get(i).getSizePolygonsTextureVertexIndices() == 0 &&
-                    polygons.get(i).getSizePolygonsNormalIndices() != 0) {
-                for (int j = 0; j < polygons.get(i).getSizePolygonsNormalIndices(); j++) {
-                    strPolygon.append(polygons.get(i).getVertexIndices().get(j) + 1).append("//").
-                            append(polygons.get(i).getNormalIndices().get(j) + 1).append(" ");
+            } else if (polygon.getSizePolygonsTextureVertexIndices() == 0 &&
+                    polygon.getSizePolygonsNormalIndices() != 0) {
+                for (int j = 0; j < polygon.getSizePolygonsNormalIndices(); j++) {
+                    strPolygon.append(polygon.getVertexIndices().get(j) + 1).append("//").
+                            append(polygon.getNormalIndices().get(j) + 1).append(" ");
                 }
             } else {
-                for (int j = 0; j < polygons.get(i).getSizePolygonsTextureVertexIndices(); j++) {
-                    strPolygon.append(polygons.get(i).getVertexIndices().get(j) + 1).append("/").append(
-                            polygons.get(i).getTextureVertexIndices().get(j) + 1).append("/").append(
-                            polygons.get(i).getNormalIndices().get(j) + 1).append(" ");
+                for (int j = 0; j < polygon.getSizePolygonsTextureVertexIndices(); j++) {
+                    strPolygon.append(polygon.getVertexIndices().get(j) + 1).append("/").append(
+                            polygon.getTextureVertexIndices().get(j) + 1).append("/").append(
+                            polygon.getNormalIndices().get(j) + 1).append(" ");
                 }
             }
         } catch (IndexOutOfBoundsException e) {
-            throw new ObjWriterException("Too few vertex arguments");
+            throw new ObjWriterExceptions("Too few vertex arguments");
         }
         outListFileContent.add(String.valueOf(strPolygon));
     }
