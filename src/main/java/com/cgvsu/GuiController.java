@@ -27,7 +27,7 @@ import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
-    final private float TRANSLATION = 0.5F;
+    final private float TRANSLATION = 2F;
     // private boolean isStructure = false; mesh
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture

@@ -9,13 +9,23 @@ import java.util.List;
 
 public class Model {
 
-    public ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
-    public ArrayList<Vector2f> textureVertices = new ArrayList<Vector2f>();
-    public ArrayList<Vector3f> normals = new ArrayList<Vector3f>();
-    public ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+    private List<Vector3f> vertices;
+    private List<Vector2f> textureVertices;
+    private List<Vector3f> normals;
+    private List<Polygon> polygons;
 
-    public void setPolygons(ArrayList<Polygon> polygons) {
+    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons) {
+        this.vertices = vertices;
+        this.textureVertices = textureVertices;
+        this.normals = normals;
         this.polygons = polygons;
+    }
+
+    public Model() {
+        vertices = new ArrayList<>();
+        textureVertices = new ArrayList<>();
+        normals = new ArrayList<>();
+        polygons = new ArrayList<>();
     }
 
     public List<Vector3f> getVertices() {
@@ -34,20 +44,23 @@ public class Model {
         return polygons;
     }
 
-    public void setVertices(final ArrayList<Vector3f> vertices) {
+    public void setVertices(List<Vector3f> vertices) {
         this.vertices = vertices;
     }
 
-    public void setTextureVertices(final ArrayList<Vector2f> vertices) {
-        this.textureVertices = vertices;
+    public void setTextureVertices(List<Vector2f> textureVertices) {
+        this.textureVertices = textureVertices;
     }
 
-    public void setNormals(final ArrayList<Vector3f> vertices) {
-        this.normals = vertices;
+    public void setNormals(List<Vector3f> normals) {
+        this.normals = normals;
     }
 
+    public void setPolygons(List<Polygon> polygons) {
+        this.polygons = polygons;
+    }
 
-    public void checkConsistency() {
+    public boolean checkConsistency() {
         for (int i = 0; i < polygons.size(); i++) {
             List<Integer> vertexIndices = polygons.get(i).getVertexIndices();
             List<Integer> textureVertexIndices = polygons.get(i).getTextureVertexIndices();
@@ -86,5 +99,6 @@ public class Model {
                 }
             }
         }
+        return true;
     }
 }
