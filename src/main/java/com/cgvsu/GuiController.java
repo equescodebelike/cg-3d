@@ -36,6 +36,7 @@ import com.cgvsu.render_engine.Camera;
 public class GuiController {
 
     final private float TRANSLATION = 2F;
+    // todo: comments below
     // private boolean isStructure = false; mesh
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
@@ -116,6 +117,7 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             scene.mesh.add(ObjReader.read(fileContent, writeToConsole));
+
             /* String fileContent = Files.readString(fileName);
             Model model = ObjReader.read(fileContent, writeToConsole);
             ArrayList<Polygon> triangles = Triangle.triangulatePolygon(model.getPolygons());
@@ -129,7 +131,10 @@ public class GuiController {
         }
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
         scene.mesh.get(numberMesh).setPolygons(triangles);
-
+        if (scene.mesh.size() > 1) {
+            addCamera();
+            nextModel();
+        }
     }
 
     @FXML
@@ -191,7 +196,7 @@ public class GuiController {
     public void deleteMesh() {
         if (scene.mesh.size() > 1) {
             if (numberMesh == scene.mesh.size() - 1) numberMesh--;
-           scene.mesh.remove(scene.mesh.size() - 1);
+            scene.mesh.remove(scene.mesh.size() - 1);
         }
     }
 
