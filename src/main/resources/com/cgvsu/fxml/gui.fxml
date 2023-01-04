@@ -18,8 +18,18 @@
                <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
             </accelerator>
          </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#nextModel" text="Next model">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#deleteMesh" text="Delete model">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
         </Menu>
-        <Menu mnemonicParsing="false" text="Camera Options">
+        <Menu mnemonicParsing="false" text="Move">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="UP" control="UP" meta="UP" shift="UP" shortcut="UP" />
@@ -53,6 +63,23 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Settings">
             <CheckMenuItem onAction="#displayConsole" selected="true" text="Display Console" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Camera">
+            <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#deleteCamera" text="Delete Camera">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Next Camera">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
         </Menu>
     </MenuBar>
 

@@ -4,12 +4,15 @@ import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -21,6 +24,8 @@ import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.vecmath.Vector3f;
 
 import com.cgvsu.model.Model;
@@ -41,19 +46,32 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
-    private Model mesh = null;
+    private final List<Model> mesh = new ArrayList<>();
 
-    private Camera camera = new Camera(
-            new Vector3f(0, 0, 100),
-            new Vector3f(0, 0, 0),
-            1.0F, 1, 0.01F, 100);
+    private int numberCamera = 0;
+    private int numberMesh = 0;
 
     private Timeline timeline;
+
+    private List<Camera> camera = new ArrayList<>(List.of(new Camera(
+            new Vector3f(0, 0, 100),
+            new Vector3f(0, 0, 0),
+            1.0F, 1, 0.01F, 100)));
 
     @FXML
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        anchorPane.setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY();
+            //todo: scene
+            if (deltaY > 0) {
+                camera.get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
+            } else {
+                camera.get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
+            }
+        });
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -63,10 +81,10 @@ public class GuiController {
             double height = canvas.getHeight();
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
-            camera.setAspectRatio((float) (width / height));
+            camera.get(numberCamera).setAspectRatio((float) (width / height));
 
-            if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+            if (mesh.size() != 0) {
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera.get(numberCamera), mesh.get(numberMesh), (int) width, (int) height);
             }
         });
 
@@ -89,14 +107,13 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-
-            mesh = ObjReader.read(fileContent, writeToConsole);
+            mesh.add(ObjReader.read(fileContent, writeToConsole));
             // todo: обработка ошибок
         } catch (IOException exception) {
 
         }
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(mesh.getPolygons());
-        mesh.setPolygons(triangles);
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(mesh.get(numberMesh).getPolygons());
+        mesh.get(numberMesh).setPolygons(triangles);
     }
 
     @FXML
@@ -111,7 +128,7 @@ public class GuiController {
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
-            ArrayList<String> fileContent = ObjWriter.write(mesh);
+            ArrayList<String> fileContent = ObjWriter.write(mesh.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {
                 writer.write(s + "\n");
@@ -126,37 +143,74 @@ public class GuiController {
     }
 
     @FXML
+    public void addCamera() {
+        camera.add(new Camera(
+                new Vector3f(0, 0, 100),
+                new Vector3f(0, 0, 0),
+                1.0F, 1, 0.01F, 100));
+        numberCamera++;
+    }
+
+    @FXML
+    public void deleteCamera() {
+        if (camera.size() > 1) {
+            if (numberCamera == camera.size() - 1) numberCamera--;
+            camera.remove(camera.size() - 1);
+        }
+    }
+
+    @FXML
+    public void nextCamera() {
+        if (numberCamera < camera.size() - 1) numberCamera++;
+        else numberCamera = 0;
+    }
+
+    @FXML
+    public void nextModel() {
+        if (numberMesh < mesh.size() - 1) numberMesh++;
+        else numberMesh = 0;
+    }
+
+    @FXML
+    public void deleteMesh() {
+        if (mesh.size() > 1) {
+            if (numberMesh == mesh.size() - 1) numberMesh--;
+            mesh.remove(mesh.size() - 1);
+        }
+    }
+
+    @FXML
     private void displayConsole() {
         writeToConsole = !writeToConsole;
     }
 
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+        camera.get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
     }
 
     @FXML
     public void handleCameraBackward(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+        camera.get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
     }
 
     @FXML
     public void handleCameraLeft(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.get(numberCamera).movePosition(new Vector3f(TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraRight(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.get(numberCamera).movePosition(new Vector3f(-TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraUp(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+        camera.get(numberCamera).movePosition(new Vector3f(0, TRANSLATION, 0));
     }
 
     @FXML
     public void handleCameraDown(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+        camera.get(numberCamera).movePosition(new Vector3f(0, -TRANSLATION, 0));
     }
 }
