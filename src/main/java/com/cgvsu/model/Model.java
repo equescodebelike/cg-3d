@@ -38,6 +38,10 @@ public class Model {
         trianglePolygons = new ArrayList<>();
     }
 
+    public Model(Model model) {
+
+    }
+
     public List<Polygon> getTrianglePolygons() {
         return trianglePolygons;
     }
