@@ -9,15 +9,15 @@
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
-            <accelerator>
-                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-            </accelerator>
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
             </MenuItem>
-         <MenuItem mnemonicParsing="false" onAction="#saveModelMenuItemClick" text="Save Model">
-            <accelerator>
-               <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-            </accelerator>
-         </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#saveModelMenuItemClick" text="Save Model">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#nextModel" text="Next model">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -63,6 +63,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Settings">
             <CheckMenuItem onAction="#displayConsole" selected="true" text="Display Console" />
+            <CheckMenuItem fx:id="dark" onAction="#changeTheme" selected="false" text="Dark Theme" />
         </Menu>
         <Menu mnemonicParsing="false" text="Camera">
             <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">

@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -41,7 +42,11 @@ public class GuiController {
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
     private boolean writeToConsole = true;
+    private boolean on = true;
     private Scene scene = new Scene();
+
+    @FXML
+    CheckMenuItem dark;
 
     @FXML
     AnchorPane anchorPane;
@@ -203,6 +208,20 @@ public class GuiController {
     @FXML
     private void displayConsole() {
         writeToConsole = !writeToConsole;
+    }
+
+    private void turn() {
+        on = !on;
+    }
+
+    @FXML
+    private void changeTheme() {
+        if (on) {
+            canvas.getScene().getRoot().getStylesheets().add(getClass().getResource("styles.css").toString());
+        } else {
+            canvas.getScene().getRoot().getStylesheets().remove(getClass().getResource("styles.css").toString());
+        }
+        on = !on;
     }
 
     @FXML
