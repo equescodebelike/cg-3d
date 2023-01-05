@@ -1,20 +1,17 @@
 package com.cgvsu;
 
-import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
-import javafx.event.EventHandler;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -26,11 +23,8 @@ import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import javax.vecmath.Vector3f;
 
-import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.render_engine.Camera;
 
@@ -42,13 +36,15 @@ public class GuiController {
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
     private boolean writeToConsole = true;
-    private boolean on = true;
     private Scene scene = new Scene();
 
     private static final float EPS = 1e-6f;
 
     @FXML
     AnchorPane anchorPane;
+
+    @FXML
+    AnchorPane changeTheme;
 
     @FXML
     private Canvas canvas;
@@ -71,6 +67,22 @@ public class GuiController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        /*checkMenuItem.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                scene.getStyleSheets().add("dark-theme.css");
+            } else {
+                scene.getStyleSheets().remove("dark-theme.css");
+            }
+        });*/
+
+        ToggleSwitch button = new ToggleSwitch();
+        SimpleBooleanProperty turn = button.switchOnProperty();
+        turn.addListener((observable, oldValue, newValue) -> {
+
+
+        });
+        changeTheme.getChildren().add(button);
 
         anchorPane.setOnScroll(scrollEvent -> {
             double deltaY = scrollEvent.getDeltaY();
@@ -237,20 +249,6 @@ public class GuiController {
     @FXML
     private void displayConsole() {
         writeToConsole = !writeToConsole;
-    }
-
-    private void turn() {
-        on = !on;
-    }
-
-    @FXML
-    private void changeTheme() {
-        if (on) {
-            canvas.getScene().getRoot().getStylesheets().add(getClass().getResource("styles.css").toString());
-        } else {
-            canvas.getScene().getRoot().getStylesheets().remove(getClass().getResource("styles.css").toString());
-        }
-        on = !on;
     }
 
     @FXML

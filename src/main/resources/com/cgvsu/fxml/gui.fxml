@@ -5,7 +5,7 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" stylesheets="@../../../../java/com/cgvsu/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
@@ -63,7 +63,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Settings">
             <CheckMenuItem onAction="#displayConsole" selected="true" text="Display Console" />
-            <CheckMenuItem fx:id="dark" onAction="#changeTheme" selected="false" text="Dark Theme" />
+            <CheckMenuItem fx:id="checkMenuItem" mnemonicParsing="false" text="Change Theme" />
         </Menu>
         <Menu mnemonicParsing="false" text="Camera">
             <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">
@@ -85,4 +85,5 @@
     </MenuBar>
 
     <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
+    <AnchorPane fx:id="changeTheme" layoutX="81.0" layoutY="584.0" prefHeight="200.0" prefWidth="200.0" />
 </AnchorPane>
