@@ -45,8 +45,7 @@ public class GuiController {
     private boolean on = true;
     private Scene scene = new Scene();
 
-    @FXML
-    CheckMenuItem dark;
+    private static final float EPS = 1e-6f;
 
     @FXML
     AnchorPane anchorPane;
@@ -98,12 +97,42 @@ public class GuiController {
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
 
             if (scene.mesh.size() != 0) {
+                canvas.setOnMousePressed(this::handleMousePressed);
                 RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.mesh.get(numberMesh), (int) width, (int) height);
             }
         });
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+    }
+
+    private void handleMousePressed(javafx.scene.input.MouseEvent event) {
+        var ref = new Object() {
+            float prevX = (float) event.getX();
+            float prevY = (float) event.getY();
+        };
+        canvas.setOnMouseDragged(mouseEvent -> {
+            final float actualX = (float) mouseEvent.getX();
+            final float actualY = (float) mouseEvent.getY();
+            float dx = ref.prevX - actualX;
+            final float dy = actualY - ref.prevY;
+            final float dxy = Math.abs(dx) - Math.abs(dy);
+            float dz = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().x <= EPS && dx < 0 ||
+                    scene.getCamera().get(numberCamera).getPosition().x > EPS && dx > 0)) {
+                dz *= -1;
+            } else if (dxy < EPS) { //если больше перемещаем по y, то по z не перемещаем
+                dz = 0;
+            }
+            if (scene.getCamera().get(numberCamera).getPosition().z <= EPS) {
+                dx *= -1;
+            }
+
+            ref.prevX = actualX;
+            ref.prevY = actualY;
+            scene.getCamera().get(numberCamera).movePosition(new Vector3f(new float[]{dx * 0.1f, dy * 0.1f, dz * 0.1f}));
+        });
     }
 
     @FXML
