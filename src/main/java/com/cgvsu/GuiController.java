@@ -79,7 +79,11 @@ public class GuiController {
         ToggleSwitch button = new ToggleSwitch();
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
-
+            if (newValue) {
+                button.getScene().getRoot().getStylesheets().add(getClass().getResource("style.css").toString());
+            } else {
+                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("style.css").toString());
+            }
 
         });
         changeTheme.getChildren().add(button);
