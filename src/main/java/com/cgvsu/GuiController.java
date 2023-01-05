@@ -80,9 +80,9 @@ public class GuiController {
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                button.getScene().getRoot().getStylesheets().add(getClass().getResource("style.css").toString());
+                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/style.css").toString());
             } else {
-                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("style.css").toString());
+                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/style.css").toString());
             }
 
         });
