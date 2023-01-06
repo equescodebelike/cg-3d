@@ -80,8 +80,7 @@ public class GuiController {
 
        FileInputStream input = null;
         try {
-            // todo: relative path
-            input = new FileInputStream("C:\\Users\\hahuibala\\Desktop\\Coding\\vsu\\Simple3DViewer\\src\\main\\resources\\com\\cgvsu\\fxml\\image\\ico.png");
+            input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
