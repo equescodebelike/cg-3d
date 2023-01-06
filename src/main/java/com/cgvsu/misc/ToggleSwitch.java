@@ -1,4 +1,4 @@
-package com.cgvsu;
+package com.cgvsu.misc;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
@@ -19,7 +19,7 @@ public class ToggleSwitch extends HBox {
 
     private void init() {
 
-        label.setText("OFF");
+        label.setText("Dark");
 
         getChildren().addAll(label, button);
         button.setOnAction((e) -> {
@@ -37,7 +37,7 @@ public class ToggleSwitch extends HBox {
         setWidth(80);
         label.setAlignment(Pos.CENTER);
         setStyle("-fx-background-color: grey; -fx-text-fill:black; -fx-background-radius: 4;");
-        setAlignment(Pos.CENTER_LEFT);
+        setAlignment(Pos.CENTER);
     }
 
     private void bindProperties() {
@@ -51,11 +51,11 @@ public class ToggleSwitch extends HBox {
         init();
         switchedOn.addListener((a, b, c) -> {
             if (c) {
-                label.setText("ON");
+                label.setText("Default");
                 setStyle("-fx-background-color: green;");
                 label.toFront();
             } else {
-                label.setText("OFF");
+                label.setText("Dark");
                 setStyle("-fx-background-color: grey;");
                 button.toFront();
             }

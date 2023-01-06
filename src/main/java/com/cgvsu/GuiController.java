@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
@@ -11,17 +12,18 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.IOException;
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.vecmath.Vector3f;
 
@@ -41,13 +43,16 @@ public class GuiController {
     private static final float EPS = 1e-6f;
 
     @FXML
-    AnchorPane anchorPane;
+    private AnchorPane anchorPane;
 
     @FXML
-    AnchorPane changeTheme;
+    private AnchorPane changeTheme;
 
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private MenuButton menuButton;
 
     // private final List<Model> mesh = new ArrayList<>();
     // private Model mesh = null;
@@ -68,35 +73,30 @@ public class GuiController {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
 
-        /*checkMenuItem.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            if (isSelected) {
-                scene.getStyleSheets().add("dark-theme.css");
-            } else {
-                scene.getStyleSheets().remove("dark-theme.css");
-            }
-        });*/
+        // AnchorPane.setBottomAnchor(changeTheme,800.0);
+
+        //todo: проблема при загрузке иконки, не может найти файл как меня заебал этот файл нот фаунд экспешн засуньте себе его в сраку
+
+       /* FileInputStream input = null;
+        try {
+            input = new FileInputStream(getClass().getResource("fxml/image/ico.png").toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image); */
 
         ToggleSwitch button = new ToggleSwitch();
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/style.css").toString());
+                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/styles/style.css").toString());
             } else {
-                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/style.css").toString());
+                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/styles/style.css").toString());
             }
 
         });
         changeTheme.getChildren().add(button);
-
-        anchorPane.setOnScroll(scrollEvent -> {
-            double deltaY = scrollEvent.getDeltaY();
-            //todo: scene
-            if (deltaY > 0) {
-                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
-            } else {
-                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
-            }
-        });
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -114,12 +114,25 @@ public class GuiController {
 
             if (scene.mesh.size() != 0) {
                 canvas.setOnMousePressed(this::handleMousePressed);
+                handleWheelScroll();
                 RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.mesh.get(numberMesh), (int) width, (int) height);
             }
         });
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+    }
+
+    private void handleWheelScroll() {
+        anchorPane.setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY();
+            //todo: scene
+            if (deltaY > 0) {
+                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
+            } else {
+                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
+            }
+        });
     }
 
     private void handleMousePressed(javafx.scene.input.MouseEvent event) {

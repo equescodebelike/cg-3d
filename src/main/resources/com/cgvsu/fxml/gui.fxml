@@ -6,29 +6,54 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
-    <MenuBar>
-        <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#saveModelMenuItemClick" text="Save Model">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#nextModel" text="Next model">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#deleteMesh" text="Delete model">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-        </Menu>
+    <AnchorPane fx:id="changeTheme" layoutX="168.0" layoutY="3.0" prefHeight="87.0" prefWidth="175.0" />
+    <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false">
+        <items>
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#saveModelMenuItemClick" text="Save Model">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#nextModel" text="Next model">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#deleteMesh" text="Delete model">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+                <CheckMenuItem onAction="#displayConsole" selected="true" text="Display Console" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Camera">
+                <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#deleteCamera" text="Delete Camera">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Next Camera">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+            </Menu>
+        </items>
+    </MenuButton>
+    <MenuBar disable="true" layoutX="102.0" layoutY="3.0" opacity="0.0">
         <Menu mnemonicParsing="false" text="Move">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
@@ -61,29 +86,7 @@
                 </accelerator>
             </MenuItem>
         </Menu>
-        <Menu mnemonicParsing="false" text="Settings">
-            <CheckMenuItem onAction="#displayConsole" selected="true" text="Display Console" />
-            <CheckMenuItem fx:id="checkMenuItem" mnemonicParsing="false" text="Change Theme" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Camera">
-            <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#deleteCamera" text="Delete Camera">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Next Camera">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-        </Menu>
     </MenuBar>
 
     <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
-    <AnchorPane fx:id="changeTheme" layoutX="81.0" layoutY="584.0" prefHeight="200.0" prefWidth="200.0" />
 </AnchorPane>
