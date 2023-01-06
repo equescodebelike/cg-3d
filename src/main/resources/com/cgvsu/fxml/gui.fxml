@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
-    <AnchorPane fx:id="changeTheme" layoutX="168.0" layoutY="3.0" prefHeight="87.0" prefWidth="175.0" />
-    <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false">
+    <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0" />
+    <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="52.0">
         <items>
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
@@ -53,8 +53,8 @@
             </Menu>
         </items>
     </MenuButton>
-    <MenuBar disable="true" layoutX="102.0" layoutY="3.0" opacity="0.0">
-        <Menu mnemonicParsing="false" text="Move">
+    <MenuBar layoutX="78.0" layoutY="4.0" opacity="0.0">
+        <Menu disable="true" mnemonicParsing="false" text="Move">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="UP" control="UP" meta="UP" shift="UP" shortcut="UP" />

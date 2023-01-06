@@ -16,6 +16,9 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -75,16 +78,18 @@ public class GuiController {
 
         // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
-        //todo: проблема при загрузке иконки, не может найти файл как меня заебал этот файл нот фаунд экспешн засуньте себе его в сраку
-
-       /* FileInputStream input = null;
+       FileInputStream input = null;
         try {
-            input = new FileInputStream(getClass().getResource("fxml/image/ico.png").toString());
+            // todo: relative path
+            input = new FileInputStream("C:\\Users\\hahuibala\\Desktop\\Coding\\vsu\\Simple3DViewer\\src\\main\\resources\\com\\cgvsu\\fxml\\image\\ico.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         Image image = new Image(input);
-        ImageView imageView = new ImageView(image); */
+        ImageView imageView = new ImageView(image);
+        menuButton.setGraphic(imageView);
+        menuButton.setStyle("-fx-mark-color: transparent");
+        menuButton.setShape(new Circle());
 
         ToggleSwitch button = new ToggleSwitch();
         SimpleBooleanProperty turn = button.switchOnProperty();
@@ -253,6 +258,7 @@ public class GuiController {
     public void nextModel() {
         if (numberMesh < scene.mesh.size() - 1) numberMesh++;
         else numberMesh = 0;
+        nextCamera();
     }
 
     @FXML
