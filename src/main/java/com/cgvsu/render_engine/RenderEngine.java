@@ -26,6 +26,11 @@ public class RenderEngine {
         modelViewProjectionMatrix.mul(projectionMatrix);
 
         final int nPolygons = mesh.getPolygons().size();
+
+        Point2f minPoint = new Point2f(10000,10000);
+        Point2f maxPoint = new Point2f();
+
+
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
             final int nVerticesInPolygon = mesh.getPolygons().get(polygonInd).getVertexIndices().size();
 
@@ -36,8 +41,24 @@ public class RenderEngine {
                 javax.vecmath.Vector3f vertexVecmath = new javax.vecmath.Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
+                //вот здесь можно находить максимальную и минимальную координату
+                //мб придумаю что-нибудь потом другое, но пока - так
+                if (minPoint.x > resultPoint.x){
+                    minPoint.x = resultPoint.x;
+                }
+                if (minPoint.y > resultPoint.y){
+                    minPoint.y = resultPoint.y;
+                }
+                if (maxPoint.x < resultPoint.x){
+                    maxPoint.x = resultPoint.x;
+                }
+                if (maxPoint.y < resultPoint.y){
+                    maxPoint.y = resultPoint.y;
+                }
                 resultPoints.add(resultPoint);
             }
+
+
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                 graphicsContext.strokeLine(
@@ -54,5 +75,8 @@ public class RenderEngine {
                         resultPoints.get(0).x,
                         resultPoints.get(0).y);
         }
+
+        mesh.setMinPoint2f(minPoint);
+        mesh.setMaxPoint2f(maxPoint);
     }
 }

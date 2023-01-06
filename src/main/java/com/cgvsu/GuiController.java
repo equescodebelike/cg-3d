@@ -1,18 +1,25 @@
 package com.cgvsu;
 
+import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
+import com.cgvsu.ui.MyRectangle;
+import com.cgvsu.ui.UIModel;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -23,6 +30,8 @@ import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import javax.vecmath.Point2f;
 import javax.vecmath.Vector3f;
 
 import com.cgvsu.objreader.ObjReader;
@@ -36,12 +45,16 @@ public class GuiController {
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
     private boolean writeToConsole = true;
-    private Scene scene = new Scene();
+    private final Scene scene = new Scene();
+
+    List<MyRectangle> shapes = new ArrayList<>();
 
     private static final float EPS = 1e-6f;
 
     @FXML
     AnchorPane anchorPane;
+    @FXML
+    public Group myGroup;
 
     @FXML
     AnchorPane changeTheme;
@@ -76,6 +89,12 @@ public class GuiController {
             }
         });*/
 
+        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+            }
+        });
+
         ToggleSwitch button = new ToggleSwitch();
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
@@ -100,7 +119,8 @@ public class GuiController {
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
-
+        //It's better to change. Updating every 15 millis aren't well.
+        //I'll do it by myself @Nikitos
         KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -111,10 +131,25 @@ public class GuiController {
             //todo: HashMap, change model
 
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
-
             if (scene.mesh.size() != 0) {
                 canvas.setOnMousePressed(this::handleMousePressed);
-                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.mesh.get(numberMesh), (int) width, (int) height);
+                RenderEngine.render(
+                        canvas.getGraphicsContext2D(),
+                        scene.getCamera().get(numberCamera),
+                        scene.mesh.get(numberMesh),
+                        (int) width,
+                        (int) height
+                );
+                MyRectangle a = shapes.get(numberMesh);
+                Model model = scene.mesh.get(numberMesh);
+                Point2f minP = model.getMinPoint2f();
+                Point2f maxP = model.getMaxPoint2f();
+                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
+                a.relocate(minP.x,minP.y);
+//                a.setLayoutX(minP.x);
+//                a.setLayoutY(minP.y);
+                a.setWidth(maxP.x - minP.x);
+                a.setHeight(maxP.y - minP.y);
             }
         });
 
@@ -163,10 +198,9 @@ public class GuiController {
         }
 
         Path fileName = Path.of(file.getAbsolutePath());
-
+        String fileContent = "";
         try {
-            String fileContent = Files.readString(fileName);
-            scene.mesh.add(ObjReader.read(fileContent, writeToConsole));
+            fileContent = Files.readString(fileName);
 
             /* String fileContent = Files.readString(fileName);
             Model model = ObjReader.read(fileContent, writeToConsole);
@@ -179,6 +213,19 @@ public class GuiController {
         } catch (IOException exception) {
 
         }
+
+        Model model = ObjReader.read(fileContent, writeToConsole);
+        scene.mesh.add(model);
+        UIModel a = new UIModel();
+
+        a.setOnMouseReleased(mouseEvent -> {
+            canvas.getGraphicsContext2D().fillText("i got it", a.getLayoutX() + a.getWidth() + 50, a.getLayoutY() + a.getHeight() + 50);
+        });
+
+
+        shapes.add(a.getMyRectangle());
+        myGroup.getChildren().add(a);
+
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
         scene.mesh.get(numberMesh).setPolygons(triangles);
         if (scene.mesh.size() > 1) {

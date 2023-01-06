@@ -4,6 +4,7 @@ import com.cgvsu.math.Vector2f;
 import com.cgvsu.math.Vector3f;
 import com.cgvsu.objreader.ObjReaderExceptions;
 
+import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class Model {
     private List<Vector3f> normals;
     private List<Polygon> polygons;
     private List<Polygon> trianglePolygons;
+
+    private Point2f minPoint2f;
+    private Point2f maxPoint2f;
 
     public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons, final List<Polygon> trianglePolygons) {
         this.vertices = vertices;
@@ -40,6 +44,23 @@ public class Model {
 
     public Model(Model model) {
 
+    }
+
+
+    public void setMinPoint2f(Point2f minPoint2f) {
+        this.minPoint2f = minPoint2f;
+    }
+
+    public void setMaxPoint2f(Point2f maxPoint2f) {
+        this.maxPoint2f = maxPoint2f;
+    }
+
+    public Point2f getMinPoint2f() {
+        return minPoint2f;
+    }
+
+    public Point2f getMaxPoint2f() {
+        return maxPoint2f;
     }
 
     public List<Polygon> getTrianglePolygons() {
