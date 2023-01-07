@@ -16,6 +16,10 @@ public class ChangedModel extends Model {
         translate = new Vector3f(0, 0, 0);
     }
 
+    public Model getModel() {
+        return this;
+    }
+
     public Matrix4f getModelMatrix() {
         return null;
     }

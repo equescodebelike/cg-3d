@@ -15,6 +15,11 @@ public class Scene {
 
     // private HashMap<String, ChangedModel> loadedModels = new HashMap<>();
     public List<ChangedModel> mesh = new ArrayList<>();
+    //todo: Model -> ChangedModel
+
+    public HashMap<String, ChangedModel> loadedModels = new HashMap<>();
+    public List<Model> loadedMeshes = new ArrayList<>();
+    // public HashMap<String, Model> mapLoadedMeshes = new HashMap<>();
 
     private List<Camera> camera = new ArrayList<>(List.of(new Camera(
             new Vector3f(0, 0, 100),
@@ -25,9 +30,17 @@ public class Scene {
         return currentModel;
     }
 
-   /* public HashMap<String, ChangedModel> getLoadedModels() {
+    /* public HashMap<String, Model> getMapLoadedMeshes() {
+        return mapLoadedMeshes;
+    }
+
+    public void setMapLoadedMeshes(HashMap<String, Model> mapLoadedMeshes) {
+        this.mapLoadedMeshes = mapLoadedMeshes;
+    } */
+
+    public HashMap<String, ChangedModel> getLoadedModels() {
         return loadedModels;
-    }*/
+    }
 
     public List<Camera> getCamera() {
         return camera;
@@ -37,9 +50,9 @@ public class Scene {
         this.currentModel = currentModel;
     }
 
-   /* public void setLoadedModels(HashMap<String, ChangedModel> loadedModels) {
+    public void setLoadedModels(HashMap<String, ChangedModel> loadedModels) {
         this.loadedModels = loadedModels;
-    }*/
+    }
 
     public void setCamera(List<Camera> camera) {
         this.camera = camera;

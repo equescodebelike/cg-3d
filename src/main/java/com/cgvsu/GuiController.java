@@ -2,9 +2,13 @@ package com.cgvsu;
 
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
+import com.cgvsu.model.ChangedModel;
+import com.cgvsu.model.Model;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
+import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
+import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
@@ -20,15 +24,24 @@ import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.vecmath.Vector3f;
+import java.io.*;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,7 +67,7 @@ public class GuiController {
 
     List<UIModel> uiModels = new ArrayList<>();
 
-    private static final float EPS = 1e-6f;
+    public static final float EPS = 1e-6f;
 
     private boolean isClickedOnModel = false;
     private SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
@@ -64,16 +77,24 @@ public class GuiController {
 
     ModelSettings settings ;
     @FXML
-    AnchorPane anchorPane;
+    private AnchorPane anchorPane;
+
     @FXML
-    AnchorPane changeTheme;
+    private AnchorPane changeTheme;
 
     @FXML
     private Canvas canvas;
 
-    // private final List<Model> mesh = new ArrayList<>();
-    // private Model mesh = null;
+    @FXML
+    private MenuButton menuButton;
 
+    @FXML
+    private ListView listView;
+
+    // private final List<Model> mesh = new ArrayList<>();
+    private Model mesh = null;
+
+    //todo: list of models in ui
 
     private int numberCamera = 0;
     private int numberMesh = 0;
@@ -91,6 +112,8 @@ public class GuiController {
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
         settings = new ModelSettings(modelSettings);
 
+        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue() - 300));
+        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue() - 300));
 
 
         currentUIModel.addListener(new ChangeListener<UIModel>() {
@@ -106,6 +129,7 @@ public class GuiController {
                 scene.getStyleSheets().remove("dark-theme.css");
             }
         });*/
+        // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
         canvas.setOnMouseReleased(mouseEvent -> {
             double x = mouseEvent.getX();
@@ -122,31 +146,30 @@ public class GuiController {
             currentUIModel.set(null);
         });
 
+
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        menuButton.setGraphic(imageView);
+        menuButton.setStyle("-fx-mark-color: transparent");
+        menuButton.setShape(new Circle());
+
         ToggleSwitch button = new ToggleSwitch();
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/style.css").toString());
+                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/styles/style.css").toString());
             } else {
-                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/style.css").toString());
+                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/styles/style.css").toString());
             }
 
         });
         changeTheme.getChildren().add(button);
-
-        anchorPane.setOnScroll(scrollEvent -> {
-            double deltaY = scrollEvent.getDeltaY();
-            //todo: scene
-            if (deltaY > 0) {
-                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
-            } else {
-                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
-            }
-        });
-
-        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue() - 300));
-        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue() - 300));
-
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -158,31 +181,20 @@ public class GuiController {
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
-            //todo delete from here
-            if (currentUIModel.get() != null){
-                System.out.println(currentUIModel.get().getModel().getRotate());
-                System.out.println(currentUIModel.get().getModel().getScale());
-                System.out.println(currentUIModel.get().getModel().getTranslate());
-            }
-//
 
             //todo: HashMap, change model
 
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
-            if (scene.mesh.size() != 0) {
+            for (int i = 0; i < scene.loadedMeshes.size(); i++) {
+
                 canvas.setOnMousePressed(this::handleMousePressed);
-                RenderEngine.render(
-                        canvas.getGraphicsContext2D(),
-                        scene.getCamera().get(numberCamera),
-                        scene.mesh.get(numberMesh),
-                        (int) width,
-                        (int) height
-                );
-                UIModel a = uiModels.get(numberMesh);
-                Model model = scene.mesh.get(numberMesh);
+                handleWheelScroll();
+                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
+                UIModel a = uiModels.get(i);
+                Model model = scene.loadedMeshes.get(i);
                 Point2f minP = model.getMinPoint2f();
                 Point2f maxP = model.getMaxPoint2f();
-                a.setSize(minP,maxP);
+                a.setSize(minP, maxP);
 //                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
 //                Border b = a.getBorder();
 /*                canvas.getGraphicsContext2D().fillRect(
@@ -204,10 +216,31 @@ public class GuiController {
 
 
             }
+            if (isClickedOnModel) {
+                Border b = currentUIModel.getBorder();
+                canvas.getGraphicsContext2D().strokeRect(
+                        b.getScale().x,
+                        b.getScale().y,
+                        b.getWidth(),
+                        b.getHeight()
+                );
+            }
         });
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+    }
+
+    private void handleWheelScroll() {
+        anchorPane.setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY();
+            //todo: scene
+            if (deltaY > 0) {
+                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
+            } else {
+                scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, TRANSLATION));
+            }
+        });
     }
 
     private void handleMousePressed(javafx.scene.input.MouseEvent event) {
@@ -268,16 +301,23 @@ public class GuiController {
         }
 
         Model model = ObjReader.read(fileContent, writeToConsole);
+        scene.loadedMeshes.add(model);
+
+        uiModels.add(new UIModel());
         ChangedModel changedModel = new ChangedModel(model);
         scene.mesh.add(changedModel);
         uiModels.add(new UIModel(changedModel));
 
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
-        scene.mesh.get(numberMesh).setPolygons(triangles);
-        if (scene.mesh.size() > 1) {
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
+        scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
+        listView.getItems().add(scene.loadedMeshes.get(numberMesh));
+        listView.scrollTo(scene.loadedMeshes.get(numberMesh));
+
+        if (scene.loadedMeshes.size() > 1) {
             addCamera();
             nextModel();
         }
+
     }
 
     @FXML
@@ -294,6 +334,7 @@ public class GuiController {
         try {
             //todo model -> changed module
             ArrayList<String> fileContent = ObjWriter.write(scene.mesh.get(numberMesh));
+            ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {
                 writer.write(s + "\n");
@@ -332,15 +373,16 @@ public class GuiController {
 
     @FXML
     public void nextModel() {
-        if (numberMesh < scene.mesh.size() - 1) numberMesh++;
+        if (numberMesh < scene.loadedMeshes.size() - 1) numberMesh++;
         else numberMesh = 0;
+        nextCamera();
     }
 
     @FXML
     public void deleteMesh() {
-        if (scene.mesh.size() > 1) {
-            if (numberMesh == scene.mesh.size() - 1) numberMesh--;
-            scene.mesh.remove(scene.mesh.size() - 1);
+        if (scene.loadedMeshes.size() > 1) {
+            if (numberMesh == scene.loadedMeshes.size() - 1) numberMesh--;
+            scene.loadedMeshes.remove(scene.loadedMeshes.size() - 1);
         }
     }
 
