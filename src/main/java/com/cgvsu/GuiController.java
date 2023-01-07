@@ -181,6 +181,7 @@ public class GuiController {
         }
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
         scene.mesh.get(numberMesh).setPolygons(triangles);
+
         if (scene.mesh.size() > 1) {
             addCamera();
             nextModel();
