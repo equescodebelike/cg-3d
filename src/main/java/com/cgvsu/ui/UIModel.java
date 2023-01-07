@@ -1,60 +1,27 @@
 package com.cgvsu.ui;
 
-import com.cgvsu.math.Vector2f;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import javax.vecmath.Point2f;
 
-public class UIModel extends StackPane{
+public class UIModel{
 
-    ObjectProperty<MyRectangle> myRectangle = new SimpleObjectProperty<>();
-
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-
-
-/*    public UIModel(Point2f minPoint2f, Point2f maxPoint2f) {
-        setSize(minPoint2f,maxPoint2f);
-//        MyRectangle shape = new Rectangle(x,y,width,height);
-//        shape.setFill(Color.BLACK);
-//        myRectangle.set(shape);
-//        setShape(myRectangle.get());
-    }*/
+    Border border;
 
     public UIModel() {
-        MyRectangle shape = new MyRectangle();
-        shape.setFill(Color.BLACK);
-        myRectangle.set(shape);
-        setShape(myRectangle.get());
-
+        border  = new Border();
     }
 
     public void setSize(Point2f minPoint2f, Point2f maxPoint2f){
-        this.x = (int) minPoint2f.x;
-        this.y = (int) maxPoint2f.y;
-        width = (int) (maxPoint2f.x - minPoint2f.x);
-        height = (int) (maxPoint2f.y - minPoint2f.y);
-        MyRectangle myRectangle = new MyRectangle(minPoint2f,maxPoint2f);
-        myRectangle.setFill(Color.BLACK);
-        this.myRectangle.set(myRectangle);
+           border.setScale(minPoint2f);
+           border.setRightTop(maxPoint2f);
     }
 
-    public MyRectangle getMyRectangle() {
-        return myRectangle.get();
+    public Border getBorder() {
+        return border;
     }
 
-    public ObjectProperty<MyRectangle> myRectangleProperty() {
-        return myRectangle;
-    }
 
     public void setMinPoint2f(Point2f minPoint2f) {
 //        this.minPoint2f = minPoint2f;

@@ -1,10 +1,12 @@
 package com.cgvsu;
 
+import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
+import com.cgvsu.ui.Border;
 import com.cgvsu.ui.MyRectangle;
 import com.cgvsu.ui.UIModel;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,10 +18,8 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -47,15 +47,15 @@ public class GuiController {
     private boolean writeToConsole = true;
     private final Scene scene = new Scene();
 
-    List<MyRectangle> shapes = new ArrayList<>();
+    List<UIModel> uiModels = new ArrayList<>();
 
     private static final float EPS = 1e-6f;
 
+    private boolean isClickedOnModel = false;
+    private UIModel currentUIModel;
+
     @FXML
     AnchorPane anchorPane;
-    @FXML
-    public Group myGroup;
-
     @FXML
     AnchorPane changeTheme;
 
@@ -92,6 +92,18 @@ public class GuiController {
         canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Point2f point2f = new Point2f((float) x, (float) y);
+                for (UIModel uiModel : uiModels) {
+                    if (uiModel.getBorder().isInBorder(point2f)){
+                        isClickedOnModel = true;
+                        currentUIModel = uiModel;
+                        return;
+                    }
+                }
+                isClickedOnModel = false;
+                currentUIModel = null;
             }
         });
 
@@ -140,16 +152,31 @@ public class GuiController {
                         (int) width,
                         (int) height
                 );
-                MyRectangle a = shapes.get(numberMesh);
+                UIModel a = uiModels.get(numberMesh);
                 Model model = scene.mesh.get(numberMesh);
                 Point2f minP = model.getMinPoint2f();
                 Point2f maxP = model.getMaxPoint2f();
-                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
-                a.relocate(minP.x,minP.y);
-//                a.setLayoutX(minP.x);
-//                a.setLayoutY(minP.y);
-                a.setWidth(maxP.x - minP.x);
-                a.setHeight(maxP.y - minP.y);
+                a.setSize(minP,maxP);
+//                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
+//                Border b = a.getBorder();
+/*                canvas.getGraphicsContext2D().fillRect(
+                        b.getScale().x,
+                        b.getScale().y,
+                        b.getWidth(),
+                        b.getHeight()
+                );*/
+
+                if (isClickedOnModel){
+                    Border b = currentUIModel.getBorder();
+                    canvas.getGraphicsContext2D().strokeRect(
+                            b.getScale().x,
+                            b.getScale().y,
+                            b.getWidth(),
+                            b.getHeight()
+                    );
+                }
+
+
             }
         });
 
@@ -216,15 +243,8 @@ public class GuiController {
 
         Model model = ObjReader.read(fileContent, writeToConsole);
         scene.mesh.add(model);
-        UIModel a = new UIModel();
 
-        a.setOnMouseReleased(mouseEvent -> {
-            canvas.getGraphicsContext2D().fillText("i got it", a.getLayoutX() + a.getWidth() + 50, a.getLayoutY() + a.getHeight() + 50);
-        });
-
-
-        shapes.add(a.getMyRectangle());
-        myGroup.getChildren().add(a);
+        uiModels.add(new UIModel());
 
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
         scene.mesh.get(numberMesh).setPolygons(triangles);
