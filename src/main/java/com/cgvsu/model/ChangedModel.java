@@ -1,8 +1,8 @@
 package com.cgvsu.model;
 
-import com.cgvsu.math.Vector3f;
 
 import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
 
 public class ChangedModel extends Model {
     private Vector3f rotate;

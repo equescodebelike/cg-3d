@@ -14,7 +14,7 @@ public class Scene {
     String currentModel;
 
     // private HashMap<String, ChangedModel> loadedModels = new HashMap<>();
-    public List<Model> mesh = new ArrayList<>();
+    public List<ChangedModel> mesh = new ArrayList<>();
 
     private List<Camera> camera = new ArrayList<>(List.of(new Camera(
             new Vector3f(0, 0, 100),
@@ -45,7 +45,7 @@ public class Scene {
         this.camera = camera;
     }
 
-    public List<Model> getMesh() {
+    public List<ChangedModel> getMesh() {
         return mesh;
     }
 }

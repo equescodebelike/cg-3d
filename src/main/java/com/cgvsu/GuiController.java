@@ -1,15 +1,20 @@
 package com.cgvsu;
 
 import com.cgvsu.misc.ToggleSwitch;
+import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
+import com.cgvsu.ui.ModelSettings;
 import com.cgvsu.ui.MyRectangle;
 import com.cgvsu.ui.UIModel;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
@@ -52,8 +57,12 @@ public class GuiController {
     private static final float EPS = 1e-6f;
 
     private boolean isClickedOnModel = false;
-    private UIModel currentUIModel;
+    private SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
 
+    @FXML
+    AnchorPane modelSettings;
+
+    ModelSettings settings ;
     @FXML
     AnchorPane anchorPane;
     @FXML
@@ -80,7 +89,16 @@ public class GuiController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        settings = new ModelSettings(modelSettings);
 
+
+
+        currentUIModel.addListener(new ChangeListener<UIModel>() {
+            @Override
+            public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
+                 settings.setCurrentModel(t1);
+            }
+        });
         /*checkMenuItem.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
             if (isSelected) {
                 scene.getStyleSheets().add("dark-theme.css");
@@ -89,22 +107,19 @@ public class GuiController {
             }
         });*/
 
-        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                double x = mouseEvent.getX();
-                double y = mouseEvent.getY();
-                Point2f point2f = new Point2f((float) x, (float) y);
-                for (UIModel uiModel : uiModels) {
-                    if (uiModel.getBorder().isInBorder(point2f)){
-                        isClickedOnModel = true;
-                        currentUIModel = uiModel;
-                        return;
-                    }
+        canvas.setOnMouseReleased(mouseEvent -> {
+            double x = mouseEvent.getX();
+            double y = mouseEvent.getY();
+            Point2f point2f = new Point2f((float) x, (float) y);
+            for (UIModel uiModel : uiModels) {
+                if (uiModel.getBorder().isInBorder(point2f)){
+                    isClickedOnModel = true;
+                    currentUIModel.set(uiModel);
+                    return;
                 }
-                isClickedOnModel = false;
-                currentUIModel = null;
             }
+            isClickedOnModel = false;
+            currentUIModel.set(null);
         });
 
         ToggleSwitch button = new ToggleSwitch();
@@ -129,6 +144,10 @@ public class GuiController {
             }
         });
 
+        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue() - 300));
+        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue() - 300));
+
+
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
         //It's better to change. Updating every 15 millis aren't well.
@@ -139,6 +158,13 @@ public class GuiController {
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
+            //todo delete from here
+            if (currentUIModel.get() != null){
+                System.out.println(currentUIModel.get().getModel().getRotate());
+                System.out.println(currentUIModel.get().getModel().getScale());
+                System.out.println(currentUIModel.get().getModel().getTranslate());
+            }
+//
 
             //todo: HashMap, change model
 
@@ -167,7 +193,7 @@ public class GuiController {
                 );*/
 
                 if (isClickedOnModel){
-                    Border b = currentUIModel.getBorder();
+                    Border b = currentUIModel.get().getBorder();
                     canvas.getGraphicsContext2D().strokeRect(
                             b.getScale().x,
                             b.getScale().y,
@@ -242,9 +268,9 @@ public class GuiController {
         }
 
         Model model = ObjReader.read(fileContent, writeToConsole);
-        scene.mesh.add(model);
-
-        uiModels.add(new UIModel());
+        ChangedModel changedModel = new ChangedModel(model);
+        scene.mesh.add(changedModel);
+        uiModels.add(new UIModel(changedModel));
 
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
         scene.mesh.get(numberMesh).setPolygons(triangles);
@@ -266,6 +292,7 @@ public class GuiController {
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
+            //todo model -> changed module
             ArrayList<String> fileContent = ObjWriter.write(scene.mesh.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {

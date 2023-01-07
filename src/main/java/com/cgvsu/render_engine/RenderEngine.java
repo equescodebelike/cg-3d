@@ -42,7 +42,7 @@ public class RenderEngine {
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
                 //вот здесь можно находить максимальную и минимальную координату
-                //мб придумаю что-нибудь потом другое, но пока - так
+                //мб придумаю что-нибудь потом другое, но пока так
                 if (minPoint.x > resultPoint.x){
                     minPoint.x = resultPoint.x;
                 }

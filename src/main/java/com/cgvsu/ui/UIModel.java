@@ -1,5 +1,7 @@
 package com.cgvsu.ui;
 
+import com.cgvsu.model.ChangedModel;
+import com.cgvsu.model.Model;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -9,7 +11,10 @@ public class UIModel{
 
     Border border;
 
-    public UIModel() {
+    ChangedModel model;
+
+    public UIModel(ChangedModel changedModel) {
+        model = changedModel;
         border  = new Border();
     }
 
@@ -22,6 +27,9 @@ public class UIModel{
         return border;
     }
 
+    public ChangedModel getModel() {
+        return model;
+    }
 
     public void setMinPoint2f(Point2f minPoint2f) {
 //        this.minPoint2f = minPoint2f;
