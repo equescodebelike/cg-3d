@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import javax.vecmath.Point2f;
+import java.util.Objects;
 
 public class UIModel{
 
@@ -37,5 +38,18 @@ public class UIModel{
 
     public void setMaxPoint2f(Point2f maxPoint2f) {
 //        this.maxPoint2f = maxPoint2f;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UIModel uiModel = (UIModel) o;
+        return Objects.equals(border, uiModel.border) && Objects.equals(model, uiModel.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(border, model);
     }
 }

@@ -2,8 +2,6 @@ package com.cgvsu;
 
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
-import com.cgvsu.model.ChangedModel;
-import com.cgvsu.model.Model;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
@@ -13,27 +11,21 @@ import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
 import com.cgvsu.ui.ModelSettings;
-import com.cgvsu.ui.MyRectangle;
 import com.cgvsu.ui.UIModel;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -50,10 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Point2f;
-import javax.vecmath.Vector3f;
-
-import com.cgvsu.objreader.ObjReader;
-import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
@@ -182,6 +170,13 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
 
+//            if (currentUIModel.get() !=null){
+//                System.out.println(currentUIModel.get().getModel().getRotate());
+//                System.out.println(currentUIModel.get().getModel().getScale());
+//                System.out.println(currentUIModel.get().getModel().getTranslate());
+//
+//            }
+
             //todo: HashMap, change model
 
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
@@ -217,7 +212,7 @@ public class GuiController {
 
             }
             if (isClickedOnModel) {
-                Border b = currentUIModel.getBorder();
+                Border b = currentUIModel.get().getBorder();
                 canvas.getGraphicsContext2D().strokeRect(
                         b.getScale().x,
                         b.getScale().y,
@@ -301,11 +296,8 @@ public class GuiController {
         }
 
         Model model = ObjReader.read(fileContent, writeToConsole);
-        scene.loadedMeshes.add(model);
-
-        uiModels.add(new UIModel());
         ChangedModel changedModel = new ChangedModel(model);
-        scene.mesh.add(changedModel);
+        scene.loadedMeshes.add(changedModel);
         uiModels.add(new UIModel(changedModel));
 
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
@@ -333,7 +325,6 @@ public class GuiController {
 
         try {
             //todo model -> changed module
-            ArrayList<String> fileContent = ObjWriter.write(scene.mesh.get(numberMesh));
             ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {

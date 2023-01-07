@@ -225,5 +225,6 @@
             </children>
          </VBox>
       </children></AnchorPane>
-    <Canvas fx:id="canvas" height="600.0" width="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="100.0" />
+<!--    <Canvas fx:id="canvas" height="600.0" width="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="100.0" />-->
+    </AnchorPane>
 </AnchorPane>

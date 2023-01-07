@@ -7,6 +7,7 @@ import com.cgvsu.objreader.ObjReaderExceptions;
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Model {
 
@@ -143,5 +144,18 @@ public class Model {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Model model = (Model) o;
+        return Objects.equals(vertices, model.vertices) && Objects.equals(textureVertices, model.textureVertices) && Objects.equals(normals, model.normals) && Objects.equals(polygons, model.polygons) && Objects.equals(trianglePolygons, model.trianglePolygons) && Objects.equals(minPoint2f, model.minPoint2f) && Objects.equals(maxPoint2f, model.maxPoint2f);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vertices, textureVertices, normals, polygons, trianglePolygons, minPoint2f, maxPoint2f);
     }
 }

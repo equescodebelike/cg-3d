@@ -27,14 +27,15 @@ public class ModelSettings {
     private final double movedX;
 
 
-    public class  ModelTransform{
+    public class ModelTransform {
         Label nameOfTransform;
         ModelTransformByAxis modelTransformByX;
         ModelTransformByAxis modelTransformByY;
         ModelTransformByAxis modelTransformByZ;
 
-        Vector3f vector = new Vector3f();
-        private class ModelTransformByAxis{
+        SimpleObjectProperty<Vector3f> vector = new SimpleObjectProperty<>(this, "vector", new Vector3f());
+
+        private class ModelTransformByAxis {
             Label axis;
             TextField textField;
             Slider slider;
@@ -46,10 +47,9 @@ public class ModelSettings {
                 this.textField = (TextField) borderPane.getCenter();
                 this.slider = (Slider) borderPane.getBottom();
                 textField.textProperty().addListener((observableValue, s, t1) -> {
-                    if(t1.isEmpty()){
+                    if (t1.isEmpty()) {
                         currentValue.set(0);
-                    }
-                    else {
+                    } else {
                         currentValue.set(Integer.parseInt(textField.getText()));
                         textField.setText(t1.replaceAll("[^\\d]", ""));
                     }
@@ -66,20 +66,34 @@ public class ModelSettings {
             nameOfTransform = (Label) vBox.getChildren().get(0);
 
             BorderPane borderPaneX = (BorderPane) vBox.getChildren().get(1);
-            modelTransformByX  = new ModelTransformByAxis(borderPaneX);
-            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.x = t1.floatValue());
+            modelTransformByX = new ModelTransformByAxis(borderPaneX);
+            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().x = t1.floatValue());
 
             BorderPane borderPaneY = (BorderPane) vBox.getChildren().get(2);
-            modelTransformByY  = new ModelTransformByAxis(borderPaneY);
-            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.y = t1.floatValue());
+            modelTransformByY = new ModelTransformByAxis(borderPaneY);
+            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().y = t1.floatValue());
 
             BorderPane borderPaneZ = (BorderPane) vBox.getChildren().get(3);
-            modelTransformByZ  = new ModelTransformByAxis(borderPaneZ);
-            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.z = t1.floatValue());
+            modelTransformByZ = new ModelTransformByAxis(borderPaneZ);
+            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().z = t1.floatValue());
+
+            vector.addListener(new ChangeListener<Vector3f>() {
+                @Override
+                public void changed(ObservableValue<? extends Vector3f> observableValue, Vector3f vector3f, Vector3f t1) {
+                    modelTransformByX.textField.setText((int) t1.x + "");
+                    modelTransformByY.textField.setText((int) t1.y + "");
+                    modelTransformByZ.textField.setText((int) t1.z + "");
+                    System.out.println("fdfddfdfd");
+                }
+            });
         }
 
-        public Vector3f getVector(){
-            return vector;
+        public Vector3f getVector() {
+            return vector.get();
+        }
+
+        public void setVector(Vector3f vector) {
+            this.vector.set(vector);
         }
     }
 
@@ -101,17 +115,27 @@ public class ModelSettings {
 
         translateTransform = new ModelTransform((VBox) vBox.getChildren().get(2));
 
+
+        //                        currentModel.get().model.setRotate(rotateTransform.vector);
+//                        currentModel.get().model.setScale(scaleTransform.vector);
+//                        currentModel.get().model.setTranslate(translateTransform.vector);
+
         currentModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null){
-                    translateTransition.setByX(-175);
-                    currentModel.get().model.setRotate(rotateTransform.vector);
-                    currentModel.get().model.setScale(scaleTransform.vector);
-                    currentModel.get().model.setTranslate(translateTransform.vector);
-
-                }
-                else {
+                if (t1 != null) {
+                    rotateTransform.setVector(t1.model.getRotate());
+                    scaleTransform.setVector(t1.model.getScale());
+                    translateTransform.setVector(t1.model.getTranslate());
+                    if (uiModel != null) {
+                        translateTransition.setByX(0);
+                    } else {
+                        translateTransition.setByX(-175);
+                    }
+                    currentModel.get().model.setRotate(rotateTransform.vector.get());
+                    currentModel.get().model.setScale(scaleTransform.vector.get());
+                    currentModel.get().model.setTranslate(translateTransform.vector.get());
+                } else {
                     translateTransition.setByX(175);
                 }
                 translateTransition.play();

@@ -3,6 +3,7 @@ package com.cgvsu.model;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
+import java.util.Objects;
 
 public class ChangedModel extends Model {
     private Vector3f rotate;
@@ -46,5 +47,18 @@ public class ChangedModel extends Model {
 
     public void setTranslate(Vector3f translate) {
         this.translate = translate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChangedModel that = (ChangedModel) o;
+        return Objects.equals(rotate, that.rotate) && Objects.equals(scale, that.scale) && Objects.equals(translate, that.translate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rotate, scale, translate);
     }
 }
