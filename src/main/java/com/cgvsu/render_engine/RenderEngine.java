@@ -23,7 +23,9 @@ public class RenderEngine {
             final Model mesh,
             final int width,
             final int height) {
-        Matrix4f modelMatrix = rotateScaleTranslate();
+        Matrix4f modelMatrix = rotateScaleTranslate(new javax.vecmath.Vector3f(0, 0, 0),
+                new javax.vecmath.Vector3f(1, 1, 1),
+                new javax.vecmath.Vector3f(0, 0, 0));
         Matrix4f viewMatrix = camera.getViewMatrix();
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
@@ -65,16 +67,6 @@ public class RenderEngine {
                         resultPoints.get(nVerticesInPolygon - 1).y,
                         resultPoints.get(0).x,
                         resultPoints.get(0).y);
-//                if (nVerticesInPolygon > 2) {
-//                    Rasterization.fillTriangle(gr, resultPoints.get(nVerticesInPolygon - 1).x, resultPoints.get(nVerticesInPolygon - 1).y,
-//                            resultPoints.get(0).x, resultPoints.get(0).y,
-//                            resultPoints.get(1).x, resultPoints.get(1).y,
-//                            MyColor.RED, MyColor.GREEN, MyColor.BLUE);
-//                    Rasterization.fillTriangle(gr, resultPoints.get(nVerticesInPolygon - 2).x, resultPoints.get(nVerticesInPolygon - 2).y,
-//                            resultPoints.get(nVerticesInPolygon-1).x, resultPoints.get(nVerticesInPolygon-1).y,
-//                            resultPoints.get(0).x, resultPoints.get(0).y,
-//                            MyColor.RED, MyColor.GREEN, MyColor.BLUE);
-//                }
             }
         }
     }
