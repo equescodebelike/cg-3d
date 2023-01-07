@@ -52,4 +52,9 @@ public class UIModel{
     public int hashCode() {
         return Objects.hash(border, model);
     }
+
+    @Override
+    public String toString() {
+        return model.toString();
+    }
 }

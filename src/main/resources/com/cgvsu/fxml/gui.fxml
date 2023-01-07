@@ -6,7 +6,9 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
+
+ <Canvas fx:id="canvas" height="600.0" width="665.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="30.0" />
     <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0" />
     <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="52.0">
         <items>
@@ -89,142 +91,138 @@
         </Menu>
     </MenuBar>
    <ListView fx:id="listView" layoutX="14.0" layoutY="148.0" prefHeight="431.0" prefWidth="192.0" />
-   <AnchorPane layoutX="593.0" prefHeight="461.0" prefWidth="192.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
-
-    <Canvas fx:id="canvas" height="600.0" width="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="30.0" />
-   <AnchorPane fx:id="modelSettings" layoutX="593.0" prefHeight="561.0" prefWidth="174.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <children>
-         <VBox layoutY="-2.0" prefHeight="344.0" prefWidth="174.0">
-            <children>
-               <VBox prefHeight="97.0" prefWidth="147.0">
-                  <children>
-                     <Label text="Label">
-                        <VBox.margin>
-                           <Insets bottom="10.0" left="70.0" top="10.0" />
-                        </VBox.margin>
-                     </Label>
-                     <BorderPane prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                  </children>
-               </VBox>
-               <VBox layoutX="10.0" layoutY="10.0" prefHeight="97.0" prefWidth="147.0">
-                  <children>
-                     <Label text="Label">
-                        <VBox.margin>
-                           <Insets bottom="10.0" left="70.0" top="10.0" />
-                        </VBox.margin>
-                     </Label>
-                     <BorderPane prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                  </children>
-               </VBox>
-               <VBox layoutX="10.0" layoutY="233.0" prefHeight="97.0" prefWidth="147.0">
-                  <children>
-                     <Label text="Label">
-                        <VBox.margin>
-                           <Insets bottom="10.0" left="70.0" top="10.0" />
-                        </VBox.margin>
-                     </Label>
-                     <BorderPane prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                     <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
-                        <center>
-                           <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
-                        </center>
-                        <bottom>
-                           <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
-                        </bottom>
-                        <left>
-                           <Label text="Label" BorderPane.alignment="CENTER" />
-                        </left>
-                     </BorderPane>
-                  </children>
-               </VBox>
-            </children>
-         </VBox>
-      </children></AnchorPane>
-<!--    <Canvas fx:id="canvas" height="600.0" width="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="100.0" />-->
-    </AnchorPane>
+<AnchorPane fx:id="modelSettings" prefHeight="561.0" prefWidth="174.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <children>
+      <VBox layoutY="-2.0" prefHeight="344.0" prefWidth="174.0">
+         <children>
+            <VBox prefHeight="97.0" prefWidth="147.0">
+               <children>
+                  <Label text="Label">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="70.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <BorderPane prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="97.0" prefWidth="147.0">
+               <children>
+                  <Label text="Label">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="70.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <BorderPane prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="233.0" prefHeight="97.0" prefWidth="147.0">
+               <children>
+                  <Label text="Label">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="70.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <BorderPane prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+                  <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
+                     <center>
+                        <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <bottom>
+                        <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <left>
+                        <Label text="Label" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+   </AnchorPane>
 </AnchorPane>

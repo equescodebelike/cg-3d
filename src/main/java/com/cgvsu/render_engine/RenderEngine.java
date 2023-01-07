@@ -3,6 +3,7 @@ package com.cgvsu.render_engine;
 import java.util.ArrayList;
 
 import com.cgvsu.math.Vector3f;
+import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
 import com.cgvsu.rasterization.MyColor;
@@ -20,12 +21,13 @@ public class RenderEngine {
     public static void render(
             final GraphicsContext graphicsContext,
             final Camera camera,
-            final Model mesh,
+            final ChangedModel mesh,
             final int width,
             final int height) {
-        Matrix4f modelMatrix = rotateScaleTranslate(new javax.vecmath.Vector3f(0, 0, 0),
-                new javax.vecmath.Vector3f(1, 1, 1),
-                new javax.vecmath.Vector3f(0, 0, 0));
+        Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
+                mesh.getScale(),
+                mesh.getTranslate());
+
         Matrix4f viewMatrix = camera.getViewMatrix();
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
@@ -77,11 +79,11 @@ public class RenderEngine {
                         resultPoints.get(vertexInPolygonInd).x,
                         resultPoints.get(vertexInPolygonInd).y);
                 //Rasterization
-                if (vertexInPolygonInd + 1 < nVerticesInPolygon)
-                    Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
-                            resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
-                            resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
-                            MyColor.GREEN, MyColor.BLUE, MyColor.RED);
+//                if (vertexInPolygonInd + 1 < nVerticesInPolygon)
+//                    Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
+//                            resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
+//                            resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
+//                            MyColor.GREEN, MyColor.BLUE, MyColor.RED);
             }
             if (nVerticesInPolygon > 0) {
                 graphicsContext.strokeLine(

@@ -47,11 +47,12 @@ public class ModelSettings {
                 this.textField = (TextField) borderPane.getCenter();
                 this.slider = (Slider) borderPane.getBottom();
                 textField.textProperty().addListener((observableValue, s, t1) -> {
-                    if (t1.isEmpty()) {
+                    if (t1.isEmpty() || t1.equals("-")) {
                         currentValue.set(0);
                     } else {
+                        textField.setText(t1.replaceAll("[^-\\d]", ""));
+
                         currentValue.set(Integer.parseInt(textField.getText()));
-                        textField.setText(t1.replaceAll("[^\\d]", ""));
                     }
                     slider.adjustValue(currentValue.get());
                 });
@@ -83,7 +84,7 @@ public class ModelSettings {
                     modelTransformByX.textField.setText((int) t1.x + "");
                     modelTransformByY.textField.setText((int) t1.y + "");
                     modelTransformByZ.textField.setText((int) t1.z + "");
-                    System.out.println("fdfddfdfd");
+                    System.out.println("I picked another model");
                 }
             });
         }
@@ -116,27 +117,37 @@ public class ModelSettings {
         translateTransform = new ModelTransform((VBox) vBox.getChildren().get(2));
 
 
-        //                        currentModel.get().model.setRotate(rotateTransform.vector);
-//                        currentModel.get().model.setScale(scaleTransform.vector);
-//                        currentModel.get().model.setTranslate(translateTransform.vector);
-
         currentModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) {
+                if (t1 != null) /**/{
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
                     if (uiModel != null) {
-                        translateTransition.setByX(0);
+                        translateTransition.setFromX(0);
+                        translateTransition.setToX(0);
+                        System.out.println("\n\n\n!!!!!!!\n\n\n");
                     } else {
-                        translateTransition.setByX(-175);
+                        translateTransition.setFromX(175);
+                        translateTransition.setToX(0);
                     }
                     currentModel.get().model.setRotate(rotateTransform.vector.get());
                     currentModel.get().model.setScale(scaleTransform.vector.get());
                     currentModel.get().model.setTranslate(translateTransform.vector.get());
                 } else {
-                    translateTransition.setByX(175);
+                    System.out.println("Модели нет");
+                    if (uiModel != null){
+
+                        translateTransition.setFromX(0);
+                        translateTransition.setToX(175);
+                        System.out.println("но прошлая была");
+                    }
+                    else {
+                        translateTransition.setFromX(0);
+                        translateTransition.setToX(0);
+                        System.out.println("но прошлой не было");
+                    }
                 }
                 translateTransition.play();
             }
@@ -144,7 +155,8 @@ public class ModelSettings {
 
         translateTransition = new TranslateTransition();
         translateTransition.setNode(settings);
-        translateTransition.setByX(175);
+        translateTransition.setFromX(0);
+        translateTransition.setToX(175);
         translateTransition.play();
     }
 

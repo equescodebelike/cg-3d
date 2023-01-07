@@ -107,6 +107,12 @@ public class GuiController {
         currentUIModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
+                if (t1!= null){
+                    isClickedOnModel = true;
+                }
+                else {
+                    isClickedOnModel = false;
+                }
                  settings.setCurrentModel(t1);
             }
         });
@@ -125,12 +131,10 @@ public class GuiController {
             Point2f point2f = new Point2f((float) x, (float) y);
             for (UIModel uiModel : uiModels) {
                 if (uiModel.getBorder().isInBorder(point2f)){
-                    isClickedOnModel = true;
                     currentUIModel.set(uiModel);
                     return;
                 }
             }
-            isClickedOnModel = false;
             currentUIModel.set(null);
         });
 
@@ -185,6 +189,7 @@ public class GuiController {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
                 RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
+
                 UIModel a = uiModels.get(i);
                 Model model = scene.loadedMeshes.get(i);
                 Point2f minP = model.getMinPoint2f();
@@ -294,15 +299,28 @@ public class GuiController {
         } catch (IOException exception) {
 
         }
-
+//        listView;
         Model model = ObjReader.read(fileContent, writeToConsole);
+        model.setName(file.getName());
         ChangedModel changedModel = new ChangedModel(model);
+
         scene.loadedMeshes.add(changedModel);
-        uiModels.add(new UIModel(changedModel));
+        UIModel a = new UIModel(changedModel);
+        uiModels.add(a);
 
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
         scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
-        listView.getItems().add(scene.loadedMeshes.get(numberMesh));
+        listView.getItems().add(a);
+//        listView.getSelectionModel().;
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                UIModel a = (UIModel) t1;
+                 currentUIModel.set(a);
+            }
+        });
+
+
         listView.scrollTo(scene.loadedMeshes.get(numberMesh));
 
         if (scene.loadedMeshes.size() > 1) {

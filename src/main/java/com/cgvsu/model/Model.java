@@ -17,6 +17,8 @@ public class Model {
     private List<Polygon> polygons;
     private List<Polygon> trianglePolygons;
 
+    private String name;
+
     private Point2f minPoint2f;
     private Point2f maxPoint2f;
 
@@ -45,6 +47,7 @@ public class Model {
 
     public Model(Model model) {
         this(model.vertices,model.textureVertices,model.normals,model.polygons,model.trianglePolygons);
+        setName(model.name);
     }
 
 
@@ -146,6 +149,10 @@ public class Model {
         return true;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,5 +164,10 @@ public class Model {
     @Override
     public int hashCode() {
         return Objects.hash(vertices, textureVertices, normals, polygons, trianglePolygons, minPoint2f, maxPoint2f);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
