@@ -53,7 +53,7 @@
             </Menu>
         </items>
     </MenuButton>
-    <MenuBar layoutX="78.0" layoutY="4.0" opacity="0.0">
+    <MenuBar layoutY="61.0" opacity="0.0">
         <Menu disable="true" mnemonicParsing="false" text="Move">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
@@ -88,5 +88,6 @@
         </Menu>
     </MenuBar>
 
-    <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
+    <Canvas fx:id="canvas" height="870" layoutY="46.0" width="1600" AnchorPane.topAnchor="46.0" />
+   <ListView fx:id="listView" layoutX="14.0" layoutY="163.0" prefHeight="511.0" prefWidth="218.0" />
 </AnchorPane>

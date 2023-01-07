@@ -1,37 +1,36 @@
 package com.cgvsu;
 
 import com.cgvsu.misc.ToggleSwitch;
+import com.cgvsu.model.ChangedModel;
+import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
+import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
+import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.vecmath.Vector3f;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import javax.vecmath.Vector3f;
-
-import com.cgvsu.objreader.ObjReader;
-import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
@@ -43,7 +42,7 @@ public class GuiController {
     private boolean writeToConsole = true;
     private Scene scene = new Scene();
 
-    private static final float EPS = 1e-6f;
+    public static final float EPS = 1e-6f;
 
     @FXML
     private AnchorPane anchorPane;
@@ -57,9 +56,13 @@ public class GuiController {
     @FXML
     private MenuButton menuButton;
 
-    // private final List<Model> mesh = new ArrayList<>();
-    // private Model mesh = null;
+    @FXML
+    private ListView listView;
 
+    // private final List<Model> mesh = new ArrayList<>();
+    private Model mesh = null;
+
+    //todo: list of models in ui
 
     private int numberCamera = 0;
     private int numberMesh = 0;
@@ -78,7 +81,7 @@ public class GuiController {
 
         // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
-       FileInputStream input = null;
+        FileInputStream input = null;
         try {
             input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
         } catch (FileNotFoundException e) {
@@ -116,10 +119,10 @@ public class GuiController {
 
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
 
-            if (scene.mesh.size() != 0) {
+            if (scene.loadedMeshes.size() != 0) {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
-                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.mesh.get(numberMesh), (int) width, (int) height);
+                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(numberMesh), (int) width, (int) height);
             }
         });
 
@@ -183,7 +186,7 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-            scene.mesh.add(ObjReader.read(fileContent, writeToConsole));
+            scene.loadedMeshes.add(ObjReader.read(fileContent, writeToConsole));
 
             /* String fileContent = Files.readString(fileName);
             Model model = ObjReader.read(fileContent, writeToConsole);
@@ -196,9 +199,12 @@ public class GuiController {
         } catch (IOException exception) {
 
         }
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
-        scene.mesh.get(numberMesh).setPolygons(triangles);
-        if (scene.mesh.size() > 1) {
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
+        scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
+        listView.getItems().add(scene.loadedMeshes.get(numberMesh));
+        listView.scrollTo(scene.loadedMeshes.get(numberMesh));
+
+        if (scene.loadedMeshes.size() > 1) {
             addCamera();
             nextModel();
         }
@@ -216,7 +222,7 @@ public class GuiController {
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
-            ArrayList<String> fileContent = ObjWriter.write(scene.mesh.get(numberMesh));
+            ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {
                 writer.write(s + "\n");
@@ -255,16 +261,16 @@ public class GuiController {
 
     @FXML
     public void nextModel() {
-        if (numberMesh < scene.mesh.size() - 1) numberMesh++;
+        if (numberMesh < scene.loadedMeshes.size() - 1) numberMesh++;
         else numberMesh = 0;
         nextCamera();
     }
 
     @FXML
     public void deleteMesh() {
-        if (scene.mesh.size() > 1) {
-            if (numberMesh == scene.mesh.size() - 1) numberMesh--;
-            scene.mesh.remove(scene.mesh.size() - 1);
+        if (scene.loadedMeshes.size() > 1) {
+            if (numberMesh == scene.loadedMeshes.size() - 1) numberMesh--;
+            scene.loadedMeshes.remove(scene.loadedMeshes.size() - 1);
         }
     }
 
