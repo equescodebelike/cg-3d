@@ -101,6 +101,8 @@ public class GuiController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue() - 300));
+        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue() - 300));
 
         // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
@@ -111,7 +113,7 @@ public class GuiController {
                 double y = mouseEvent.getY();
                 Point2f point2f = new Point2f((float) x, (float) y);
                 for (UIModel uiModel : uiModels) {
-                    if (uiModel.getBorder().isInBorder(point2f)){
+                    if (uiModel.getBorder().isInBorder(point2f)) {
                         isClickedOnModel = true;
                         currentUIModel = uiModel;
                         return;
@@ -121,6 +123,8 @@ public class GuiController {
                 currentUIModel = null;
             }
         });
+
+
         FileInputStream input = null;
         try {
             input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
@@ -159,23 +163,16 @@ public class GuiController {
             //todo: HashMap, change model
 
             // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
+            for (int i = 0; i < scene.loadedMeshes.size(); i++) {
 
-            if (scene.loadedMeshes.size() != 0) {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
-                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(numberMesh), (int) width, (int) height);
-                RenderEngine.render(
-                        canvas.getGraphicsContext2D(),
-                        scene.getCamera().get(numberCamera),
-                        scene.mesh.get(numberMesh),
-                        (int) width,
-                        (int) height
-                );
-                UIModel a = uiModels.get(numberMesh);
-                Model model = scene.mesh.get(numberMesh);
+                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
+                UIModel a = uiModels.get(i);
+                Model model = scene.loadedMeshes.get(i);
                 Point2f minP = model.getMinPoint2f();
                 Point2f maxP = model.getMaxPoint2f();
-                a.setSize(minP,maxP);
+                a.setSize(minP, maxP);
 //                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
 //                Border b = a.getBorder();
 /*                canvas.getGraphicsContext2D().fillRect(
@@ -185,17 +182,15 @@ public class GuiController {
                         b.getHeight()
                 );*/
 
-                if (isClickedOnModel){
-                    Border b = currentUIModel.getBorder();
-                    canvas.getGraphicsContext2D().strokeRect(
-                            b.getScale().x,
-                            b.getScale().y,
-                            b.getWidth(),
-                            b.getHeight()
-                    );
-                }
-
-
+            }
+            if (isClickedOnModel) {
+                Border b = currentUIModel.getBorder();
+                canvas.getGraphicsContext2D().strokeRect(
+                        b.getScale().x,
+                        b.getScale().y,
+                        b.getWidth(),
+                        b.getHeight()
+                );
             }
         });
 
@@ -273,23 +268,20 @@ public class GuiController {
         }
 
         Model model = ObjReader.read(fileContent, writeToConsole);
-        scene.mesh.add(model);
+        scene.loadedMeshes.add(model);
 
         uiModels.add(new UIModel());
 
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
-        scene.mesh.get(numberMesh).setPolygons(triangles);
-        if (scene.loadedMeshes.size() > 1) {
-            ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
-            scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
-            listView.getItems().add(scene.loadedMeshes.get(numberMesh));
-            listView.scrollTo(scene.loadedMeshes.get(numberMesh));
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
+        scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
+        listView.getItems().add(scene.loadedMeshes.get(numberMesh));
+        listView.scrollTo(scene.loadedMeshes.get(numberMesh));
 
-            if (scene.loadedMeshes.size() > 1) {
-                addCamera();
-                nextModel();
-            }
+        if (scene.loadedMeshes.size() > 1) {
+            addCamera();
+            nextModel();
         }
+
     }
 
     @FXML

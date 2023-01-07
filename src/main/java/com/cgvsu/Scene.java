@@ -15,7 +15,7 @@ public class Scene {
 
     //todo: Model -> ChangedModel
 
-    public HashMap<String, Model> loadedModels = new HashMap<>();
+    public HashMap<String, ChangedModel> loadedModels = new HashMap<>();
     public List<Model> loadedMeshes = new ArrayList<>();
     // public HashMap<String, Model> mapLoadedMeshes = new HashMap<>();
 
@@ -36,7 +36,7 @@ public class Scene {
         this.mapLoadedMeshes = mapLoadedMeshes;
     } */
 
-    public HashMap<String, Model> getLoadedModels() {
+    public HashMap<String, ChangedModel> getLoadedModels() {
         return loadedModels;
     }
 
@@ -48,7 +48,7 @@ public class Scene {
         this.currentModel = currentModel;
     }
 
-    public void setLoadedModels(HashMap<String, Model> loadedModels) {
+    public void setLoadedModels(HashMap<String, ChangedModel> loadedModels) {
         this.loadedModels = loadedModels;
     }
 
