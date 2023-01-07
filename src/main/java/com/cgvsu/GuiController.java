@@ -3,23 +3,32 @@ package com.cgvsu;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
+import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
+import com.cgvsu.ui.Border;
+import com.cgvsu.ui.MyRectangle;
+import com.cgvsu.ui.UIModel;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -28,9 +37,18 @@ import javafx.util.Duration;
 
 import javax.vecmath.Vector3f;
 import java.io.*;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import javax.vecmath.Point2f;
+import javax.vecmath.Vector3f;
+
+import com.cgvsu.objreader.ObjReader;
+import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
@@ -40,9 +58,14 @@ public class GuiController {
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
     private boolean writeToConsole = true;
-    private Scene scene = new Scene();
+    private final Scene scene = new Scene();
+
+    List<UIModel> uiModels = new ArrayList<>();
 
     public static final float EPS = 1e-6f;
+
+    private boolean isClickedOnModel = false;
+    private UIModel currentUIModel;
 
     @FXML
     private AnchorPane anchorPane;
@@ -81,6 +104,23 @@ public class GuiController {
 
         // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
+        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Point2f point2f = new Point2f((float) x, (float) y);
+                for (UIModel uiModel : uiModels) {
+                    if (uiModel.getBorder().isInBorder(point2f)){
+                        isClickedOnModel = true;
+                        currentUIModel = uiModel;
+                        return;
+                    }
+                }
+                isClickedOnModel = false;
+                currentUIModel = null;
+            }
+        });
         FileInputStream input = null;
         try {
             input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
@@ -107,7 +147,8 @@ public class GuiController {
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
-
+        //It's better to change. Updating every 15 millis aren't well.
+        //I'll do it by myself @Nikitos
         KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -123,6 +164,38 @@ public class GuiController {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
                 RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(numberMesh), (int) width, (int) height);
+                RenderEngine.render(
+                        canvas.getGraphicsContext2D(),
+                        scene.getCamera().get(numberCamera),
+                        scene.mesh.get(numberMesh),
+                        (int) width,
+                        (int) height
+                );
+                UIModel a = uiModels.get(numberMesh);
+                Model model = scene.mesh.get(numberMesh);
+                Point2f minP = model.getMinPoint2f();
+                Point2f maxP = model.getMaxPoint2f();
+                a.setSize(minP,maxP);
+//                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
+//                Border b = a.getBorder();
+/*                canvas.getGraphicsContext2D().fillRect(
+                        b.getScale().x,
+                        b.getScale().y,
+                        b.getWidth(),
+                        b.getHeight()
+                );*/
+
+                if (isClickedOnModel){
+                    Border b = currentUIModel.getBorder();
+                    canvas.getGraphicsContext2D().strokeRect(
+                            b.getScale().x,
+                            b.getScale().y,
+                            b.getWidth(),
+                            b.getHeight()
+                    );
+                }
+
+
             }
         });
 
@@ -183,10 +256,9 @@ public class GuiController {
         }
 
         Path fileName = Path.of(file.getAbsolutePath());
-
+        String fileContent = "";
         try {
-            String fileContent = Files.readString(fileName);
-            scene.loadedMeshes.add(ObjReader.read(fileContent, writeToConsole));
+            fileContent = Files.readString(fileName);
 
             /* String fileContent = Files.readString(fileName);
             Model model = ObjReader.read(fileContent, writeToConsole);
@@ -199,14 +271,24 @@ public class GuiController {
         } catch (IOException exception) {
 
         }
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
-        scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
-        listView.getItems().add(scene.loadedMeshes.get(numberMesh));
-        listView.scrollTo(scene.loadedMeshes.get(numberMesh));
 
+        Model model = ObjReader.read(fileContent, writeToConsole);
+        scene.mesh.add(model);
+
+        uiModels.add(new UIModel());
+
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.mesh.get(numberMesh).getPolygons());
+        scene.mesh.get(numberMesh).setPolygons(triangles);
         if (scene.loadedMeshes.size() > 1) {
-            addCamera();
-            nextModel();
+            ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
+            scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
+            listView.getItems().add(scene.loadedMeshes.get(numberMesh));
+            listView.scrollTo(scene.loadedMeshes.get(numberMesh));
+
+            if (scene.loadedMeshes.size() > 1) {
+                addCamera();
+                nextModel();
+            }
         }
     }
 

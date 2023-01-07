@@ -90,4 +90,35 @@
 
     <Canvas fx:id="canvas" height="870" layoutY="46.0" width="1600" AnchorPane.topAnchor="46.0" />
    <ListView fx:id="listView" layoutX="14.0" layoutY="163.0" prefHeight="511.0" prefWidth="218.0" />
+    <Canvas fx:id="canvas" height="500.0" width="800.0" AnchorPane.topAnchor="30.0" />
+    <AnchorPane fx:id="changeTheme" layoutX="81.0" layoutY="525.0" prefHeight="155.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" />
+   <AnchorPane layoutX="593.0" prefHeight="561.0" prefWidth="174.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+         <VBox prefHeight="232.0" prefWidth="174.0">
+            <children>
+               <Label prefHeight="25.0" prefWidth="35.0" text="Rotate" />
+               <Pane prefHeight="69.0" prefWidth="174.0">
+                  <children>
+                     <Label text="Label" />
+                     <Slider fx:id="slider" layoutX="30.0" layoutY="44.0" prefHeight="25.0" prefWidth="117.0" />
+                     <TextField layoutX="26.0" layoutY="20.0" prefHeight="0.0" prefWidth="117.0" />
+                  </children>
+               </Pane>
+               <Pane layoutX="10.0" layoutY="35.0" prefHeight="69.0" prefWidth="174.0">
+                  <children>
+                     <Label text="Label" />
+                     <Slider fx:id="slider1" layoutX="30.0" layoutY="44.0" prefHeight="25.0" prefWidth="117.0" />
+                     <TextField layoutX="26.0" layoutY="20.0" prefHeight="0.0" prefWidth="117.0" />
+                  </children>
+               </Pane>
+               <Pane layoutX="10.0" layoutY="104.0" prefHeight="69.0" prefWidth="174.0">
+                  <children>
+                     <Label text="Label" />
+                     <Slider fx:id="slider11" layoutX="30.0" layoutY="44.0" prefHeight="25.0" prefWidth="117.0" />
+                     <TextField layoutX="26.0" layoutY="20.0" prefHeight="0.0" prefWidth="117.0" />
+                  </children>
+               </Pane>
+            </children>
+         </VBox>
+      </children></AnchorPane>
 </AnchorPane>
