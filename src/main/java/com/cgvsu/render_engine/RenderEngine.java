@@ -3,9 +3,16 @@ package com.cgvsu.render_engine;
 import java.util.ArrayList;
 
 import com.cgvsu.math.Vector3f;
+import com.cgvsu.rasterization.DrawUtilsJavaFX;
+import com.cgvsu.rasterization.GraphicsUtils;
+import com.cgvsu.rasterization.MyColor;
+import com.cgvsu.rasterization.Rasterization;
 import javafx.scene.canvas.GraphicsContext;
+
 import javax.vecmath.*;
+
 import com.cgvsu.model.Model;
+
 import static com.cgvsu.render_engine.GraphicConveyor.*;
 
 public class RenderEngine {
@@ -15,15 +22,17 @@ public class RenderEngine {
             final Camera camera,
             final Model mesh,
             final int width,
-            final int height)
-    {
-        Matrix4f modelMatrix = rotateScaleTranslate();
+            final int height) {
+        Matrix4f modelMatrix = rotateScaleTranslate(new javax.vecmath.Vector3f(0, 0, 0),
+                new javax.vecmath.Vector3f(1, 1, 1),
+                new javax.vecmath.Vector3f(0, 0, 0));
         Matrix4f viewMatrix = camera.getViewMatrix();
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
         Matrix4f modelViewProjectionMatrix = new Matrix4f(modelMatrix);
         modelViewProjectionMatrix.mul(viewMatrix);
         modelViewProjectionMatrix.mul(projectionMatrix);
+
 
         final int nPolygons = mesh.getPolygons().size();
 
@@ -57,6 +66,7 @@ public class RenderEngine {
                 }
                 resultPoints.add(resultPoint);
             }
+            GraphicsUtils gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
 
 
 
@@ -66,14 +76,20 @@ public class RenderEngine {
                         resultPoints.get(vertexInPolygonInd - 1).y,
                         resultPoints.get(vertexInPolygonInd).x,
                         resultPoints.get(vertexInPolygonInd).y);
+                //Rasterization
+                if (vertexInPolygonInd + 1 < nVerticesInPolygon)
+                    Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
+                            resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
+                            resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
+                            MyColor.GREEN, MyColor.BLUE, MyColor.RED);
             }
-
-            if (nVerticesInPolygon > 0)
+            if (nVerticesInPolygon > 0) {
                 graphicsContext.strokeLine(
                         resultPoints.get(nVerticesInPolygon - 1).x,
                         resultPoints.get(nVerticesInPolygon - 1).y,
                         resultPoints.get(0).x,
                         resultPoints.get(0).y);
+            }
         }
 
         mesh.setMinPoint2f(minPoint);

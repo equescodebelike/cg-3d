@@ -1,15 +1,59 @@
 package com.cgvsu.render_engine;
+
 import javax.vecmath.*;
+
+import static java.lang.Math.*;
 
 public class GraphicConveyor {
 
-    public static Matrix4f rotateScaleTranslate() {
+    public static Matrix4f rotateScaleTranslate(final Vector3f rotateVector, final Vector3f scaleVector, final Vector3f translationVector) {
         float[] matrix = new float[]{
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                0, 0, 0, 1};
-        return new Matrix4f(matrix);
+                0, 0, 0, 1
+        };
+        Matrix4f matrix4f = new Matrix4f(matrix);
+        //Angles GRAD -> RAD
+        float rotateAngleXRAD = (float) ((rotateVector.x) * PI / 180);
+        float rotateAngleYRAD = (float) ((rotateVector.y) * PI / 180);
+        float rotateAngleZRAD = (float) ((rotateVector.z) * PI / 180);
+
+        //Rotation
+        //x
+        matrix4f.mul(new Matrix4f(new float[]{
+                1, 0, 0, 0,
+                0, (float) cos(rotateAngleXRAD), (float) sin(rotateAngleXRAD), 0,
+                0, (float) -sin(rotateAngleXRAD), (float) cos(rotateAngleXRAD), 0,
+                0, 0, 0, 1
+        }));
+        //y
+        matrix4f.mul(new Matrix4f(new float[]{
+                (float) cos(rotateAngleYRAD), 0, (float) -sin(rotateAngleYRAD), 0,
+                0, 1, 0, 0,
+                (float) sin(rotateAngleYRAD), 0, (float) cos(rotateAngleYRAD), 0,
+                0, 0, 0, 1
+        }));
+        //z
+        matrix4f.mul(new Matrix4f(new float[]{
+                (float) cos(rotateAngleZRAD), (float) sin(rotateAngleZRAD), 0, 0,
+                -(float) sin(rotateAngleZRAD), (float) cos(rotateAngleZRAD), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        }));
+
+
+        //Scaling
+        matrix4f.m00 *= scaleVector.x;
+        matrix4f.m11 *= scaleVector.y;
+        matrix4f.m22 *= scaleVector.z;
+        //Translation
+        matrix4f.m30 = translationVector.x;
+        matrix4f.m31 = translationVector.y;
+        matrix4f.m32 = translationVector.z;
+
+
+        return matrix4f;
     }
 
     public static Matrix4f lookAt(Vector3f eye, Vector3f target) {
