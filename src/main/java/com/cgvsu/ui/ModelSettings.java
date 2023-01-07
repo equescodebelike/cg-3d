@@ -84,7 +84,6 @@ public class ModelSettings {
                     modelTransformByX.textField.setText((int) t1.x + "");
                     modelTransformByY.textField.setText((int) t1.y + "");
                     modelTransformByZ.textField.setText((int) t1.z + "");
-                    System.out.println("I picked another model");
                 }
             });
         }
@@ -120,7 +119,7 @@ public class ModelSettings {
         currentModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) /**/{
+                if (t1 != null) /**/ {
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
@@ -136,17 +135,13 @@ public class ModelSettings {
                     currentModel.get().model.setScale(scaleTransform.vector.get());
                     currentModel.get().model.setTranslate(translateTransform.vector.get());
                 } else {
-                    System.out.println("Модели нет");
-                    if (uiModel != null){
+                    if (uiModel != null) {
 
                         translateTransition.setFromX(0);
                         translateTransition.setToX(175);
-                        System.out.println("но прошлая была");
-                    }
-                    else {
+                    } else {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
-                        System.out.println("но прошлой не было");
                     }
                 }
                 translateTransition.play();

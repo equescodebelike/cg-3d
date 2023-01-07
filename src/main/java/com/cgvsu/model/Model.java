@@ -46,7 +46,7 @@ public class Model {
     }
 
     public Model(Model model) {
-        this(model.vertices,model.textureVertices,model.normals,model.polygons,model.trianglePolygons);
+        this(model.vertices, model.textureVertices, model.normals, model.polygons, model.trianglePolygons);
         setName(model.name);
     }
 

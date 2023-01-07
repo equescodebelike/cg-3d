@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class DrawUtilsSwing extends GraphicsUtils<Graphics> {
 
-
     public DrawUtilsSwing(Graphics graphics) {
         super(graphics);
     }
@@ -18,6 +17,4 @@ public class DrawUtilsSwing extends GraphicsUtils<Graphics> {
     private Color toColor(MyColor myColor) {
         return new Color((int) (255 * myColor.getRed()), (int) (255 * myColor.getGreen()), (int) (255 * myColor.getBlue()));
     }
-
-
 }

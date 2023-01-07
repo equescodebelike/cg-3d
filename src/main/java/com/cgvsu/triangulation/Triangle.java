@@ -30,7 +30,7 @@ public class Triangle {
                     triangle.getTextureVertexIndices().add(
                             polygon.getTextureVertexIndices().get(1));
                     triangle.getTextureVertexIndices().add(
-                            polygon.getTextureVertexIndices().get( 2));
+                            polygon.getTextureVertexIndices().get(2));
                 }
 
                 if (polygon.getNormalIndices().size() != 0) {

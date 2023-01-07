@@ -8,5 +8,4 @@ public abstract class GraphicsUtils<T> {
     }
 
     public abstract void setPixel(int x, int y, MyColor myColor);
-
 }

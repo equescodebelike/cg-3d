@@ -41,7 +41,6 @@ public class MyPoint2D {
         return Objects.hash(x, y);
     }
 
-
     @Override
     public String toString() {
         return "MyPoint2D{" +

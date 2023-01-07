@@ -7,19 +7,22 @@ public class Border {
     Point2f rightTop;
 
 
-
-    public boolean isInBorder(Point2f p){
+    public boolean isInBorder(Point2f p) {
         return p.x > leftBottom.x && p.x < rightTop.x && p.y > leftBottom.y && p.y < rightTop.y;
     }
-    public Point2f getScale(){
+
+    public Point2f getScale() {
         return leftBottom;
     }
-    public double getWidth(){
+
+    public double getWidth() {
         return rightTop.x - leftBottom.x;
     }
-    public double getHeight(){
+
+    public double getHeight() {
         return rightTop.y - leftBottom.y;
     }
+
     public void setScale(Point2f leftBottom) {
         this.leftBottom = leftBottom;
     }

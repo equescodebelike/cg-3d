@@ -12,7 +12,6 @@ public class Rasterization {
             MyPoint2D p1, MyPoint2D p2, MyPoint2D p3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3) {
 
-
         List<MyPoint2D> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
 
         points.sort(Comparator.comparingDouble(MyPoint2D::getY));
@@ -89,5 +88,4 @@ public class Rasterization {
 
         return new MyColor(r, g, b);
     }
-
 }

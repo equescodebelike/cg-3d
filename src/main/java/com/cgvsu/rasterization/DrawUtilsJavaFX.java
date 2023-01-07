@@ -1,6 +1,5 @@
 package com.cgvsu.rasterization;
 
-
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 

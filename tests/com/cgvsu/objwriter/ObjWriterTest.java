@@ -3,10 +3,8 @@ package com.cgvsu.objwriter;
 import com.cgvsu.math.Vector2f;
 import com.cgvsu.math.Vector3f;
 import com.cgvsu.model.Polygon;
-import com.cgvsu.objwriter.ObjWriter;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,36 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class ObjWriterTest {
-
-    @Test
-    void write() throws IOException {
-        /*Path fileName = Path.of("src/cg/models/Faceform/WrapHead.obj");
-        String fileContent = Files.readString(fileName);
-        Model model = ObjReader.read(fileContent);
-
-        Path fileName2 = Path.of("src/cg/models/Faceform/NewOne.obj");
-        try {
-            ArrayList<String> fileContent2 = ObjWriter.write(model);
-            FileWriter writer = new FileWriter(fileName2.toFile());
-            for (String s : fileContent2) {
-                writer.write(s + "\n");
-
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException ex) {
-
-        }
-
-        String fileContent2 = Files.readString(fileName2);
-        Model model2 = ObjReader.read(fileContent2);
-
-        assertEquals(model.normals.size(), model2.normals.size());
-        assertEquals(model.textureVertices.size(), model2.textureVertices.size());
-        assertEquals(model.polygons.size(), model2.polygons.size());
-        assertEquals(model.vertices.size(), model2.vertices.size());*/
-    }
-
 
     @Test
     void writeVertices1() {

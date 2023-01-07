@@ -12,13 +12,9 @@ public class Scene {
 
     String currentModel;
 
-    // private HashMap<String, ChangedModel> loadedModels = new HashMap<>();
     public List<ChangedModel> loadedMeshes = new ArrayList<>();
-    //todo: Model -> ChangedModel
 
     public HashMap<String, ChangedModel> loadedModels = new HashMap<>();
-//    public List<Model> loadedMeshes = new ArrayList<>();
-    // public HashMap<String, Model> mapLoadedMeshes = new HashMap<>();
 
     private List<Camera> camera = new ArrayList<>(List.of(new Camera(
             new Vector3f(0, 0, 100),
@@ -28,14 +24,6 @@ public class Scene {
     public String getCurrentModel() {
         return currentModel;
     }
-
-    /* public HashMap<String, Model> getMapLoadedMeshes() {
-        return mapLoadedMeshes;
-    }
-
-    public void setMapLoadedMeshes(HashMap<String, Model> mapLoadedMeshes) {
-        this.mapLoadedMeshes = mapLoadedMeshes;
-    } */
 
     public HashMap<String, ChangedModel> getLoadedModels() {
         return loadedModels;

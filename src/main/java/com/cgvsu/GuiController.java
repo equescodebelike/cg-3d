@@ -50,7 +50,8 @@ public class GuiController {
     // private boolean isStructure = false; mesh
     // public static boolean isLight = true; light
     // private boolean isTexture = false; texture
-    private boolean writeToConsole = true;
+    private boolean writeToConsole = false;
+
     private final Scene scene = new Scene();
 
     List<UIModel> uiModels = new ArrayList<>();
@@ -58,12 +59,14 @@ public class GuiController {
     public static final float EPS = 1e-6f;
 
     private boolean isClickedOnModel = false;
+
     private SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
 
     @FXML
     AnchorPane modelSettings;
 
-    ModelSettings settings ;
+    ModelSettings settings;
+
     @FXML
     private AnchorPane anchorPane;
 
@@ -79,20 +82,12 @@ public class GuiController {
     @FXML
     private ListView listView;
 
-    // private final List<Model> mesh = new ArrayList<>();
     private Model mesh = null;
-
-    //todo: list of models in ui
 
     private int numberCamera = 0;
     private int numberMesh = 0;
 
     private Timeline timeline;
-
-   /* private List<Camera> camera = new ArrayList<>(List.of(new Camera(
-            new Vector3f(0, 0, 100),
-            new Vector3f(0, 0, 0),
-            1.0F, 1, 0.01F, 100)));*/
 
     @FXML
     private void initialize() {
@@ -107,30 +102,21 @@ public class GuiController {
         currentUIModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1!= null){
+                if (t1 != null) {
                     isClickedOnModel = true;
-                }
-                else {
+                } else {
                     isClickedOnModel = false;
                 }
-                 settings.setCurrentModel(t1);
+                settings.setCurrentModel(t1);
             }
         });
-        /*checkMenuItem.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            if (isSelected) {
-                scene.getStyleSheets().add("dark-theme.css");
-            } else {
-                scene.getStyleSheets().remove("dark-theme.css");
-            }
-        });*/
-        // AnchorPane.setBottomAnchor(changeTheme,800.0);
 
         canvas.setOnMouseReleased(mouseEvent -> {
             double x = mouseEvent.getX();
             double y = mouseEvent.getY();
             Point2f point2f = new Point2f((float) x, (float) y);
             for (UIModel uiModel : uiModels) {
-                if (uiModel.getBorder().isInBorder(point2f)){
+                if (uiModel.getBorder().isInBorder(point2f)) {
                     currentUIModel.set(uiModel);
                     return;
                 }
@@ -174,16 +160,6 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
 
-//            if (currentUIModel.get() !=null){
-//                System.out.println(currentUIModel.get().getModel().getRotate());
-//                System.out.println(currentUIModel.get().getModel().getScale());
-//                System.out.println(currentUIModel.get().getModel().getTranslate());
-//
-//            }
-
-            //todo: HashMap, change model
-
-            // scene.getLoadedModels().get(scene.currentModel).setRotate(new com.cgvsu.math.Vector3f(Double.parseDouble()));
             for (int i = 0; i < scene.loadedMeshes.size(); i++) {
 
                 canvas.setOnMousePressed(this::handleMousePressed);
@@ -195,16 +171,8 @@ public class GuiController {
                 Point2f minP = model.getMinPoint2f();
                 Point2f maxP = model.getMaxPoint2f();
                 a.setSize(minP, maxP);
-//                canvas.getGraphicsContext2D().fillRect(minP.x,minP.y,maxP.x - minP.x,maxP.y - minP.y);
-//                Border b = a.getBorder();
-/*                canvas.getGraphicsContext2D().fillRect(
-                        b.getScale().x,
-                        b.getScale().y,
-                        b.getWidth(),
-                        b.getHeight()
-                );*/
 
-                if (isClickedOnModel){
+                if (isClickedOnModel) {
                     Border b = currentUIModel.get().getBorder();
                     canvas.getGraphicsContext2D().strokeRect(
                             b.getScale().x,
@@ -213,7 +181,6 @@ public class GuiController {
                             b.getHeight()
                     );
                 }
-
 
             }
             if (isClickedOnModel) {
@@ -234,7 +201,6 @@ public class GuiController {
     private void handleWheelScroll() {
         anchorPane.setOnScroll(scrollEvent -> {
             double deltaY = scrollEvent.getDeltaY();
-            //todo: scene
             if (deltaY > 0) {
                 scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, 0, -TRANSLATION));
             } else {
@@ -288,18 +254,9 @@ public class GuiController {
         try {
             fileContent = Files.readString(fileName);
 
-            /* String fileContent = Files.readString(fileName);
-            Model model = ObjReader.read(fileContent, writeToConsole);
-            ArrayList<Polygon> triangles = Triangle.triangulatePolygon(model.getPolygons());
-            model.setPolygons(triangles);
-            scene.getLoadedModels().put(file.getName(), new ChangedModel(model));
-            scene.currentModel = file.getName(); */
-
-            // todo: обработка ошибок
         } catch (IOException exception) {
 
         }
-//        listView;
         Model model = ObjReader.read(fileContent, writeToConsole);
         model.setName(file.getName());
         ChangedModel changedModel = new ChangedModel(model);
@@ -311,15 +268,10 @@ public class GuiController {
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
         scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
         listView.getItems().add(a);
-//        listView.getSelectionModel().;
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                UIModel a = (UIModel) t1;
-                 currentUIModel.set(a);
-            }
+        listView.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
+            UIModel a1 = (UIModel) t1;
+            currentUIModel.set(a1);
         });
-
 
         listView.scrollTo(scene.loadedMeshes.get(numberMesh));
 
@@ -342,7 +294,6 @@ public class GuiController {
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
-            //todo model -> changed module
             ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
             FileWriter writer = new FileWriter(fileName.toFile());
             for (String s : fileContent) {
@@ -352,7 +303,7 @@ public class GuiController {
             writer.flush();
             writer.close();
         } catch (IOException ex) {
-            // Handle exception
+
         }
 
     }

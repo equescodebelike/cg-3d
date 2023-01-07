@@ -2,11 +2,9 @@ package com.cgvsu.rasterization;
 
 public class MyColor {
 
-
     public static final MyColor RED = new MyColor(1, 0, 0);
     public static final MyColor GREEN = new MyColor(0, 1, 0);
     public static final MyColor BLUE = new MyColor(0, 0, 1);
-
 
     private final double R;
     private final double G;
