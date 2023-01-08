@@ -81,8 +81,8 @@ public class RenderEngine {
             GraphicsUtils gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
 
 
-                for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                    if (!isLight && !isTextured) {
+            for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
+                if (!isLight && !isTextured) {
                     graphicsContext.strokeLine(
                             resultPoints.get(vertexInPolygonInd - 1).x,
                             resultPoints.get(vertexInPolygonInd - 1).y,
@@ -94,14 +94,14 @@ public class RenderEngine {
                                 resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
                                 resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
                                 MyColor.GREEN, MyColor.BLUE, MyColor.RED);
-                if (nVerticesInPolygon > 0) {
-                    graphicsContext.strokeLine(
-                            resultPoints.get(nVerticesInPolygon - 1).x,
-                            resultPoints.get(nVerticesInPolygon - 1).y,
-                            resultPoints.get(0).x,
-                            resultPoints.get(0).y);
-                }}
-                else {
+                    if (nVerticesInPolygon > 0) {
+                        graphicsContext.strokeLine(
+                                resultPoints.get(nVerticesInPolygon - 1).x,
+                                resultPoints.get(nVerticesInPolygon - 1).y,
+                                resultPoints.get(0).x,
+                                resultPoints.get(0).y);
+                    }
+                } else {
                     Rasterization.fillTriangle(gr,
                             resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
                             resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
@@ -109,7 +109,7 @@ public class RenderEngine {
                             MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
                             mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(0)),
                             mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(1)),
-                            mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(2)),mesh);
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(2)), mesh);
                 }
             }
         }

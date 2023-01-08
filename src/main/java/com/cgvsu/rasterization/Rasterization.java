@@ -1,8 +1,7 @@
 package com.cgvsu.rasterization;
 
-import com.cgvsu.GuiController;
 import com.cgvsu.math.SomeVectorMath;
-import com.cgvsu.math.Vector2f;
+import com.cgvsu.math.vectors.vectorFloat.Vector2f;
 import com.cgvsu.model.Model;
 import com.cgvsu.render_engine.Camera;
 
@@ -82,7 +81,7 @@ public class Rasterization {
             double x3, double y3, double z3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
             Double[][] zBuffer, Camera camera, BufferedImage image,
-            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3,Model mesh) throws IOException {
+            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, Model mesh) throws IOException {
         fillTriangleTextureAndLight(gr, new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3),
                 myColor1, myColor2, myColor3, zBuffer, camera, image, texturePoint1, texturePoint2, texturePoint3,mesh);
     }
@@ -148,11 +147,11 @@ public class Rasterization {
         for (int x = (int) startX + 1; x < endX; x++) {
             double z = SomeVectorMath.getZ(new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3), x, y);
             if (x >= 0 && y >= 0) {
-                if (zBuffer[x][y] == null || zBuffer[x][y] > Math.abs(z - camera.getPosition().z)) {
+                if (zBuffer[x][y] == null || zBuffer[x][y] > Math.abs(z - camera.getPosition().getZ())) {
                     MyColor color = getColor(myColor1, myColor2, myColor3, x, y, x1, x2, x3, y1, y2, y3, image,
                             texturePoint1, texturePoint2, texturePoint3,mesh);
                     gr.setPixel(x, y, new MyColor(color.getRed() * cosLight, color.getGreen() * cosLight, color.getBlue() * cosLight));
-                    zBuffer[x][y] = Math.abs(z - camera.getPosition().z);
+                    zBuffer[x][y] = Math.abs(z - camera.getPosition().getZ());
                 }
             }
         }
