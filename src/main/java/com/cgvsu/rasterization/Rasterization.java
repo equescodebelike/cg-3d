@@ -27,24 +27,30 @@ public class Rasterization {
             MyPoint3D tmp = points.get(1);
             points.set(1, points.get(0));
             points.set(0, tmp);
-            Vector2f tmp1 = texturePoint1;
-            texturePoint1 = texturePoint2;
-            texturePoint2 = tmp1;
+            if (texturePoint1 != null) {
+                Vector2f tmp1 = texturePoint1;
+                texturePoint1 = texturePoint2;
+                texturePoint2 = tmp1;
+            }
         }
         if (points.get(1).getY() > points.get(2).getY()) {
             MyPoint3D tmp = points.get(2);
             points.set(2, points.get(1));
             points.set(1, tmp);
-            Vector2f tmp1 = texturePoint2;
-            texturePoint2 = texturePoint3;
-            texturePoint3 = tmp1;
+            if (texturePoint1 != null) {
+                Vector2f tmp1 = texturePoint2;
+                texturePoint2 = texturePoint3;
+                texturePoint3 = tmp1;
+            }
             if (points.get(0).getY() > points.get(1).getY()) {
                 MyPoint3D tmp2 = points.get(1);
                 points.set(1, points.get(0));
                 points.set(0, tmp2);
-                Vector2f tmp3 = texturePoint1;
-                texturePoint1 = texturePoint2;
-                texturePoint2 = tmp3;
+                if (texturePoint1 != null) {
+                    Vector2f tmp3 = texturePoint1;
+                    texturePoint1 = texturePoint2;
+                    texturePoint2 = tmp3;
+                }
             }
         }
 
@@ -105,7 +111,6 @@ public class Rasterization {
             startX = endX;
             endX = temp;
         }
-        int counter = 0;
         for (int x = (int) startX + 1; x < endX; x++) {
             double z = SomeVectorMath.getZ(new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3), x, y);
             if (x >= 0 && y >= 0) {
@@ -143,7 +148,7 @@ public class Rasterization {
 
             return new MyColor(r, g, b);
 
-        } else {
+        } else if (texturePoint1 != null){
             float aup = (float) (x1 - x);
             float bup = (float) (x2 - x);
             float cup = (float) (x3 - x);
@@ -163,6 +168,8 @@ public class Rasterization {
             double vI = u * texturePoint1.getY() + v * texturePoint2.getY() + w * texturePoint3.getY();
             return getColorTexture(uI, vI, image);
         }
+        else
+            return null;
     }
 
     public static MyColor getColorTexture(double x0, double y0, BufferedImage image) throws IOException {

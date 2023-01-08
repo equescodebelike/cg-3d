@@ -97,6 +97,7 @@ public class RenderEngine {
             }
 
         if (mesh.isRasterized()) {
+            if (mesh.getTextureVertices().size() != 0)
             Rasterization.fillTriangle(gr,
                     resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
                     resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
@@ -105,6 +106,16 @@ public class RenderEngine {
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
+            else {
+                Rasterization.fillTriangle(gr,
+                        resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                        resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                        resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                        MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
+                        null,
+                        null,
+                        null, mesh);
+            }
         }
     }
 
