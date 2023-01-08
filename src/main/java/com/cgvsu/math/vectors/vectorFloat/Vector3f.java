@@ -15,8 +15,6 @@ public class Vector3f extends Vector3<Float> {
         super(x, y, z);
     }
 
-
-
     public Vector3f(float value) {
         super(value);
     }

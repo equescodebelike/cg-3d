@@ -180,7 +180,7 @@ public class GuiController {
                     //LoadBufferedImage
                 else
                     try {
-                        RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, true, true, null);
+                        RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, false, false, null);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
