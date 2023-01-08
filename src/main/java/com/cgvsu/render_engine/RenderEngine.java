@@ -74,11 +74,6 @@ public class RenderEngine {
 
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                graphicsContext.strokeLine(
-                        resultPoints.get(vertexInPolygonInd - 1).x,
-                        resultPoints.get(vertexInPolygonInd - 1).y,
-                        resultPoints.get(vertexInPolygonInd).x,
-                        resultPoints.get(vertexInPolygonInd).y);
                 //Rasterization
                 if (vertexInPolygonInd + 1 < nVerticesInPolygon)
                     Rasterization.fillTriangle(gr,
@@ -86,13 +81,6 @@ public class RenderEngine {
                             resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y, pointsZ.get(vertexInPolygonInd),
                             resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y, pointsZ.get(vertexInPolygonInd + 1),
                             MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera);
-            }
-            if (nVerticesInPolygon > 0) {
-                graphicsContext.strokeLine(
-                        resultPoints.get(nVerticesInPolygon - 1).x,
-                        resultPoints.get(nVerticesInPolygon - 1).y,
-                        resultPoints.get(0).x,
-                        resultPoints.get(0).y);
             }
         }
 
