@@ -81,10 +81,9 @@ public class ModelSettings {
             vector.addListener(new ChangeListener<Vector3f>() {
                 @Override
                 public void changed(ObservableValue<? extends Vector3f> observableValue, Vector3f vector3f, Vector3f t1) {
-                    modelTransformByX.textField.setText((int) (float)t1.getX() + "");
-                    modelTransformByY.textField.setText((int) (float)t1.getY() + "");
-                    modelTransformByZ.textField.setText((int) (float)t1.getZ() + "");
-                    System.out.println("I picked another model");
+                    modelTransformByX.textField.setText((int) (float) t1.getX() + "");
+                    modelTransformByY.textField.setText((int) (float) t1.getY() + "");
+                    modelTransformByZ.textField.setText((int) (float) t1.getZ() + "");
                 }
             });
         }
@@ -117,17 +116,16 @@ public class ModelSettings {
         translateTransform = new ModelTransform((VBox) vBox.getChildren().get(2));
 
 
-        currentModel.addListener(new ChangeListener<UIModel>() {
+        currentModel.addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) /**/{
+                if (t1 != null) {
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
                     if (uiModel != null) {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
-                        System.out.println("\n\n\n!!!!!!!\n\n\n");
                     } else {
                         translateTransition.setFromX(175);
                         translateTransition.setToX(0);
@@ -136,17 +134,13 @@ public class ModelSettings {
                     currentModel.get().model.setScale(scaleTransform.vector.get());
                     currentModel.get().model.setTranslate(translateTransform.vector.get());
                 } else {
-                    System.out.println("Модели нет");
-                    if (uiModel != null){
+                    if (uiModel != null) {
 
                         translateTransition.setFromX(0);
                         translateTransition.setToX(175);
-                        System.out.println("но прошлая была");
-                    }
-                    else {
+                    } else {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
-                        System.out.println("но прошлой не было");
                     }
                 }
                 translateTransition.play();
