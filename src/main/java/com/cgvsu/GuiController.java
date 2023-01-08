@@ -13,16 +13,19 @@ import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
 import com.cgvsu.ui.ModelSettings;
 import com.cgvsu.ui.UIModel;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
@@ -33,17 +36,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import javax.vecmath.Point2f;
 import java.io.*;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.IOException;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.vecmath.Point2f;
 
 public class GuiController {
 
@@ -133,7 +131,11 @@ public class GuiController {
         try {
             input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Exception caught in task!");
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Wrong menuButton filepath!", ButtonType.OK);
+                dialog.show();
+            });
         }
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
@@ -173,7 +175,11 @@ public class GuiController {
                     try {
                         RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, false, false, null);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Exception caught in task!");
+                        Platform.runLater(() -> {
+                            Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with rendering!", ButtonType.OK);
+                            dialog.show();
+                        });
                     }
                     //if (light and texture)
                     //BufferedImage texture = new BufferedImage();
@@ -182,7 +188,11 @@ public class GuiController {
                     try {
                         RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, false, false, null);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Exception caught in task!");
+                        Platform.runLater(() -> {
+                            Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with rendering!", ButtonType.OK);
+                            dialog.show();
+                        });
                     }
                 UIModel a = uiModels.get(i);
                 Model model = scene.loadedMeshes.get(i);
@@ -273,6 +283,11 @@ public class GuiController {
             fileContent = Files.readString(fileName);
 
         } catch (IOException exception) {
+            System.out.println("Exception caught in task!");
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with opening model!", ButtonType.OK);
+                dialog.show();
+            });
 
         }
         Model model = ObjReader.read(fileContent, writeToConsole);
@@ -321,7 +336,11 @@ public class GuiController {
             writer.flush();
             writer.close();
         } catch (IOException ex) {
-
+            System.out.println("Exception caught in task!");
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with saving model!", ButtonType.OK);
+                dialog.show();
+            });
         }
 
     }
