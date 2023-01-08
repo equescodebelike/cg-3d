@@ -1,5 +1,6 @@
 package com.cgvsu.ui;
 
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -12,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-import javax.vecmath.Vector3f;
 
 public class ModelSettings {
     private final TranslateTransition translateTransition;
@@ -68,22 +68,23 @@ public class ModelSettings {
 
             BorderPane borderPaneX = (BorderPane) vBox.getChildren().get(1);
             modelTransformByX = new ModelTransformByAxis(borderPaneX);
-            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().x = t1.floatValue());
+            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().setX(t1.floatValue()));
 
             BorderPane borderPaneY = (BorderPane) vBox.getChildren().get(2);
             modelTransformByY = new ModelTransformByAxis(borderPaneY);
-            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().y = t1.floatValue());
+            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().setY(t1.floatValue()));
 
             BorderPane borderPaneZ = (BorderPane) vBox.getChildren().get(3);
             modelTransformByZ = new ModelTransformByAxis(borderPaneZ);
-            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().z = t1.floatValue());
+            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().setZ(t1.floatValue()));
 
             vector.addListener(new ChangeListener<Vector3f>() {
                 @Override
                 public void changed(ObservableValue<? extends Vector3f> observableValue, Vector3f vector3f, Vector3f t1) {
-                    modelTransformByX.textField.setText((int) t1.x + "");
-                    modelTransformByY.textField.setText((int) t1.y + "");
-                    modelTransformByZ.textField.setText((int) t1.z + "");
+                    modelTransformByX.textField.setText((int) (float)t1.getX() + "");
+                    modelTransformByY.textField.setText((int) (float)t1.getY() + "");
+                    modelTransformByZ.textField.setText((int) (float)t1.getZ() + "");
+                    System.out.println("I picked another model");
                 }
             });
         }
@@ -119,13 +120,14 @@ public class ModelSettings {
         currentModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) {
+                if (t1 != null) /**/{
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
                     if (uiModel != null) {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
+                        System.out.println("\n\n\n!!!!!!!\n\n\n");
                     } else {
                         translateTransition.setFromX(175);
                         translateTransition.setToX(0);
@@ -134,13 +136,17 @@ public class ModelSettings {
                     currentModel.get().model.setScale(scaleTransform.vector.get());
                     currentModel.get().model.setTranslate(translateTransform.vector.get());
                 } else {
-                    if (uiModel != null) {
+                    System.out.println("Модели нет");
+                    if (uiModel != null){
 
                         translateTransition.setFromX(0);
                         translateTransition.setToX(175);
-                    } else {
+                        System.out.println("но прошлая была");
+                    }
+                    else {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
+                        System.out.println("но прошлой не было");
                     }
                 }
                 translateTransition.play();
