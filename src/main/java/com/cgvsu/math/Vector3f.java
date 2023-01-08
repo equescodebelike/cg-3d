@@ -19,6 +19,18 @@ public class Vector3f {
         return z;
     }
 
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setZ(float z) {
+        this.z = z;
+    }
+
     public boolean equals(Vector3f other) {
         // todo: желательно, чтобы это была глобальная константа
         final float eps = 1e-7f;

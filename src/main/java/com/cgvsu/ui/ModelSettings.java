@@ -42,16 +42,19 @@ public class ModelSettings {
 
     private void uploadTextureChanged(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
         if (currentModel != null) {
-            if (currentModel.get().model.image == null){
+            if (t1 && currentModel.get().model.image == null){
+
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model", "*.png","*.jpg"));
                 fileChooser.setTitle("Load Model");
 
-                File file = fileChooser.showOpenDialog((Stage) settings.getScene().getWindow());
+                File file = fileChooser.showOpenDialog(settings.getScene().getWindow());
                 if (file == null) {
+                    unloadTexture.setSelected(false);
                     return;
                 }
                 currentModel.get().model.image = new Image(file.toString());
+
             }
             unloadTexture.setSelected(t1);
 
