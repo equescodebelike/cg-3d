@@ -1,8 +1,10 @@
 package com.cgvsu.ui;
 
 import com.cgvsu.model.ChangedModel;
+import javafx.scene.image.Image;
 
 import javax.vecmath.Point2f;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public class UIModel {
@@ -10,6 +12,8 @@ public class UIModel {
     Border border;
 
     ChangedModel model;
+
+
 
     public UIModel(ChangedModel changedModel) {
         model = changedModel;

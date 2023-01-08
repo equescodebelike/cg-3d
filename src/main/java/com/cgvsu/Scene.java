@@ -1,9 +1,8 @@
 package com.cgvsu;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.render_engine.Camera;
-
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

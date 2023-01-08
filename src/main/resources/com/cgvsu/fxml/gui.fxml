@@ -222,24 +222,24 @@
                             </BorderPane>
                         </children>
                     </VBox>
-               <CheckBox fx:id="rasterize" mnemonicParsing="false" text="Rasterization">
+               <CheckBox mnemonicParsing="false" text="Rasterization">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin></CheckBox>
-               <CheckBox fx:id="zbuffer" mnemonicParsing="false" text="Z-Buffer">
+               <CheckBox mnemonicParsing="false" text="Z-Buffer">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin></CheckBox>
-               <CheckBox fx:id="lights" mnemonicParsing="false" text="Switch Lights">
+               <CheckBox mnemonicParsing="false" text="Switch Lights">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin></CheckBox>
-               <CheckBox fx:id="texture" layoutX="10.0" layoutY="723.0" mnemonicParsing="false" text="Upload Texture">
+               <CheckBox layoutX="10.0" layoutY="723.0" mnemonicParsing="false" text="Upload Texture">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin>
                </CheckBox>
-               <CheckBox fx:id="polygonalGrid" layoutX="10.0" layoutY="723.0" mnemonicParsing="false" text="Swith Grid">
+               <CheckBox layoutX="10.0" layoutY="723.0" mnemonicParsing="false" text="Swith Grid">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin>

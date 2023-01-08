@@ -1,6 +1,5 @@
 package com.cgvsu;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -11,6 +10,7 @@ import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
+import com.cgvsu.ui.FileException;
 import com.cgvsu.ui.ModelSettings;
 import com.cgvsu.ui.UIModel;
 import javafx.animation.Animation;
@@ -35,13 +35,14 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import javax.vecmath.Vector3f;
 import javax.vecmath.Point2f;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GuiController {
 
@@ -60,7 +61,7 @@ public class GuiController {
 
     private boolean isClickedOnModel = false;
 
-    private SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
+    private final SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
 
     @FXML
     AnchorPane modelSettings;
@@ -80,7 +81,7 @@ public class GuiController {
     private MenuButton menuButton;
 
     @FXML
-    private ListView listView;
+    private ListView<UIModel> listView;
 
     private Model mesh = null;
 
@@ -100,11 +101,7 @@ public class GuiController {
 
 
         currentUIModel.addListener((observableValue, uiModel, t1) -> {
-            if (t1 != null) {
-                isClickedOnModel = true;
-            } else {
-                isClickedOnModel = false;
-            }
+            isClickedOnModel = t1 != null;
             settings.setCurrentModel(t1);
         });
 
@@ -127,16 +124,13 @@ public class GuiController {
         FileInputStream input = null;
         try {
             input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
+            Image image = new Image(input);
+            ImageView imageView = new ImageView(image);
+            menuButton.setGraphic(imageView);
         } catch (FileNotFoundException e) {
-            System.out.println("Exception caught in task!");
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Wrong menuButton filepath!", ButtonType.OK);
-                dialog.show();
-            });
+            new FileException("Wrong menuButton filepath!");
         }
-        Image image = new Image(input);
-        ImageView imageView = new ImageView(image);
-        menuButton.setGraphic(imageView);
+
         menuButton.setStyle("-fx-mark-color: transparent");
         menuButton.setShape(new Circle());
 
@@ -144,14 +138,14 @@ public class GuiController {
         SimpleBooleanProperty turn = button.switchOnProperty();
         turn.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                button.getScene().getRoot().getStylesheets().add(getClass().getResource("fxml/styles/style.css").toString());
+                button.getScene().getRoot().getStylesheets().add(Objects.requireNonNull(getClass().getResource("fxml/styles/style.css")).toString());
             } else {
-                button.getScene().getRoot().getStylesheets().remove(getClass().getResource("fxml/styles/style.css").toString());
+                button.getScene().getRoot().getStylesheets().remove(Objects.requireNonNull(getClass().getResource("fxml/styles/style.css")).toString());
             }
 
         });
-        changeTheme.getChildren().add(button);
 
+        changeTheme.getChildren().add(button);
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
         //It's better to change. Updating every 15 millis aren't well.
@@ -168,7 +162,7 @@ public class GuiController {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
                 try {
-                    RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, null);
+                    RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
                 } catch (IOException e) {
                     System.out.println("Exception caught in task!");
                     Platform.runLater(() -> {
@@ -181,17 +175,6 @@ public class GuiController {
                 Point2f minP = model.getMinPoint2f();
                 Point2f maxP = model.getMaxPoint2f();
                 a.setSize(minP, maxP);
-
-                if (isClickedOnModel) {
-                    Border b = currentUIModel.get().getBorder();
-                    canvas.getGraphicsContext2D().strokeRect(
-                            b.getScale().x,
-                            b.getScale().y,
-                            b.getWidth(),
-                            b.getHeight()
-                    );
-                }
-
             }
             if (isClickedOnModel) {
                 Border b = currentUIModel.get().getBorder();
@@ -232,19 +215,19 @@ public class GuiController {
             final float dxy = Math.abs(dx) - Math.abs(dy);
             float dz = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().getX() <= EPS && dx < 0 ||
-                    scene.getCamera().get(numberCamera).getPosition().getX() > EPS && dx > 0)) {
+            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().x <= EPS && dx < 0 ||
+                    scene.getCamera().get(numberCamera).getPosition().x > EPS && dx > 0)) {
                 dz *= -1;
-            } else if (dxy < EPS) {
+            } else if (dxy < EPS) { //если больше перемещаем по y, то по z не перемещаем
                 dz = 0;
             }
-            if (scene.getCamera().get(numberCamera).getPosition().getZ() <= EPS) {
+            if (scene.getCamera().get(numberCamera).getPosition().z <= EPS) {
                 dx *= -1;
             }
 
             ref.prevX = actualX;
             ref.prevY = actualY;
-            scene.getCamera().get(numberCamera).movePosition(new Vector3f(dx * 0.1f, dy * 0.1f, dz * 0.1f));
+            scene.getCamera().get(numberCamera).movePosition(new Vector3f(new float[]{dx * 0.1f, dy * 0.1f, dz * 0.1f}));
         });
     }
 
@@ -254,7 +237,7 @@ public class GuiController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
 
-        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
         if (file == null) {
             return;
         }
@@ -265,12 +248,7 @@ public class GuiController {
             fileContent = Files.readString(fileName);
 
         } catch (IOException exception) {
-            System.out.println("Exception caught in task!");
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with opening model!", ButtonType.OK);
-                dialog.show();
-            });
-
+            new FileException("Error with opening model!");
         }
         Model model = ObjReader.read(fileContent, writeToConsole);
         model.setName(file.getName());
@@ -284,11 +262,8 @@ public class GuiController {
         scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
         listView.getItems().add(a);
         listView.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
-            UIModel a1 = (UIModel) t1;
-            currentUIModel.set(a1);
+            currentUIModel.set(t1);
         });
-
-        listView.scrollTo(scene.loadedMeshes.get(numberMesh));
 
         if (scene.loadedMeshes.size() > 1) {
             addCamera();
@@ -304,7 +279,7 @@ public class GuiController {
         fileChooser.setTitle("Save Model");
         fileChooser.setInitialFileName("NewFileOBJ");
 
-        File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
+        File file = fileChooser.showSaveDialog (canvas.getScene().getWindow());
 
         Path fileName = Path.of(file.getAbsolutePath());
 
@@ -325,11 +300,6 @@ public class GuiController {
             });
         }
 
-    }
-
-    @FXML
-    public void changeRasterize() {
-        currentUIModel.get().getModel().setRasterized(!currentUIModel.get().getModel().isRasterized());
     }
 
     @FXML

@@ -1,8 +1,9 @@
 package com.cgvsu.model;
 
 
-import com.cgvsu.math.matrix.floatMatrix.Matrix4f;
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
+import javafx.scene.image.Image;
 
 import java.util.Objects;
 
@@ -15,6 +16,8 @@ public class ChangedModel extends Model {
     private boolean isLighted = false;
     private boolean isTextureLoaded = false;
     private boolean isGridLoaded = true;
+
+    public Image image;
 
     public ChangedModel(Model model) {
         super(model);

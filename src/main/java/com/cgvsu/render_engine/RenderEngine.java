@@ -2,20 +2,18 @@ package com.cgvsu.render_engine;
 
 import java.util.ArrayList;
 
-import com.cgvsu.math.matrix.floatMatrix.Matrix4f;
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
+import com.cgvsu.math.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
 import com.cgvsu.rasterization.MyColor;
 import com.cgvsu.rasterization.Rasterization;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 
-import javax.vecmath.Point2f;
-import java.awt.image.BufferedImage;
+import javax.vecmath.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.cgvsu.render_engine.GraphicConveyor.*;
@@ -27,8 +25,7 @@ public class RenderEngine {
             final Camera camera,
             final ChangedModel mesh,
             final int width,
-            final int height,
-            BufferedImage image) throws IOException {
+            final int height) throws IOException {
         Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
                 mesh.getScale(),
                 mesh.getTranslate());
@@ -37,16 +34,15 @@ public class RenderEngine {
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
         Matrix4f modelViewProjectionMatrix = new Matrix4f(modelMatrix);
-        modelViewProjectionMatrix = new Matrix4f(modelViewProjectionMatrix.mul(viewMatrix));
-        modelViewProjectionMatrix = new Matrix4f(modelViewProjectionMatrix.mul(projectionMatrix));
+        modelViewProjectionMatrix.mul(viewMatrix);
+        modelViewProjectionMatrix.mul(projectionMatrix);
 
 
         final int nPolygons = mesh.getPolygons().size();
         Double[][] zBuffer = new Double[width][height];
 
-        Point2f minPoint = new Point2f(10000, 10000);
+        Point2f minPoint = new Point2f(10000,10000);
         Point2f maxPoint = new Point2f();
-
 
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
             final int nVerticesInPolygon = mesh.getPolygons().get(polygonInd).getVertexIndices().size();
@@ -56,7 +52,7 @@ public class RenderEngine {
             for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                 Vector3f vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
 
-                Vector3f vertexVecmath = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
+                javax.vecmath.Vector3f vertexVecmath = new javax.vecmath.Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
                 pointsZ.add((double) vertex.getZ());
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
@@ -98,11 +94,11 @@ public class RenderEngine {
 
         if (mesh.isRasterized()) {
             if (mesh.getTextureVertices().size() != 0)
-            Rasterization.fillTriangle(gr,
+                Rasterization.fillTriangle(gr,
                     resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
                     resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
                     resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                    MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
+                    MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
                     mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
@@ -111,7 +107,7 @@ public class RenderEngine {
                         resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
                         resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
                         resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                        MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
+                        MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
                         null,
                         null,
                         null, mesh);

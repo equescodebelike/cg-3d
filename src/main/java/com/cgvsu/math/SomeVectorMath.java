@@ -24,9 +24,9 @@ public class SomeVectorMath {
 
     public static double getCosLight(Camera camera, MyPoint3D p1, MyPoint3D p2, MyPoint3D p3) {
         Vector3f normal = getNormal(p1, p2, p3);
-        Vector3f normalCamera = new Vector3f(camera.getTarget().getX() - camera.getPosition().getX(),
-                camera.getTarget().getY() - camera.getPosition().getY(),
-                camera.getTarget().getZ() - camera.getPosition().getZ());
+        Vector3f normalCamera = new Vector3f(camera.getTarget().x - camera.getPosition().x,
+                camera.getTarget().y - camera.getPosition().y,
+                camera.getTarget().z - camera.getPosition().z);
         Vector3f normalCameraN = new Vector3f(
                 normalCamera.x / normalCamera.length(),
                 normalCamera.y / normalCamera.length(),

@@ -1,18 +1,28 @@
 package com.cgvsu.ui;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javax.vecmath.Vector3f;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 public class ModelSettings {
@@ -29,6 +39,26 @@ public class ModelSettings {
     CheckBox switchLights;
     CheckBox unloadTexture;
     CheckBox switchGrid;
+
+    private void uploadTextureChanged(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+        if (currentModel != null) {
+            if (currentModel.get().model.image == null){
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model", "*.png","*.jpg"));
+                fileChooser.setTitle("Load Model");
+
+                File file = fileChooser.showOpenDialog((Stage) settings.getScene().getWindow());
+                if (file == null) {
+                    return;
+                }
+                currentModel.get().model.image = new Image(file.toString());
+            }
+            unloadTexture.setSelected(t1);
+
+            currentModel.get().getModel().setTextureLoaded(t1);
+
+        }
+    }
 
 
     public class ModelTransform {
@@ -72,22 +102,22 @@ public class ModelSettings {
 
             BorderPane borderPaneX = (BorderPane) vBox.getChildren().get(1);
             modelTransformByX = new ModelTransformByAxis(borderPaneX);
-            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().setX(t1.floatValue()));
+            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().x = t1.floatValue());
 
             BorderPane borderPaneY = (BorderPane) vBox.getChildren().get(2);
             modelTransformByY = new ModelTransformByAxis(borderPaneY);
-            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().setY(t1.floatValue()));
+            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().y = t1.floatValue());
 
             BorderPane borderPaneZ = (BorderPane) vBox.getChildren().get(3);
             modelTransformByZ = new ModelTransformByAxis(borderPaneZ);
-            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().setZ(t1.floatValue()));
+            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().z = t1.floatValue());
 
             vector.addListener(new ChangeListener<Vector3f>() {
                 @Override
                 public void changed(ObservableValue<? extends Vector3f> observableValue, Vector3f vector3f, Vector3f t1) {
-                    modelTransformByX.textField.setText((int) (float) t1.getX() + "");
-                    modelTransformByY.textField.setText((int) (float) t1.getY() + "");
-                    modelTransformByZ.textField.setText((int) (float) t1.getZ() + "");
+                    modelTransformByX.textField.setText((int) t1.x + "");
+                    modelTransformByY.textField.setText((int) t1.y + "");
+                    modelTransformByZ.textField.setText((int) t1.z + "");
                 }
             });
         }
@@ -136,13 +166,6 @@ public class ModelSettings {
                 currentModel.get().getModel().setLighted(t1);
             }
         });
-        unloadTexture = (CheckBox) vBox.getChildren().get(6);
-        unloadTexture.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(currentModel != null){
-                unloadTexture.setSelected(t1);
-                currentModel.get().getModel().setTextureLoaded(t1);
-            }
-        });
         switchGrid = (CheckBox) vBox.getChildren().get(7);
         switchGrid.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if(currentModel != null){
@@ -152,6 +175,8 @@ public class ModelSettings {
         });
 
 
+        unloadTexture = (CheckBox) vBox.getChildren().get(6);
+        unloadTexture.selectedProperty().addListener(this::uploadTextureChanged);
         currentModel.addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
