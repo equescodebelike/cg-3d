@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public interface MatrixUtils {
-    static Float[] toFloatArray(float[] floats){
+    static Float[] toFloatArray(float[] floats) {
         Float[] floats1 = new Float[floats.length];
         for (int i = 0; i < floats.length; i++) {
             floats1[i] = floats[i];
@@ -22,11 +22,11 @@ public interface MatrixUtils {
         return doubleSum;
     }
 
-    static Float multiplyToFloat(Number... numbers){
+    static Float multiplyToFloat(Number... numbers) {
         float doubleMultiply = 1;
 
         for (Number number : numbers) {
-            doubleMultiply*=number.floatValue();
+            doubleMultiply *= number.floatValue();
         }
         return doubleMultiply;
     }
@@ -66,7 +66,7 @@ public interface MatrixUtils {
         List<T> matrix1F = matrix.getValues();
         List<T> newMatrix = new LinkedList<>();
         for (T number : matrix1F) {
-            newMatrix.add((T) multiplyToFloat(c,  number));
+            newMatrix.add((T) multiplyToFloat(c, number));
         }
 
         return new Matrix<>(newMatrix, matrix.getRows(), matrix.getCols());
@@ -85,13 +85,13 @@ public interface MatrixUtils {
         List<T> newMatrix = new LinkedList<>();
 
 //
-        for (int i = 0; i < matrix1.getRows()*matrix2.getCols(); i++) {
+        for (int i = 0; i < matrix1.getRows() * matrix2.getCols(); i++) {
             float value = 0;
             for (int j = 0; j < matrix1.getCols(); j++) {
                 //matrix.get(i + j) + matrix.get(j*cols)
                 //matrix.get(i + j)
                 //matrix.get(i + j)
-                 value += getElement(matrix1F, matrix1.cols, i/ matrix2.cols,j).doubleValue() * getElement(matrix2F, matrix2.cols, j,i% matrix2.rows).floatValue();
+                value += getElement(matrix1F, matrix1.cols, i / matrix2.cols, j).doubleValue() * getElement(matrix2F, matrix2.cols, j, i % matrix2.rows).floatValue();
 //                value += matrix1F.get(i * matrix1.getCols() + j).doubleValue() * matrix2F.get(j * matrix2.getRows() + i).doubleValue();
 
             }
@@ -106,11 +106,11 @@ public interface MatrixUtils {
     }
 
 
-    static<T extends Number> T getElement(List<T> matrix, int cols, int row, int col){
-        return matrix.get(cols*row + col);
+    static <T extends Number> T getElement(List<T> matrix, int cols, int row, int col) {
+        return matrix.get(cols * row + col);
     }
 
-    static<T extends Number> void checkMatrices(Matrix<T> matrix1, Matrix<T> matrix2) {
+    static <T extends Number> void checkMatrices(Matrix<T> matrix1, Matrix<T> matrix2) {
         //переименовать метод и разделить проверки
         if (matrix1 == null || matrix2 == null) {
             throw new MatrixException("Matrix is null");
@@ -120,7 +120,7 @@ public interface MatrixUtils {
         }
     }
 
-    public static<T extends Number> Matrix<T> transposition(Matrix<T> matrix){
+    public static <T extends Number> Matrix<T> transposition(Matrix<T> matrix) {
         //todo check matrix
         List<T> matrix1 = matrix.getValues();
         List<T> newMatrix = new ArrayList<>();
@@ -130,27 +130,27 @@ public interface MatrixUtils {
         int cols = matrix.getCols();
 
         for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++)
-            {
+            for (int col = 0; col < cols; col++) {
                 //if matrix doesn't have value there. It's related only to vectors like:
                 // v1 = (1,1,1); after transpose it must be:
                 //      (1)
                 //v1 =  (1)
                 //      (1)
-                if (matrix.getCols()* col + row >= matrix.values.size()){
+                if (matrix.getCols() * col + row >= matrix.values.size()) {
 
-                    if(rows == 1){ //this check is unnecessary. So I did it because I can
-                        rows =  cols;
+                    if (rows == 1) { //this check is unnecessary. So I did it because I can
+                        rows = cols;
                         cols = 1;
-                        setElement(newMatrix,cols,col,row,matrix.getElement(row,col));
+                        setElement(newMatrix, cols, col, row, matrix.getElement(row, col));
                     }
                     continue;
                 }
-                setElement(newMatrix,cols,row,col,matrix.getElement(col,row));
+                setElement(newMatrix, cols, row, col, matrix.getElement(col, row));
             }
         }
-        return new Matrix<>(newMatrix,rows,cols);
+        return new Matrix<>(newMatrix, rows, cols);
     }
+
     static <T extends Number> void setElement(List<T> values, int width, int row, int col, T value) {
         //todo exception if size < width * row + col
 //        if (width*row + col != values.size()-1){

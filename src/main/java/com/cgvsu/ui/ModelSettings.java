@@ -5,24 +5,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.vecmath.Vector3f;
 
+import javax.vecmath.Vector3f;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 
 public class ModelSettings {
@@ -42,9 +37,9 @@ public class ModelSettings {
 
     private void uploadTextureChanged(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
         if (currentModel != null) {
-            if (currentModel.get().model.image == null){
+            if (currentModel.get().model.image == null) {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model", "*.png","*.jpg"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model", "*.png", "*.jpg"));
                 fileChooser.setTitle("Load Model");
 
                 File file = fileChooser.showOpenDialog((Stage) settings.getScene().getWindow());
@@ -59,7 +54,6 @@ public class ModelSettings {
 
         }
     }
-
 
     public class ModelTransform {
         Label nameOfTransform;
@@ -147,33 +141,32 @@ public class ModelSettings {
 
         rasterization = (CheckBox) vBox.getChildren().get(3);
         rasterization.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(currentModel != null){
+            if (currentModel != null) {
                 rasterization.setSelected(t1);
                 currentModel.get().getModel().setRasterized(t1);
             }
         });
         zBuffer = (CheckBox) vBox.getChildren().get(4);
         zBuffer.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(currentModel != null){
+            if (currentModel != null) {
                 zBuffer.setSelected(t1);
                 currentModel.get().getModel().setZBuffered(t1);
             }
         });
         switchLights = (CheckBox) vBox.getChildren().get(5);
         switchLights.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(currentModel != null){
+            if (currentModel != null) {
                 switchLights.setSelected(t1);
                 currentModel.get().getModel().setLighted(t1);
             }
         });
         switchGrid = (CheckBox) vBox.getChildren().get(7);
         switchGrid.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(currentModel != null){
+            if (currentModel != null) {
                 switchGrid.setSelected(t1);
                 currentModel.get().getModel().setGridLoaded(t1);
             }
         });
-
 
         unloadTexture = (CheckBox) vBox.getChildren().get(6);
         unloadTexture.selectedProperty().addListener(this::uploadTextureChanged);

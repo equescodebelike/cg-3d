@@ -13,8 +13,6 @@ public class UIModel {
 
     ChangedModel model;
 
-
-
     public UIModel(ChangedModel changedModel) {
         model = changedModel;
         border = new Border();

@@ -7,7 +7,6 @@ import com.cgvsu.render_engine.Camera;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,7 +149,7 @@ public class Rasterization {
 
             return new MyColor(r, g, b);
 
-        } else if (texturePoint1 != null){
+        } else if (texturePoint1 != null) {
             float aup = (float) (x1 - x);
             float bup = (float) (x2 - x);
             float cup = (float) (x3 - x);
@@ -169,8 +168,7 @@ public class Rasterization {
             double uI = u * texturePoint1.getX() + v * texturePoint2.getX() + w * texturePoint3.getX();
             double vI = u * texturePoint1.getY() + v * texturePoint2.getY() + w * texturePoint3.getY();
             return getColorTexture(uI, vI, mesh.image);
-        }
-        else
+        } else
             return null;
     }
 
@@ -182,7 +180,7 @@ public class Rasterization {
         int x = (int) (x0 * width);
         int y = (int) (y0 * height);
 
-        Color clr = image.getPixelReader().getColor(width-x, height-y);
+        Color clr = image.getPixelReader().getColor(width - x, height - y);
         /*        int width = image.getWidth() - 1;
         int height = image.getHeight() - 1;
         int x = (int) (x0 * width);
@@ -195,7 +193,6 @@ public class Rasterization {
         double green = ((clr & 0x0000ff00) >> 8) / 255.0f;
         double blue = (clr & 0x000000ff) / 255.0f;
         return new MyColor(red, green, blue);*/
-        return new MyColor(clr.getRed(),clr.getGreen(), clr.getBlue());
+        return new MyColor(clr.getRed(), clr.getGreen(), clr.getBlue());
     }
-
 }

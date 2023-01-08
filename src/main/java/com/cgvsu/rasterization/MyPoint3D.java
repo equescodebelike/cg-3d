@@ -20,9 +20,11 @@ public class MyPoint3D {
     public double getY() {
         return y;
     }
+
     public double getZ() {
         return z;
     }
+
     public void setX(double x) {
         this.x = x;
     }
@@ -30,9 +32,11 @@ public class MyPoint3D {
     public void setY(double y) {
         this.y = y;
     }
+
     public void setZ(double z) {
         this.z = z;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

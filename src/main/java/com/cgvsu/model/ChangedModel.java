@@ -3,6 +3,7 @@ package com.cgvsu.model;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
+
 import javafx.scene.image.Image;
 
 import java.util.Objects;

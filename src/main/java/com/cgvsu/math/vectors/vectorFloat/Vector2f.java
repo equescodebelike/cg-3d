@@ -11,7 +11,8 @@ public class Vector2f extends Vector2<Float> {
     public Vector2f(float value) {
         super(value);
     }
-    public Vector2f(){
+
+    public Vector2f() {
         super(0f);
     }
 }

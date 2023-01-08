@@ -19,7 +19,8 @@ public class Matrix4f extends Matrix4<Float> {
     public Matrix4f(Matrix<Float> matrix) {
         super(matrix);
     }
-    public Matrix4f(){
+
+    public Matrix4f() {
         super(0f);
     }
 

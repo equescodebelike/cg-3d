@@ -12,7 +12,7 @@ import static com.cgvsu.math.matrix.MatrixUtils.*;
 
 //import static matrix.MatrixUtils.transposition;
 
-public  class Matrix<T extends Number> {
+public class Matrix<T extends Number> {
     protected List<T> values;
     protected final int rows;
     protected final int cols;
@@ -23,8 +23,9 @@ public  class Matrix<T extends Number> {
         this.rows = rows;
         this.cols = cols;
     }
-    public Matrix(T[] values, int rows, int cols){
-        this(Arrays.asList(values),rows,cols);
+
+    public Matrix(T[] values, int rows, int cols) {
+        this(Arrays.asList(values), rows, cols);
     }
 
     //https://www.youtube.com/live/9yt4SiA7OiU?feature=share&t=5321
@@ -35,8 +36,8 @@ public  class Matrix<T extends Number> {
         fill(value);
     }
 
-    public Matrix(Matrix<T> matrix){
-        this(matrix.values,matrix.rows,matrix.cols);
+    public Matrix(Matrix<T> matrix) {
+        this(matrix.values, matrix.rows, matrix.cols);
     }
 
     private void fill(T number) {
@@ -51,8 +52,8 @@ public  class Matrix<T extends Number> {
     }
 
 
-    public void setElement(int row ,int col, T value){
-        MatrixUtils.setElement(this.values, cols, row,col,value);
+    public void setElement(int row, int col, T value) {
+        MatrixUtils.setElement(this.values, cols, row, col, value);
     }
 
 
@@ -76,14 +77,11 @@ public  class Matrix<T extends Number> {
 //    }
 
 
-
-
-
     public static void main(String[] args) {
         int[][] a = new int[][]{{1, 2}, {1, 2, 3}, {1, 2, 3, 4}};
         System.out.println(Arrays.toString(a));
-        Matrix<Float> b = new Matrix<>(5,5,1f);
-        Matrix<Double> c = new Matrix<>(5,5,1.0);
+        Matrix<Float> b = new Matrix<>(5, 5, 1f);
+        Matrix<Double> c = new Matrix<>(5, 5, 1.0);
         System.out.println(b);
 //        Matrix.addition(
 //                new Matrix3(new float[4],3,3),
@@ -104,16 +102,18 @@ public  class Matrix<T extends Number> {
     public int getRows() {
         return rows;
     }
-//
+
+    //
     public T getElement(int row, int col) {
         return values.get(cols * row + col);
     }
-//
+
+    //
 //    public Matrix<T> add(Matrix<T> matrix1) {
 //        return addition(this, matrix1);
 //    }
-    public void add(Matrix<T> matrix){
-        Matrix<T> a = addition(this,matrix);
+    public void add(Matrix<T> matrix) {
+        Matrix<T> a = addition(this, matrix);
         values = a.values;
     }
 
@@ -137,23 +137,27 @@ public  class Matrix<T extends Number> {
 
     //utils
 
-    public Matrix3<T> toMatrix3(){
+    public Matrix3<T> toMatrix3() {
         return new Matrix3<>(values);
     }
-    public Matrix4<T> toMatrix4(){
+
+    public Matrix4<T> toMatrix4() {
         return new Matrix4<>(values);
     }
 
-    public Vector<T> toVector(){
+    public Vector<T> toVector() {
         return new Vector2<T>(values);
     }
-    public Vector2<T> toVector2(){
+
+    public Vector2<T> toVector2() {
         return new Vector2<>(values);
     }
-    public Vector3<T> toVector3(){
+
+    public Vector3<T> toVector3() {
         return new Vector3<>(values);
     }
-    public Vector4<T> toVector4(){
+
+    public Vector4<T> toVector4() {
         return new Vector4<>(values);
     }
 

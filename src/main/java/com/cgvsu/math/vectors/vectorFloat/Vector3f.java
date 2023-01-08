@@ -1,6 +1,5 @@
 package com.cgvsu.math.vectors.vectorFloat;
 
-
 import com.cgvsu.math.vectors.Vector3;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class Vector3f extends Vector3<Float> {
         super(value);
     }
 
-    public Vector3f(){
+    public Vector3f() {
         super(0f);
     }
 }

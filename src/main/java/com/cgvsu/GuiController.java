@@ -1,6 +1,5 @@
 package com.cgvsu;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector4f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -8,7 +7,6 @@ import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
-import com.cgvsu.render_engine.GraphicConveyor;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
@@ -306,7 +304,7 @@ public class GuiController {
 
     }
 
-   /* private void saveModelWithChangesMenuItemClick() {
+    /*private void saveModelWithChangesMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Changed Model");
