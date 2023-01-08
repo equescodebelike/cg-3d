@@ -19,8 +19,6 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -33,10 +31,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.vecmath.Vector3f;
+
 import javax.vecmath.Point2f;
+import javax.vecmath.Vector3f;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -249,6 +247,16 @@ public class GuiController {
 
         } catch (IOException exception) {
             new FileException("Error with opening model!");
+            System.out.println("Exception caught in task!");
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with opening model!", ButtonType.OK);
+                dialog.show();
+            });
+
+        }
+        if (scene.loadedMeshes.size() >= 1) {
+            numberMesh++;
+            addCamera();
         }
         Model model = ObjReader.read(fileContent, writeToConsole);
         model.setName(file.getName());
@@ -265,11 +273,6 @@ public class GuiController {
             currentUIModel.set(t1);
         });
 
-        if (scene.loadedMeshes.size() > 1) {
-            addCamera();
-            nextModel();
-        }
-
     }
 
     @FXML
@@ -278,8 +281,7 @@ public class GuiController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Model");
         fileChooser.setInitialFileName("NewFileOBJ");
-
-        File file = fileChooser.showSaveDialog (canvas.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
 
         Path fileName = Path.of(file.getAbsolutePath());
 
@@ -300,6 +302,28 @@ public class GuiController {
             });
         }
 
+    }
+
+    /*private void saveModelWithChangesMenuItemClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Changed Model");
+        fileChooser.setInitialFileName("NewChangedFileOBJ");
+        File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
+
+        Path fileName = Path.of(file.getAbsolutePath());
+
+        ArrayList<Vector3f> newVertices = new ArrayList<>();
+        try {
+            for (int i = 0; i < ; i++) {
+
+            }
+        }
+    }*/
+
+    @FXML
+    public void changeRasterize() {
+        currentUIModel.get().getModel().setRasterized(!currentUIModel.get().getModel().isRasterized());
     }
 
     @FXML
@@ -326,18 +350,12 @@ public class GuiController {
     }
 
     @FXML
-    public void nextModel() {
-        if (numberMesh < scene.loadedMeshes.size() - 1) numberMesh++;
-        else numberMesh = 0;
-        nextCamera();
-    }
-
-    @FXML
     public void deleteMesh() {
         if (scene.loadedMeshes.size() >= 1) {
             listView.getItems().remove(uiModels.get(numberMesh));
             uiModels.remove(numberMesh);
             scene.loadedMeshes.remove(numberMesh);
+            numberMesh--;
         }
     }
 
