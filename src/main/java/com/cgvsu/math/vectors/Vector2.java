@@ -25,15 +25,4 @@ public class Vector2<T extends Number> extends FixedSizeVector<T> {
     public T getY() {
         return values.get(1);
     }
-
-
-    public static void main(String[] args) {
-        Vector3<Double> v1 = new Vector3<>(10.0);
-        Vector3<Double> v2 = new Vector3<>(1.0, 2.0, 3.0);
-//        System.out.println(v2);
-        v1 = v1.cross(v2);
-        System.out.println(v1);
-//        System.out.println(v2.transpose());
-
-    }
 }

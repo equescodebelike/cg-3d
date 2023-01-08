@@ -77,19 +77,7 @@ public class Matrix<T extends Number> {
 //    }
 
 
-    public static void main(String[] args) {
-        int[][] a = new int[][]{{1, 2}, {1, 2, 3}, {1, 2, 3, 4}};
-        System.out.println(Arrays.toString(a));
-        Matrix<Float> b = new Matrix<>(5, 5, 1f);
-        Matrix<Double> c = new Matrix<>(5, 5, 1.0);
-        System.out.println(b);
-//        Matrix.addition(
-//                new Matrix3(new float[4],3,3),
-//                new Matrix4(new float[3],1,2)
-//        );
-//
-//        Matrix<Float> matrix1 = new Matrix<>(2,3,3f);
-    }
+
 
     public List<T> getValues() {
         return values;
