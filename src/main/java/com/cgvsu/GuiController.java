@@ -101,16 +101,13 @@ public class GuiController {
         anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue()));
 
 
-        currentUIModel.addListener(new ChangeListener<UIModel>() {
-            @Override
-            public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) {
-                    isClickedOnModel = true;
-                } else {
-                    isClickedOnModel = false;
-                }
-                settings.setCurrentModel(t1);
+        currentUIModel.addListener((observableValue, uiModel, t1) -> {
+            if (t1 != null) {
+                isClickedOnModel = true;
+            } else {
+                isClickedOnModel = false;
             }
+            settings.setCurrentModel(t1);
         });
 
         canvas.setOnMouseReleased(mouseEvent -> {
