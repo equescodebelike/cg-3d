@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
 
-    <Canvas fx:id="canvas" height="840.0" layoutX="228.0" layoutY="-15.0" width="885.0" AnchorPane.bottomAnchor="102.0" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="-84.0" AnchorPane.topAnchor="-15.0" />
+    <Canvas fx:id="canvas" height="927.0" layoutX="228.0" layoutY="1.0" width="885.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="-84.0" AnchorPane.topAnchor="1.0" />
    <ListView layoutX="-2.0" prefHeight="834.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="0.0" />
     <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0" />
     <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="52.0">
