@@ -1,7 +1,7 @@
 package com.cgvsu.objwriter;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector2f;
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
+import com.cgvsu.math.Vector2f;
+import com.cgvsu.math.Vector3f;
 import com.cgvsu.model.Polygon;
 import org.junit.jupiter.api.Test;
 
