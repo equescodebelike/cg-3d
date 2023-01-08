@@ -7,6 +7,8 @@ import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
+import com.cgvsu.rasterization.MyColor;
+import com.cgvsu.rasterization.Rasterization;
 import javafx.scene.canvas.GraphicsContext;
 
 
@@ -36,7 +38,7 @@ public class RenderEngine {
 
         final int nPolygons = mesh.getPolygons().size();
 
-        Point2f minPoint = new Point2f(10000,10000);
+        Point2f minPoint = new Point2f(10000, 10000);
         Point2f maxPoint = new Point2f();
 
 
@@ -52,22 +54,21 @@ public class RenderEngine {
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
                 //вот здесь можно находить максимальную и минимальную координату
                 //мб придумаю что-нибудь потом другое, но пока так
-                if (minPoint.x > resultPoint.x){
+                if (minPoint.x > resultPoint.x) {
                     minPoint.x = resultPoint.x;
                 }
-                if (minPoint.y > resultPoint.y){
+                if (minPoint.y > resultPoint.y) {
                     minPoint.y = resultPoint.y;
                 }
-                if (maxPoint.x < resultPoint.x){
+                if (maxPoint.x < resultPoint.x) {
                     maxPoint.x = resultPoint.x;
                 }
-                if (maxPoint.y < resultPoint.y){
+                if (maxPoint.y < resultPoint.y) {
                     maxPoint.y = resultPoint.y;
                 }
                 resultPoints.add(resultPoint);
             }
             GraphicsUtils gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
-
 
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
@@ -77,11 +78,11 @@ public class RenderEngine {
                         resultPoints.get(vertexInPolygonInd).x,
                         resultPoints.get(vertexInPolygonInd).y);
                 //Rasterization
-//                if (vertexInPolygonInd + 1 < nVerticesInPolygon)
-//                    Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
-//                            resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
-//                            resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
-//                            MyColor.GREEN, MyColor.BLUE, MyColor.RED);
+                if (vertexInPolygonInd + 1 < nVerticesInPolygon && mesh.isRasterized())
+                    Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
+                            resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
+                            resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
+                            MyColor.GREEN, MyColor.BLUE, MyColor.RED);
             }
             if (nVerticesInPolygon > 0) {
                 graphicsContext.strokeLine(

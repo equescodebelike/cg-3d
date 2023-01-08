@@ -8,7 +8,8 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
 
-    <Canvas fx:id="canvas" height="690.0" layoutX="215.0" layoutY="76.0" width="610.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="215.0" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="76.0" />
+    <Canvas fx:id="canvas" height="840.0" layoutX="220.0" layoutY="-5.0" width="813.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="-5.0" />
+   <ListView layoutX="-2.0" prefHeight="834.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="0.0" />
     <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0" />
     <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="52.0">
         <items>
@@ -90,14 +91,14 @@
             </MenuItem>
         </Menu>
     </MenuBar>
-    <ListView fx:id="listView" layoutY="175.0" prefHeight="437.0" prefWidth="199.0" AnchorPane.bottomAnchor="175.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="175.0" />
+    <ListView fx:id="listView" layoutX="13.0" layoutY="175.0" prefHeight="437.0" prefWidth="199.0" AnchorPane.bottomAnchor="175.0" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="175.0" />
     <AnchorPane fx:id="modelSettings" prefHeight="667.0" prefWidth="175.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
         <children>
-            <VBox layoutY="-2.0" prefHeight="344.0" prefWidth="174.0">
+            <VBox layoutY="-2.0" prefHeight="713.0" prefWidth="174.0">
                 <children>
                     <VBox prefHeight="97.0" prefWidth="147.0">
                         <children>
-                            <Label text="Label">
+                            <Label text="Rotate">
                                 <VBox.margin>
                                     <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
@@ -110,7 +111,7 @@
                                     <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="X" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
@@ -121,7 +122,7 @@
                                     <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Y" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
@@ -132,14 +133,14 @@
                                     <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Z" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="10.0" prefHeight="97.0" prefWidth="147.0">
                         <children>
-                            <Label text="Label">
+                            <Label text="Scale">
                                 <VBox.margin>
                                     <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
@@ -152,7 +153,7 @@
                                     <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="X" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
@@ -163,7 +164,7 @@
                                     <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Y" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
@@ -174,14 +175,14 @@
                                     <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Z" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="233.0" prefHeight="97.0" prefWidth="147.0">
                         <children>
-                            <Label text="Label">
+                            <Label text="Translate">
                                 <VBox.margin>
                                     <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
@@ -194,7 +195,7 @@
                                     <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="X" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
@@ -205,7 +206,7 @@
                                     <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Y" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
@@ -216,11 +217,12 @@
                                     <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER" />
+                                    <Label text="Z" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>
                     </VBox>
+               <CheckBox fx:id="rasterize" mnemonicParsing="false" onAction="#changeRasterize" text="Rasterization" />
                 </children>
             </VBox>
         </children>
