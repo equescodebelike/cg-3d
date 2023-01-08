@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -23,8 +24,11 @@ public class ModelSettings {
     ModelTransform scaleTransform;
     ModelTransform translateTransform;
 
-    private final double defaultX;
-    private final double movedX;
+    CheckBox rasterization;
+    CheckBox zBuffer;
+    CheckBox switchLights;
+    CheckBox unloadTexture;
+    CheckBox switchGrid;
 
 
     public class ModelTransform {
@@ -105,15 +109,47 @@ public class ModelSettings {
 
         VBox vBox = (VBox) settings.getChildren().get(0);
 
-        defaultX = vBox.getLayoutX();
-
-        movedX = vBox.getWidth();
-
         rotateTransform = new ModelTransform((VBox) vBox.getChildren().get(0));
 
         scaleTransform = new ModelTransform((VBox) vBox.getChildren().get(1));
 
         translateTransform = new ModelTransform((VBox) vBox.getChildren().get(2));
+
+        rasterization = (CheckBox) vBox.getChildren().get(3);
+        rasterization.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(currentModel != null){
+                rasterization.setSelected(t1);
+                currentModel.get().getModel().setRasterized(t1);
+            }
+        });
+        zBuffer = (CheckBox) vBox.getChildren().get(4);
+        zBuffer.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(currentModel != null){
+                zBuffer.setSelected(t1);
+                currentModel.get().getModel().setZBuffered(t1);
+            }
+        });
+        switchLights = (CheckBox) vBox.getChildren().get(5);
+        switchLights.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(currentModel != null){
+                switchLights.setSelected(t1);
+                currentModel.get().getModel().setLighted(t1);
+            }
+        });
+        unloadTexture = (CheckBox) vBox.getChildren().get(6);
+        unloadTexture.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(currentModel != null){
+                unloadTexture.setSelected(t1);
+                currentModel.get().getModel().setTextureLoaded(t1);
+            }
+        });
+        switchGrid = (CheckBox) vBox.getChildren().get(7);
+        switchGrid.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(currentModel != null){
+                switchGrid.setSelected(t1);
+                currentModel.get().getModel().setGridLoaded(t1);
+            }
+        });
 
 
         currentModel.addListener(new ChangeListener<>() {
@@ -123,6 +159,13 @@ public class ModelSettings {
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
+
+                    rasterization.setSelected(t1.model.isRasterized());
+                    zBuffer.setSelected(t1.model.isZBuffered());
+                    switchLights.setSelected(t1.model.isLighted());
+                    unloadTexture.setSelected(t1.model.isTextureLoaded());
+                    switchGrid.setSelected(t1.model.isGridLoaded());
+
                     if (uiModel != null) {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
