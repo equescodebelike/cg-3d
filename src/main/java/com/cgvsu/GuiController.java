@@ -33,6 +33,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -166,8 +168,22 @@ public class GuiController {
 
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
-                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
-
+                // if (no light, no texture)
+                if (false)
+                    try {
+                        RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, false, false, null);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    //if (light and texture)
+                    //BufferedImage texture = new BufferedImage();
+                    //LoadBufferedImage
+                else
+                    try {
+                        RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, true, true, null);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 UIModel a = uiModels.get(i);
                 Model model = scene.loadedMeshes.get(i);
                 Point2f minP = model.getMinPoint2f();
