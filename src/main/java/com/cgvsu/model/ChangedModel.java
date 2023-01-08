@@ -11,12 +11,48 @@ public class ChangedModel extends Model {
     private Vector3f scale;
     private Vector3f translate;
     private boolean isRasterized = false;
+    private boolean isZBuffered = false;
+    private boolean isLighted = false;
+    private boolean isTextureLoaded = false;
+    private boolean isGridLoaded = false;
 
     public ChangedModel(Model model) {
         super(model);
         rotate = new Vector3f(0, 0, 0);
         scale = new Vector3f(1, 1, 1);
         translate = new Vector3f(0, 0, 0);
+    }
+
+    public boolean isZBuffered() {
+        return isZBuffered;
+    }
+
+    public void setZBuffered(boolean ZBuffered) {
+        isZBuffered = ZBuffered;
+    }
+
+    public boolean isLighted() {
+        return isLighted;
+    }
+
+    public void setLighted(boolean lighted) {
+        isLighted = lighted;
+    }
+
+    public boolean isTextureLoaded() {
+        return isTextureLoaded;
+    }
+
+    public void setTextureLoaded(boolean textureLoaded) {
+        isTextureLoaded = textureLoaded;
+    }
+
+    public boolean isGridLoaded() {
+        return isGridLoaded;
+    }
+
+    public void setGridLoaded(boolean gridLoaded) {
+        isGridLoaded = gridLoaded;
     }
 
     public boolean isRasterized() {
