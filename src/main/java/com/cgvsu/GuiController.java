@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cgvsu.render_engine.GraphicConveyor.multiplyMatrix4ByVector3;
 import static com.cgvsu.render_engine.GraphicConveyor.rotateScaleTranslate;
 
 public class GuiController {
@@ -321,7 +322,7 @@ public class GuiController {
             for (com.cgvsu.math.Vector3f vertex : model.getVertices()) {
                 Vector3f vM = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
                 Vector3f resultVector = multiplyMatrix4ByVector3(rst, vM);
-                System.out.println(resultVector);
+//                System.out.println(resultVector);
                 model1.getVertices().add(new com.cgvsu.math.Vector3f(
                         resultVector.x,
                         resultVector.y,
