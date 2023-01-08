@@ -2,24 +2,23 @@ package com.cgvsu.rasterization;
 
 import com.cgvsu.math.SomeVectorMath;
 import com.cgvsu.math.vectors.vectorFloat.Vector2f;
-import com.cgvsu.model.Model;
+import com.cgvsu.model.ChangedModel;
 import com.cgvsu.render_engine.Camera;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class Rasterization {
 
-    public static void fillTriangleTextureAndLight(
+    public static void fillTriangle(
             final GraphicsUtils gr,
             MyPoint3D p1, MyPoint3D p2, MyPoint3D p3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
             Double[][] zBuffer, Camera camera, BufferedImage image,
-            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, Model mesh) throws IOException {
+            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) throws IOException {
 
         List<MyPoint3D> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
 
@@ -49,8 +48,10 @@ public class Rasterization {
             }
         }
 
-        double cosLight;
-        cosLight = SomeVectorMath.getCosLight(camera, p1, p2, p3);
+        double cosLight = 1;
+        //LIGHT
+        if (mesh.isLighted()) cosLight = SomeVectorMath.getCosLight(camera, p1, p2, p3);
+
         final double x1 = points.get(0).getX();
         final double x2 = points.get(1).getX();
         final double x3 = points.get(2).getX();
@@ -64,13 +65,13 @@ public class Rasterization {
         for (int y = (int) (y1 + 1); y <= y2; y++) {
             double startX = getX(y, x1, x2, y1, y2);
             double endX = getX(y, x1, x3, y1, y3);
-            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3, z1, z2, z3, zBuffer, camera, cosLight, image, texturePoint1, texturePoint2, texturePoint3,mesh);
+            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3, z1, z2, z3, zBuffer, camera, cosLight, image, texturePoint1, texturePoint2, texturePoint3, mesh);
         }
 
         for (int y = (int) (y2 + 1); y < y3; y++) {
             double startX = getX(y, x1, x3, y1, y3);
             double endX = getX(y, x2, x3, y2, y3);
-            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3, z1, z2, z3, zBuffer, camera, cosLight, image, texturePoint1, texturePoint2, texturePoint3,mesh);
+            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3, z1, z2, z3, zBuffer, camera, cosLight, image, texturePoint1, texturePoint2, texturePoint3, mesh);
         }
     }
 
@@ -81,53 +82,14 @@ public class Rasterization {
             double x3, double y3, double z3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
             Double[][] zBuffer, Camera camera, BufferedImage image,
-            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, Model mesh) throws IOException {
-        fillTriangleTextureAndLight(gr, new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3),
-                myColor1, myColor2, myColor3, zBuffer, camera, image, texturePoint1, texturePoint2, texturePoint3,mesh);
-    }
-    public static void fillTriangle(
-            final GraphicsUtils gr,
-            MyPoint2D p1, MyPoint2D p2, MyPoint2D p3,
-            MyColor myColor1, MyColor myColor2, MyColor myColor3) {
-
-        List<MyPoint2D> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
-
-        points.sort(Comparator.comparingDouble(MyPoint2D::getY));
-
-        final double x1 = points.get(0).getX();
-        double x2 = points.get(1).getX();
-        double x3 = points.get(2).getX();
-        double y1 = points.get(0).getY();
-        double y2 = points.get(1).getY();
-        double y3 = points.get(2).getY();
-
-        for (int y = (int) Math.round(y1 + 0.5); y <= y2; y++) {
-            double startX = getX(y, x1, x2, y1, y2);
-            double endX = getX(y, x1, x3, y1, y3);
-
-            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3);
-        }
-
-        for (int y = (int) Math.round(y2 + 0.5); y < y3; y++) {
-            double startX = getX(y, x1, x3, y1, y3);
-            double endX = getX(y, x2, x3, y2, y3);
-            fillLine(gr, y, startX, endX, myColor1, myColor2, myColor3, x1, x2, x3, y1, y2, y3);
-        }
-    }
-
-    public static void fillTriangle(
-            GraphicsUtils gr,
-            double x1, double y1,
-            double x2, double y2,
-            double x3, double y3,
-            MyColor myColor1, MyColor myColor2, MyColor myColor3) {
-        fillTriangle(gr, new MyPoint2D(x1, y1), new MyPoint2D(x2, y2), new MyPoint2D(x3, y3), myColor1, myColor2, myColor3);
+            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) throws IOException {
+        fillTriangle(gr, new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3),
+                myColor1, myColor2, myColor3, zBuffer, camera, image, texturePoint1, texturePoint2, texturePoint3, mesh);
     }
 
     private static double getX(double y, double x1, double x2, double y1, double y2) {
         return (x2 - x1) * (y - y1) / (y2 - y1) + x1;
     }
-
 
     private static void fillLine(
             final GraphicsUtils gr, int y, double startX, double endX,
@@ -136,73 +98,37 @@ public class Rasterization {
             double y1, double y2, double y3,
             double z1, double z2, double z3,
             Double[][] zBuffer, Camera camera, double cosLight, BufferedImage image,
-            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3,Model mesh) throws IOException {
+            Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) throws IOException {
 
         if (Double.compare(startX, endX) > 0) {
             double temp = startX;
             startX = endX;
             endX = temp;
         }
-
+        int counter = 0;
         for (int x = (int) startX + 1; x < endX; x++) {
             double z = SomeVectorMath.getZ(new MyPoint3D(x1, y1, z1), new MyPoint3D(x2, y2, z2), new MyPoint3D(x3, y3, z3), x, y);
             if (x >= 0 && y >= 0) {
                 if (zBuffer[x][y] == null || zBuffer[x][y] > Math.abs(z - camera.getPosition().getZ())) {
                     MyColor color = getColor(myColor1, myColor2, myColor3, x, y, x1, x2, x3, y1, y2, y3, image,
-                            texturePoint1, texturePoint2, texturePoint3,mesh);
+                            texturePoint1, texturePoint2, texturePoint3, mesh);
                     gr.setPixel(x, y, new MyColor(color.getRed() * cosLight, color.getGreen() * cosLight, color.getBlue() * cosLight));
-                    zBuffer[x][y] = Math.abs(z - camera.getPosition().getZ());
+                    if (mesh.isZBuffered())
+                        zBuffer[x][y] = Math.abs(z - camera.getPosition().getZ());
                 }
             }
         }
     }
-    private static void fillLine(
-            final GraphicsUtils gr, int y, double startX, double endX,
-            MyColor myColor1, MyColor myColor2, MyColor myColor3,
-            double x1, double x2, double x3,
-            double y1, double y2, double y3) {
 
-        if (Double.compare(startX, endX) > 0) {
-            double temp = startX;
-            startX = endX;
-            endX = temp;
-        }
-
-        for (int x = (int) Math.round(startX + 0.5); x < endX; x++) {
-            gr.setPixel(x, y, getColor(myColor1, myColor2, myColor3, x, y, x1, x2, x3, y1, y2, y3));
-        }
-    }
-
-
-    private static MyColor getColor(
-            MyColor myColor1, MyColor myColor2, MyColor myColor3,
-            double x, double y,
-            double x1, double x2, double x3,
-            double y1, double y2, double y3) {
-
-        double detT = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
-
-        double alpha = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / detT;
-
-        double betta = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / detT;
-
-        double gamma = 1 - alpha - betta;
-
-        double r = (alpha * myColor1.getRed() + betta * myColor2.getRed() + gamma * myColor3.getRed());
-        double g = (alpha * myColor1.getGreen() + betta * myColor2.getGreen() + gamma * myColor3.getGreen());
-        double b = (alpha * myColor1.getBlue() + betta * myColor2.getBlue() + gamma * myColor3.getBlue());
-
-        return new MyColor(r, g, b);
-    }
 
     private static MyColor getColor(
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
             double x, double y,
             double x1, double x2, double x3,
             double y1, double y2, double y3,
-            BufferedImage image, Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, Model mesh) throws IOException {
-        //isTextured
-        if (true) {
+            BufferedImage image, Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) throws IOException {
+        //TEXTURES
+        if (!mesh.isTextureLoaded()) {
             double detT = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
 
             double alpha = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / detT;
@@ -226,7 +152,7 @@ public class Rasterization {
             float cvp = (float) (y3 - y);
 
             // parametric coords
-            float f =  (1.0f /(float) ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)));
+            float f = (1.0f / (float) ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)));
             float u = (bup * cvp - bvp * cup) * f;
             float v = (cup * avp - cvp * aup) * f;
             float w = 1.0f - (u + v);
@@ -254,4 +180,5 @@ public class Rasterization {
         double blue = (clr & 0x000000ff) / 255.0f;
         return new MyColor(red, green, blue);
     }
+
 }

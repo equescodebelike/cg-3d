@@ -14,7 +14,7 @@ public class ChangedModel extends Model {
     private boolean isZBuffered = false;
     private boolean isLighted = false;
     private boolean isTextureLoaded = false;
-    private boolean isGridLoaded = false;
+    private boolean isGridLoaded = true;
 
     public ChangedModel(Model model) {
         super(model);

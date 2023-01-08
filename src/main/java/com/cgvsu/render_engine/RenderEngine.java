@@ -28,8 +28,6 @@ public class RenderEngine {
             final ChangedModel mesh,
             final int width,
             final int height,
-            final boolean isLight,
-            final boolean isTextured,
             BufferedImage image) throws IOException {
         Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
                 mesh.getScale(),
@@ -80,41 +78,37 @@ public class RenderEngine {
             }
             GraphicsUtils gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
 
-
-            for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                if (!isLight && !isTextured) {
+            if (mesh.isGridLoaded()) {
+                for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                     graphicsContext.strokeLine(
                             resultPoints.get(vertexInPolygonInd - 1).x,
                             resultPoints.get(vertexInPolygonInd - 1).y,
                             resultPoints.get(vertexInPolygonInd).x,
                             resultPoints.get(vertexInPolygonInd).y);
-                    //Rasterization
-//                    if (vertexInPolygonInd + 1 < nVerticesInPolygon && mesh.isRasterized())
-//                        Rasterization.fillTriangle(gr, resultPoints.get(vertexInPolygonInd - 1).x, resultPoints.get(vertexInPolygonInd - 1).y,
-//                                resultPoints.get(vertexInPolygonInd).x, resultPoints.get(vertexInPolygonInd).y,
-//                                resultPoints.get(vertexInPolygonInd + 1).x, resultPoints.get(vertexInPolygonInd + 1).y,
-//                                MyColor.GREEN, MyColor.BLUE, MyColor.RED);
-                    if (nVerticesInPolygon > 0) {
-                        graphicsContext.strokeLine(
-                                resultPoints.get(nVerticesInPolygon - 1).x,
-                                resultPoints.get(nVerticesInPolygon - 1).y,
-                                resultPoints.get(0).x,
-                                resultPoints.get(0).y);
-                    }
-                } else {
-//                    Rasterization.fillTriangle(gr,
-//                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-//                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-//                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-//                            MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
-//                            mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(0)),
-//                            mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(1)),
-//                            mesh.getTextureVertices().get(mesh.getPolygons().get(vertexInPolygonInd).getTextureVertexIndices().get(2)), mesh);
+
+                }
+                if (nVerticesInPolygon > 0) {
+                    graphicsContext.strokeLine(
+                            resultPoints.get(nVerticesInPolygon - 1).x,
+                            resultPoints.get(nVerticesInPolygon - 1).y,
+                            resultPoints.get(0).x,
+                            resultPoints.get(0).y);
                 }
             }
+
+        if (mesh.isRasterized()) {
+            Rasterization.fillTriangle(gr,
+                    resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                    resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                    resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                    MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera, image,
+                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
+                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
+                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
         }
+    }
 
         mesh.setMinPoint2f(minPoint);
         mesh.setMaxPoint2f(maxPoint);
-    }
+}
 }
