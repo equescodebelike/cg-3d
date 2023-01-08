@@ -340,8 +340,10 @@ public class GuiController {
 
     @FXML
     public void deleteMesh() {
-        if (scene.loadedMeshes.size() > 1) {
+        if (scene.loadedMeshes.size() >= 1) {
             if (numberMesh == scene.loadedMeshes.size() - 1) numberMesh--;
+            listView.getItems().remove(uiModels.get(scene.loadedMeshes.size() - 1));
+            uiModels.remove(scene.loadedMeshes.size() - 1);
             scene.loadedMeshes.remove(scene.loadedMeshes.size() - 1);
         }
     }

@@ -6,53 +6,51 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
 
-    <Canvas fx:id="canvas" height="600.0" width="665.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="100.0"
-            AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="30.0"/>
-    <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0"/>
+    <Canvas fx:id="canvas" height="690.0" layoutX="215.0" layoutY="76.0" width="610.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="215.0" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="76.0" />
+    <AnchorPane fx:id="changeTheme" layoutX="109.0" layoutY="17.0" prefHeight="87.0" prefWidth="175.0" />
     <MenuButton fx:id="menuButton" layoutY="3.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="52.0">
         <items>
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" onAction="#openModelMenuItemClick" text="Load Model">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#saveModelMenuItemClick" text="Save Model">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#nextModel" text="Next model">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#deleteMesh" text="Delete model">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
             </Menu>
             <Menu mnemonicParsing="false" text="Settings">
-                <CheckMenuItem onAction="#displayConsole" selected="false" text="Display Console"/>
+                <CheckMenuItem onAction="#displayConsole" selected="false" text="Display Console" />
             </Menu>
             <Menu mnemonicParsing="false" text="Camera">
                 <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Add Camera">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#deleteCamera" text="Delete Camera">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Next Camera">
                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
             </Menu>
@@ -62,39 +60,38 @@
         <Menu disable="true" mnemonicParsing="false" text="Move">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="UP" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="UP" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#handleCameraBackward" text="Backward">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="DOWN" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="DOWN" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#handleCameraLeft" text="Left">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="LEFT" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="LEFT" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#handleCameraRight" text="Right">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="RIGHT" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="RIGHT" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#handleCameraUp" text="Up">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#handleCameraDown" text="Down">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                    <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
         </Menu>
     </MenuBar>
-    <ListView fx:id="listView" layoutX="14.0" layoutY="148.0" prefHeight="431.0" prefWidth="192.0"/>
-    <AnchorPane fx:id="modelSettings" prefHeight="561.0" prefWidth="174.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.topAnchor="0.0">
+    <ListView fx:id="listView" layoutY="175.0" prefHeight="437.0" prefWidth="199.0" AnchorPane.bottomAnchor="175.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="175.0" />
+    <AnchorPane fx:id="modelSettings" prefHeight="667.0" prefWidth="175.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
         <children>
             <VBox layoutY="-2.0" prefHeight="344.0" prefWidth="174.0">
                 <children>
@@ -102,43 +99,40 @@
                         <children>
                             <Label text="Label">
                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="70.0" top="10.0"/>
+                                    <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
                             </Label>
                             <BorderPane prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER"/>
+                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER"/>
+                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER"/>
+                                    <Slider prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>
@@ -147,46 +141,40 @@
                         <children>
                             <Label text="Label">
                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="70.0" top="10.0"/>
+                                    <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
                             </Label>
                             <BorderPane prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider max="5.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>
@@ -195,46 +183,40 @@
                         <children>
                             <Label text="Label">
                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="70.0" top="10.0"/>
+                                    <Insets bottom="10.0" left="70.0" top="10.0" />
                                 </VBox.margin>
                             </Label>
                             <BorderPane prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                             <BorderPane layoutX="10.0" layoutY="72.0" prefHeight="74.0" prefWidth="147.0">
                                 <center>
-                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0"
-                                               BorderPane.alignment="CENTER"/>
+                                    <TextField prefHeight="5.0" prefWidth="119.0" text="0" BorderPane.alignment="CENTER" />
                                 </center>
                                 <bottom>
-                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0"
-                                            BorderPane.alignment="CENTER"/>
+                                    <Slider min="-100.0" prefHeight="37.0" prefWidth="147.0" BorderPane.alignment="CENTER" />
                                 </bottom>
                                 <left>
-                                    <Label text="Label" BorderPane.alignment="CENTER"/>
+                                    <Label text="Label" BorderPane.alignment="CENTER" />
                                 </left>
                             </BorderPane>
                         </children>

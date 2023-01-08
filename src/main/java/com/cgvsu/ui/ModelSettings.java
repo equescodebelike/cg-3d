@@ -119,14 +119,13 @@ public class ModelSettings {
         currentModel.addListener(new ChangeListener<UIModel>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
-                if (t1 != null) /**/ {
+                if (t1 != null) {
                     rotateTransform.setVector(t1.model.getRotate());
                     scaleTransform.setVector(t1.model.getScale());
                     translateTransform.setVector(t1.model.getTranslate());
                     if (uiModel != null) {
                         translateTransition.setFromX(0);
                         translateTransition.setToX(0);
-                        System.out.println("\n\n\n!!!!!!!\n\n\n");
                     } else {
                         translateTransition.setFromX(175);
                         translateTransition.setToX(0);
