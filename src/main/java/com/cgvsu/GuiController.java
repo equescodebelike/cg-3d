@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -96,8 +97,8 @@ public class GuiController {
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
         settings = new ModelSettings(modelSettings);
 
-        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue() - 300));
-        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue() - 300));
+        anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue()));
+        anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue()));
 
 
         currentUIModel.addListener(new ChangeListener<UIModel>() {
@@ -116,9 +117,11 @@ public class GuiController {
             double x = mouseEvent.getX();
             double y = mouseEvent.getY();
             Point2f point2f = new Point2f((float) x, (float) y);
-            for (UIModel uiModel : uiModels) {
+            for (int i = 0, uiModelsSize = uiModels.size(); i < uiModelsSize; i++) {
+                UIModel uiModel = uiModels.get(i);
                 if (uiModel.getBorder().isInBorder(point2f)) {
                     currentUIModel.set(uiModel);
+                    numberMesh = i;
                     return;
                 }
             }
@@ -237,19 +240,19 @@ public class GuiController {
             final float dxy = Math.abs(dx) - Math.abs(dy);
             float dz = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().x <= EPS && dx < 0 ||
-                    scene.getCamera().get(numberCamera).getPosition().x > EPS && dx > 0)) {
+            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().getX() <= EPS && dx < 0 ||
+                    scene.getCamera().get(numberCamera).getPosition().getX() > EPS && dx > 0)) {
                 dz *= -1;
-            } else if (dxy < EPS) { //если больше перемещаем по y, то по z не перемещаем
+            } else if (dxy < EPS) {
                 dz = 0;
             }
-            if (scene.getCamera().get(numberCamera).getPosition().z <= EPS) {
+            if (scene.getCamera().get(numberCamera).getPosition().getZ() <= EPS) {
                 dx *= -1;
             }
 
             ref.prevX = actualX;
             ref.prevY = actualY;
-            scene.getCamera().get(numberCamera).movePosition(new Vector3f(new float[]{dx * 0.1f, dy * 0.1f, dz * 0.1f}));
+            scene.getCamera().get(numberCamera).movePosition(new Vector3f(dx * 0.1f, dy * 0.1f, dz * 0.1f));
         });
     }
 
@@ -324,6 +327,11 @@ public class GuiController {
     }
 
     @FXML
+    public void changeRasterize() {
+        currentUIModel.get().getModel().setRasterized(!currentUIModel.get().getModel().isRasterized());
+    }
+
+    @FXML
     public void addCamera() {
         scene.getCamera().add(new Camera(
                 new Vector3f(0, 0, 100),
@@ -356,10 +364,9 @@ public class GuiController {
     @FXML
     public void deleteMesh() {
         if (scene.loadedMeshes.size() >= 1) {
-            if (numberMesh == scene.loadedMeshes.size() - 1) numberMesh--;
-            listView.getItems().remove(uiModels.get(scene.loadedMeshes.size() - 1));
-            uiModels.remove(scene.loadedMeshes.size() - 1);
-            scene.loadedMeshes.remove(scene.loadedMeshes.size() - 1);
+            listView.getItems().remove(uiModels.get(numberMesh));
+            uiModels.remove(numberMesh);
+            scene.loadedMeshes.remove(numberMesh);
         }
     }
 
