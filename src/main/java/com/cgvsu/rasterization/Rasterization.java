@@ -182,7 +182,7 @@ public class Rasterization {
         int x = (int) (x0 * width);
         int y = (int) (y0 * height);
 
-        Color clr = image.getPixelReader().getColor(x, y);
+        Color clr = image.getPixelReader().getColor(width-x, height-y);
         /*        int width = image.getWidth() - 1;
         int height = image.getHeight() - 1;
         int x = (int) (x0 * width);
@@ -195,7 +195,7 @@ public class Rasterization {
         double green = ((clr & 0x0000ff00) >> 8) / 255.0f;
         double blue = (clr & 0x000000ff) / 255.0f;
         return new MyColor(red, green, blue);*/
-        return new MyColor(clr.getRed(),clr.getBlue(), clr.getGreen());
+        return new MyColor(clr.getRed(),clr.getGreen(), clr.getBlue());
     }
 
 }
