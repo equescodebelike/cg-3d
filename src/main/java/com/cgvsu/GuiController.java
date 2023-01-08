@@ -45,10 +45,6 @@ import java.util.Objects;
 public class GuiController {
 
     final private float TRANSLATION = 2F;
-    // todo: comments below
-    // private boolean isStructure = false; mesh
-    // public static boolean isLight = true; light
-    // private boolean isTexture = false; texture
     private boolean writeToConsole = false;
 
     private final Scene scene = new Scene();
@@ -320,11 +316,6 @@ public class GuiController {
             }
         }
     }*/
-
-    @FXML
-    public void changeRasterize() {
-        currentUIModel.get().getModel().setRasterized(!currentUIModel.get().getModel().isRasterized());
-    }
 
     @FXML
     public void addCamera() {
