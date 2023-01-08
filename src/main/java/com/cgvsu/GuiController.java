@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.math.vectors.vectorFloat.Vector4f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -7,6 +8,7 @@ import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
+import com.cgvsu.render_engine.GraphicConveyor;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
@@ -31,8 +33,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Point2f;
 import javax.vecmath.Vector3f;
 import java.io.*;
@@ -41,6 +45,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.cgvsu.render_engine.GraphicConveyor.rotateScaleTranslate;
 
 public class GuiController {
 
@@ -300,7 +306,7 @@ public class GuiController {
 
     }
 
-    /*private void saveModelWithChangesMenuItemClick() {
+   /* private void saveModelWithChangesMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Changed Model");
@@ -311,9 +317,15 @@ public class GuiController {
 
         ArrayList<Vector3f> newVertices = new ArrayList<>();
         try {
-            for (int i = 0; i < ; i++) {
-
+            Matrix4f rotate = rotateScaleTranslate(scene.loadedMeshes.get(numberMesh).getRotate(),
+                    scene.loadedMeshes.get(numberMesh).getScale(),
+                    scene.loadedMeshes.get(numberMesh).getTranslate());
+            for (int i = 0; i < scene.loadedMeshes.get(numberMesh).getPolygons().size(); i++) {
+                Vector3f vertexVecmath = new Vector3f(scene.loadedMeshes.get(numberMesh).getVertices().get(0).getX(),
+                        scene.loadedMeshes.get(numberMesh).getVertices().get(1).getY(),
+                        scene.loadedMeshes.get(numberMesh).getVertices().get(2).getZ());
             }
+
         }
     }*/
 
