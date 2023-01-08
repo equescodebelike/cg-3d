@@ -26,22 +26,22 @@ public class Vector<T extends Number> extends Matrix<T> {
     public int size(){
         return values.size();
     }
-    public static<T extends Number> double length(Vector<T> vec) {
-        double temp = 0;
+    public static<T extends Number> float length(Vector<T> vec) {
+        float temp = 0;
         for(int i = 0; i < vec.size(); i++) {
             temp += Math.pow(vec.values.get(i).doubleValue(), 2);
         }
-        return Math.sqrt(temp);
+        return (float) Math.sqrt(temp);
     }
 
     public static<T extends Number> Vector<T> normalize(Vector<T> vec) {
         List<T> values = new ArrayList<>();
-        double length = length(vec);
+        float length = length(vec);
         if(Double.compare(length,0.0) ==0){
-            return new Vector<T>(vec.size(),(T) Integer.valueOf(0));
+            return new Vector<T>(vec.size(),(T) Float.valueOf(0));
         }
         for(int i = 0; i < vec.size(); i++) {
-            values.add((T) Double.valueOf(vec.values.get(i).doubleValue()/length));
+            values.add((T) Float.valueOf(vec.values.get(i).floatValue()/length));
         }
         return new Vector<T>(values);
     }
@@ -77,6 +77,7 @@ public class Vector<T extends Number> extends Matrix<T> {
         return dot(this,vec);
     }
     public void normalize(){
-        normalize(this);
+        Vector<T>  a = normalize(this);
+        values = a.values;
     }
 }

@@ -24,33 +24,33 @@ public class GraphicConveyor {
 
         //Rotation
         //x
-        matrix4f.mul(new Matrix4f(new float[]{
+        matrix4f = new Matrix4f(matrix4f.mul(new Matrix4f(new float[]{
                 1, 0, 0, 0,
                 0, (float) cos(rotateAngleXRAD), (float) sin(rotateAngleXRAD), 0,
                 0, (float) -sin(rotateAngleXRAD), (float) cos(rotateAngleXRAD), 0,
                 0, 0, 0, 1
-        }));
+        })));
         //y
-        matrix4f.mul(new Matrix4f(new float[]{
+        matrix4f = new Matrix4f(matrix4f.mul(new Matrix4f(new float[]{
                 (float) cos(rotateAngleYRAD), 0, (float) -sin(rotateAngleYRAD), 0,
                 0, 1, 0, 0,
                 (float) sin(rotateAngleYRAD), 0, (float) cos(rotateAngleYRAD), 0,
                 0, 0, 0, 1
-        }));
+        })));
         //z
-        matrix4f.mul(new Matrix4f(new float[]{
+        matrix4f = new Matrix4f(matrix4f.mul(new Matrix4f(new float[]{
                 (float) cos(rotateAngleZRAD), (float) sin(rotateAngleZRAD), 0, 0,
                 -(float) sin(rotateAngleZRAD), (float) cos(rotateAngleZRAD), 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1
-        }));
+        })));
 
 
         //Scaling
 //        matrix4f.getElement(0,0) = 1F;
         matrix4f.setElement(0,0, matrix4f.getElement(0, 0) * scaleVector.getX());
-        matrix4f.setElement(1,1, matrix4f.getElement(1, 1) * scaleVector.getX());
-        matrix4f.setElement(2,2, matrix4f.getElement(2, 2) * scaleVector.getX());
+        matrix4f.setElement(1,1, matrix4f.getElement(1, 1) * scaleVector.getY());
+        matrix4f.setElement(2,2, matrix4f.getElement(2, 2) * scaleVector.getZ());
 //        matrix4f.m00 *= scaleVector.x;
 //        matrix4f.m11 *= scaleVector.y;
 //        matrix4f.m22 *= scaleVector.z;
@@ -58,9 +58,9 @@ public class GraphicConveyor {
 //        matrix4f.m30 = translationVector.x;
 //        matrix4f.m31 = translationVector.y;
 //        matrix4f.m32 = translationVector.z;
-        matrix4f.setElement(3,0, scaleVector.getX());
-        matrix4f.setElement(3,1, scaleVector.getX());
-        matrix4f.setElement(3,2, scaleVector.getX());
+        matrix4f.setElement(3,0, translationVector.getX());
+        matrix4f.setElement(3,1, translationVector.getY());
+        matrix4f.setElement(3,2, translationVector.getZ());
 
 
         return matrix4f;

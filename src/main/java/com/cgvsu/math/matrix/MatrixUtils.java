@@ -86,12 +86,12 @@ public interface MatrixUtils {
 
 //
         for (int i = 0; i < matrix1.getRows()*matrix2.getCols(); i++) {
-            double value = 0.0;
+            float value = 0;
             for (int j = 0; j < matrix1.getCols(); j++) {
                 //matrix.get(i + j) + matrix.get(j*cols)
                 //matrix.get(i + j)
                 //matrix.get(i + j)
-                 value += getElement(matrix1F, matrix1.cols, i/ matrix2.cols,j).doubleValue() * getElement(matrix2F, matrix2.cols, j,i% matrix2.rows).doubleValue();
+                 value += getElement(matrix1F, matrix1.cols, i/ matrix2.cols,j).doubleValue() * getElement(matrix2F, matrix2.cols, j,i% matrix2.rows).floatValue();
 //                value += matrix1F.get(i * matrix1.getCols() + j).doubleValue() * matrix2F.get(j * matrix2.getRows() + i).doubleValue();
 
             }
@@ -99,7 +99,7 @@ public interface MatrixUtils {
 //                System.out.println();
 //            }
 //            System.out.print((int) value + " ");
-            newMatrix.add((T) Double.valueOf(value));
+            newMatrix.add((T) Float.valueOf(value));
         }
 
         return new Matrix<>(newMatrix, matrix1.getRows(), matrix2.getCols());

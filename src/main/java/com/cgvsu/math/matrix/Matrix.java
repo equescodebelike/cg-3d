@@ -13,7 +13,7 @@ import static com.cgvsu.math.matrix.MatrixUtils.*;
 //import static matrix.MatrixUtils.transposition;
 
 public  class Matrix<T extends Number> {
-    protected final List<T> values;
+    protected List<T> values;
     protected final int rows;
     protected final int cols;
 
@@ -84,7 +84,6 @@ public  class Matrix<T extends Number> {
         System.out.println(Arrays.toString(a));
         Matrix<Float> b = new Matrix<>(5,5,1f);
         Matrix<Double> c = new Matrix<>(5,5,1.0);
-        b = b.add(b);
         System.out.println(b);
 //        Matrix.addition(
 //                new Matrix3(new float[4],3,3),
@@ -110,8 +109,12 @@ public  class Matrix<T extends Number> {
         return values.get(cols * row + col);
     }
 //
-    public Matrix<T> add(Matrix<T> matrix1) {
-        return addition(this, matrix1);
+//    public Matrix<T> add(Matrix<T> matrix1) {
+//        return addition(this, matrix1);
+//    }
+    public void add(Matrix<T> matrix){
+        Matrix<T> a = addition(this,matrix);
+        values = a.values;
     }
 
     //? extends number
