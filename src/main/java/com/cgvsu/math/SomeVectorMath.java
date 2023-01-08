@@ -31,7 +31,7 @@ public class SomeVectorMath {
                 normalCamera.x / normalCamera.length(),
                 normalCamera.y / normalCamera.length(),
                 normalCamera.z / normalCamera.length());
-        double numerator = normalCameraN.x * normal.x+ normalCameraN.y * normal.y+
+        double numerator = normalCameraN.x * normal.x + normalCameraN.y * normal.y +
                 normalCameraN.z * normal.z;
 
         double denominator = normal.length() * normalCameraN.length();

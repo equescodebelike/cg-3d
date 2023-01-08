@@ -1,6 +1,5 @@
 package com.cgvsu.math.vectors.vectorFloat;
 
-
 import com.cgvsu.math.vectors.Vector4;
 
 public class Vector4f extends Vector4<Float> {
@@ -12,7 +11,7 @@ public class Vector4f extends Vector4<Float> {
         super(value);
     }
 
-    public Vector4f(){
+    public Vector4f() {
         super(0f);
     }
 }

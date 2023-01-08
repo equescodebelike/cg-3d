@@ -1,7 +1,5 @@
 package com.cgvsu.math.matrix.floatMatrix;
 
-
-
 import com.cgvsu.math.matrix.Matrix3;
 
 import java.util.Arrays;

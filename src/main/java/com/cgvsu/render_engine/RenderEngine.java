@@ -37,11 +37,10 @@ public class RenderEngine {
         modelViewProjectionMatrix.mul(viewMatrix);
         modelViewProjectionMatrix.mul(projectionMatrix);
 
-
         final int nPolygons = mesh.getPolygons().size();
         Double[][] zBuffer = new Double[width][height];
 
-        Point2f minPoint = new Point2f(10000,10000);
+        Point2f minPoint = new Point2f(10000, 10000);
         Point2f maxPoint = new Point2f();
 
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
@@ -92,30 +91,30 @@ public class RenderEngine {
                 }
             }
 
-        if (mesh.isRasterized()) {
-            if (mesh.getTextureVertices().size() != 0)
-                Rasterization.fillTriangle(gr,
-                    resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-                    resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-                    resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                    MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
-                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
-                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
-                    mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
-            else {
-                Rasterization.fillTriangle(gr,
-                        resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-                        resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-                        resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                        MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
-                        null,
-                        null,
-                        null, mesh);
+            if (mesh.isRasterized()) {
+                if (mesh.getTextureVertices().size() != 0)
+                    Rasterization.fillTriangle(gr,
+                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                            MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
+                else {
+                    Rasterization.fillTriangle(gr,
+                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                            MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
+                            null,
+                            null,
+                            null, mesh);
+                }
             }
         }
-    }
 
         mesh.setMinPoint2f(minPoint);
         mesh.setMaxPoint2f(maxPoint);
-}
+    }
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Triangle {
 
-
     public static ArrayList<Polygon> triangulatePolygon(List<Polygon> polygons) {
         ArrayList<Polygon> triangles = new ArrayList<>();
         for (Polygon polygon : polygons) {

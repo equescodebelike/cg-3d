@@ -1,6 +1,5 @@
 package com.cgvsu;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector4f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -8,7 +7,6 @@ import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
-import com.cgvsu.render_engine.GraphicConveyor;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
@@ -46,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cgvsu.render_engine.GraphicConveyor.*;
+import static com.cgvsu.render_engine.GraphicConveyor.rotateScaleTranslate;
 
 public class GuiController {
 
@@ -83,6 +81,7 @@ public class GuiController {
     @FXML
     private ListView<UIModel> listView;
 
+    private Model mesh = null;
 
     private int numberCamera = 0;
     private int numberMesh = 0;
@@ -355,8 +354,30 @@ public class GuiController {
                 });
         }
 
-
     }
+
+   /* private void saveModelWithChangesMenuItemClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Changed Model");
+        fileChooser.setInitialFileName("NewChangedFileOBJ");
+        File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
+
+        Path fileName = Path.of(file.getAbsolutePath());
+
+        ArrayList<Vector3f> newVertices = new ArrayList<>();
+        try {
+            Matrix4f rotate = rotateScaleTranslate(scene.loadedMeshes.get(numberMesh).getRotate(),
+                    scene.loadedMeshes.get(numberMesh).getScale(),
+                    scene.loadedMeshes.get(numberMesh).getTranslate());
+            for (int i = 0; i < scene.loadedMeshes.get(numberMesh).getPolygons().size(); i++) {
+                Vector3f vertexVecmath = new Vector3f(scene.loadedMeshes.get(numberMesh).getVertices().get(0).getX(),
+                        scene.loadedMeshes.get(numberMesh).getVertices().get(1).getY(),
+                        scene.loadedMeshes.get(numberMesh).getVertices().get(2).getZ());
+            }
+
+        }
+    }*/
 
     @FXML
     public void addCamera() {
