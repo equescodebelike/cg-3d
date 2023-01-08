@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.misc.ToggleSwitch;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.model.Model;
@@ -32,7 +33,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.vecmath.Vector3f;
 import java.io.*;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -256,19 +256,19 @@ public class GuiController {
             final float dxy = Math.abs(dx) - Math.abs(dy);
             float dz = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().x <= EPS && dx < 0 ||
-                    scene.getCamera().get(numberCamera).getPosition().x > EPS && dx > 0)) {
+            if (dxy >= EPS && (scene.getCamera().get(numberCamera).getPosition().getX() <= EPS && dx < 0 ||
+                    scene.getCamera().get(numberCamera).getPosition().getX() > EPS && dx > 0)) {
                 dz *= -1;
             } else if (dxy < EPS) { //если больше перемещаем по y, то по z не перемещаем
                 dz = 0;
             }
-            if (scene.getCamera().get(numberCamera).getPosition().z <= EPS) {
+            if (scene.getCamera().get(numberCamera).getPosition().getZ() <= EPS) {
                 dx *= -1;
             }
 
             ref.prevX = actualX;
             ref.prevY = actualY;
-            scene.getCamera().get(numberCamera).movePosition(new Vector3f(new float[]{dx * 0.1f, dy * 0.1f, dz * 0.1f}));
+            scene.getCamera().get(numberCamera).movePosition(new Vector3f(dx * 0.1f, dy * 0.1f, dz * 0.1f));
         });
     }
 

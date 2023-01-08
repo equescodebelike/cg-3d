@@ -2,17 +2,15 @@ package com.cgvsu.render_engine;
 
 import java.util.ArrayList;
 
-import com.cgvsu.math.Vector3f;
+import com.cgvsu.math.matrix.floatMatrix.Matrix4f;
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
-import com.cgvsu.rasterization.MyColor;
-import com.cgvsu.rasterization.Rasterization;
 import javafx.scene.canvas.GraphicsContext;
 
-import javax.vecmath.*;
 
-import com.cgvsu.model.Model;
+import javax.vecmath.Point2f;
 
 import static com.cgvsu.render_engine.GraphicConveyor.*;
 
@@ -49,7 +47,7 @@ public class RenderEngine {
             for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                 Vector3f vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
 
-                javax.vecmath.Vector3f vertexVecmath = new javax.vecmath.Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
+                Vector3f vertexVecmath = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
                 //вот здесь можно находить максимальную и минимальную координату

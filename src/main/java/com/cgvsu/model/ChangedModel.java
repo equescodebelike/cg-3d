@@ -1,8 +1,9 @@
 package com.cgvsu.model;
 
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
+import com.cgvsu.math.matrix.floatMatrix.Matrix4f;
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
+
 import java.util.Objects;
 
 public class ChangedModel extends Model {
