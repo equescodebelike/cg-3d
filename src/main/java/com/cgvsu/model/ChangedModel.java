@@ -1,19 +1,30 @@
 package com.cgvsu.model;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
+
+import com.cgvsu.math.matrix.floatMatrix.Matrix4f;
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
+
 import java.util.Objects;
 
 public class ChangedModel extends Model {
     private Vector3f rotate;
     private Vector3f scale;
     private Vector3f translate;
+    private boolean isRasterized = false;
 
     public ChangedModel(Model model) {
         super(model);
         rotate = new Vector3f(0, 0, 0);
         scale = new Vector3f(1, 1, 1);
         translate = new Vector3f(0, 0, 0);
+    }
+
+    public boolean isRasterized() {
+        return isRasterized;
+    }
+
+    public void setRasterized(boolean rasterized) {
+        isRasterized = rasterized;
     }
 
     public Model getModel() {
