@@ -10,13 +10,12 @@ import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.Triangle;
 import com.cgvsu.ui.Border;
-import com.cgvsu.ui.FileException;
+import com.cgvsu.ui.DialogException;
 import com.cgvsu.ui.ModelSettings;
 import com.cgvsu.ui.UIModel;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -31,7 +30,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.vecmath.Matrix4f;
@@ -62,10 +60,10 @@ public class GuiController {
 
     private final SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
 
+    ModelSettings settings;
+
     @FXML
     AnchorPane modelSettings;
-
-    ModelSettings settings;
 
     @FXML
     private AnchorPane anchorPane;
@@ -81,8 +79,6 @@ public class GuiController {
 
     @FXML
     private ListView<UIModel> listView;
-
-    private Model mesh = null;
 
     private int numberCamera = 0;
     private int numberMesh = 0;
@@ -127,7 +123,7 @@ public class GuiController {
             ImageView imageView = new ImageView(image);
             menuButton.setGraphic(imageView);
         } catch (FileNotFoundException e) {
-            new FileException("Wrong menuButton filepath!");
+            new DialogException("Wrong menuButton filepath!");
         }
 
         menuButton.setStyle("-fx-mark-color: transparent");
@@ -163,11 +159,7 @@ public class GuiController {
                 try {
                     RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
                 } catch (IOException e) {
-                    System.out.println("Exception caught in task!");
-                    Platform.runLater(() -> {
-                        Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with rendering!", ButtonType.OK);
-                        dialog.show();
-                    });
+                    new DialogException("Error with rendering!");
                 }
                 UIModel a = uiModels.get(i);
                 Model model = scene.loadedMeshes.get(i);
@@ -247,13 +239,7 @@ public class GuiController {
             fileContent = Files.readString(fileName);
 
         } catch (IOException exception) {
-            new FileException("Error with opening model!");
-            System.out.println("Exception caught in task!");
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with opening model!", ButtonType.OK);
-                dialog.show();
-            });
-
+            new DialogException("Error with reading model!");
         }
         if (scene.loadedMeshes.size() >= 1) {
             numberMesh++;
@@ -276,36 +262,57 @@ public class GuiController {
 
     }
 
-//    @FXML
-//    private void saveModelMenuItemClick() {
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-//        fileChooser.setTitle("Save Model");
-//        fileChooser.setInitialFileName("NewFileOBJ");
-//        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
-//
-//        Path fileName = Path.of(file.getAbsolutePath());
-//
-//        try {
-//            ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
-//            FileWriter writer = new FileWriter(fileName.toFile());
-//            for (String s : fileContent) {
-//                writer.write(s + "\n");
-//
-//            }
-//            writer.flush();
-//            writer.close();
-//        } catch (IOException ex) {
-//            System.out.println("Exception caught in task!");
-//            Platform.runLater(() -> {
-//                Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with saving model!", ButtonType.OK);
-//                dialog.show();
-//            });
-//        }
-//
-//    }
     @FXML
     private void saveModelMenuItemClick() {
+        Vector3f defaultRotate = new Vector3f(0, 0, 0);
+        Vector3f defaultScale = new Vector3f(1, 1, 1);
+        Vector3f defaultTranslate = new Vector3f(0, 0, 0);
+
+        try {
+            if (!Objects.equals(currentUIModel.get().getModel().getRotate(), defaultRotate) || !Objects.equals(currentUIModel.get().getModel().getScale(), defaultScale) ||
+                    !Objects.equals(currentUIModel.get().getModel().getTranslate(), defaultTranslate)) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save model with changes?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                alert.showAndWait();
+
+                if (alert.getResult() == ButtonType.YES) {
+                    saveChangedModelMenuItemClick();
+                }
+
+                if (alert.getResult() == ButtonType.NO) {
+                    saveBasicModelMenuItemClick();
+                }
+            } else {
+                saveBasicModelMenuItemClick();
+            }
+        } catch (NullPointerException e) {
+            new DialogException("Select model before saving!");
+        }
+    }
+
+    private void saveBasicModelMenuItemClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Model");
+        fileChooser.setInitialFileName("NewFileOBJ");
+        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
+
+        Path fileName = Path.of(file.getAbsolutePath());
+
+        try {
+            ArrayList<String> fileContent = ObjWriter.write(scene.loadedMeshes.get(numberMesh));
+            FileWriter writer = new FileWriter(fileName.toFile());
+            for (String s : fileContent) {
+                writer.write(s + "\n");
+
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException ex) {
+            new DialogException("Error with saving model!");
+        }
+    }
+
+    private void saveChangedModelMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Changed Model");
@@ -313,72 +320,36 @@ public class GuiController {
         File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
 
         Path fileName = Path.of(file.getAbsolutePath());
-            ChangedModel model = currentUIModel.get().getModel();
-            Matrix4f rst = rotateScaleTranslate(model.getRotate(),
-                    model.getScale(),
-                    model.getTranslate());
-            Model model1 = new Model(model);
-            model1.setVertices(new ArrayList<>());
-            for (com.cgvsu.math.Vector3f vertex : model.getVertices()) {
-                Vector3f vM = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
-                Vector3f resultVector = multiplyMatrix4ByVector3(rst, vM);
-//                System.out.println(resultVector);
-                model1.getVertices().add(new com.cgvsu.math.Vector3f(
-                        resultVector.x,
-                        resultVector.y,
-                        resultVector.z
-                ));
+        ChangedModel model = currentUIModel.get().getModel();
+        Matrix4f rst = rotateScaleTranslate(model.getRotate(),
+                model.getScale(),
+                model.getTranslate());
+        Model model1 = new Model(model);
+        model1.setVertices(new ArrayList<>());
+        for (com.cgvsu.math.Vector3f vertex : model.getVertices()) {
+            Vector3f vM = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
+            Vector3f resultVector = multiplyMatrix4ByVector3(rst, vM);
+            model1.getVertices().add(new com.cgvsu.math.Vector3f(
+                    resultVector.x,
+                    resultVector.y,
+                    resultVector.z
+            ));
+
+        }
+        try {
+            ArrayList<String> fileContent = ObjWriter.write(model1);
+            FileWriter writer = new FileWriter(fileName.toFile());
+            for (String s : fileContent) {
+                writer.write(s + "\n");
 
             }
-/*        for (int j = 0; j < model1.size(); j++) {
-                com.cgvsu.math.Vector3f vertex = model.getVertices().get(polygon.getVertexIndices().get(j));
-
-
-//                    vertex.setX(resultPoint.x);
-//                    vertex.setY(resultPoint.y);
-//                    vertex.setZ(resultPoint.z);
-            }*/
-            try {
-                ArrayList<String> fileContent = ObjWriter.write(model1);
-                FileWriter writer = new FileWriter(fileName.toFile());
-                for (String s : fileContent) {
-                    writer.write(s + "\n");
-
-                }
-                writer.flush();
-                writer.close();
-            } catch (IOException ex) {
-                System.out.println("Exception caught in task!");
-                Platform.runLater(() -> {
-                    Alert dialog = new Alert(Alert.AlertType.ERROR, "Error with saving model!", ButtonType.OK);
-                    dialog.show();
-                });
+            writer.flush();
+            writer.close();
+        } catch (IOException ex) {
+            new DialogException("Error with saving changed model!");
         }
 
     }
-
-   /* private void saveModelWithChangesMenuItemClick() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-        fileChooser.setTitle("Save Changed Model");
-        fileChooser.setInitialFileName("NewChangedFileOBJ");
-        File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
-
-        Path fileName = Path.of(file.getAbsolutePath());
-
-        ArrayList<Vector3f> newVertices = new ArrayList<>();
-        try {
-            Matrix4f rotate = rotateScaleTranslate(scene.loadedMeshes.get(numberMesh).getRotate(),
-                    scene.loadedMeshes.get(numberMesh).getScale(),
-                    scene.loadedMeshes.get(numberMesh).getTranslate());
-            for (int i = 0; i < scene.loadedMeshes.get(numberMesh).getPolygons().size(); i++) {
-                Vector3f vertexVecmath = new Vector3f(scene.loadedMeshes.get(numberMesh).getVertices().get(0).getX(),
-                        scene.loadedMeshes.get(numberMesh).getVertices().get(1).getY(),
-                        scene.loadedMeshes.get(numberMesh).getVertices().get(2).getZ());
-            }
-
-        }
-    }*/
 
     @FXML
     public void addCamera() {

@@ -1,19 +1,17 @@
 package com.cgvsu.render_engine;
 
-import java.util.ArrayList;
-
 import com.cgvsu.math.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
 import com.cgvsu.rasterization.MyColor;
 import com.cgvsu.rasterization.Rasterization;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-
-import javax.vecmath.*;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Point2f;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.cgvsu.render_engine.GraphicConveyor.*;

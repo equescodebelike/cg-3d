@@ -1,7 +1,5 @@
 package com.cgvsu.math.matrix;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Matrix3<T extends Number> extends SquareMatrix<T> {
