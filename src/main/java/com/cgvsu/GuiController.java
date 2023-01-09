@@ -140,7 +140,7 @@ public class GuiController {
         timeline.setCycleCount(Animation.INDEFINITE);
         //It's better to change. Updating every 15 millis aren't well.
         //I'll do it by myself @Nikitos
-        KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(300), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -412,5 +412,39 @@ public class GuiController {
     @FXML
     public void handleCameraDown(ActionEvent actionEvent) {
         scene.getCamera().get(numberCamera).movePosition(new Vector3f(0, -TRANSLATION, 0));
+    }
+
+    public void doScene(ActionEvent actionEvent) {
+        File file = new File();
+        if (file == null) {
+            return;
+        }
+
+        Path fileName = Path.of(file.getAbsolutePath());
+        String fileContent = "";
+        try {
+            fileContent = Files.readString(fileName);
+
+        } catch (IOException exception) {
+            new DialogException("Error with reading model!");
+        }
+        if (scene.loadedMeshes.size() >= 1) {
+            numberMesh++;
+            addCamera();
+        }
+        Model model = ObjReader.read(fileContent, writeToConsole);
+        model.setName(file.getName());
+        ChangedModel changedModel = new ChangedModel(model);
+
+        scene.loadedMeshes.add(changedModel);
+        UIModel a = new UIModel(changedModel);
+        uiModels.add(a);
+
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
+        scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
+        listView.getItems().add(a);
+        listView.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
+            currentUIModel.set(t1);
+        });
     }
 }

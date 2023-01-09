@@ -6,7 +6,7 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" prefHeight="730.0" prefWidth="1029.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
 
     <Canvas fx:id="canvas" height="927.0" layoutX="234.0" layoutY="1.0" width="879.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="234.0" AnchorPane.rightAnchor="-84.0" AnchorPane.topAnchor="1.0" />
     <ListView layoutX="-2.0" prefHeight="834.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="0.0" />
@@ -246,4 +246,5 @@
             </VBox>
         </children>
     </AnchorPane>
+   <ToggleButton fx:id="loadScene" layoutX="8.0" layoutY="74.0" mnemonicParsing="false" onAction="#doScene" text="ToggleButton" />
 </AnchorPane>
