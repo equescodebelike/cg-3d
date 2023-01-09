@@ -115,16 +115,11 @@ public class GuiController {
             currentUIModel.set(null);
         });
 
-
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream("src/main/resources/com/cgvsu/fxml/image/ico.png");
-            Image image = new Image(input);
-            ImageView imageView = new ImageView(image);
-            menuButton.setGraphic(imageView);
-        } catch (FileNotFoundException e) {
-            new DialogException("Wrong menuButton filepath!");
-        }
+        // FileInputStream input = null;
+        InputStream is = getClass().getResourceAsStream("fxml/image/ico.png");
+        Image image = new Image(is);
+        ImageView imageView = new ImageView(image);
+        menuButton.setGraphic(imageView);
 
         menuButton.setStyle("-fx-mark-color: transparent");
         menuButton.setShape(new Circle());
