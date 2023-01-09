@@ -1,16 +1,36 @@
-package com.cgvsu;
+package com.cgvsu.math;
 
+import com.cgvsu.math.vectors.Vector3;
 import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.render_engine.Camera;
 import javafx.collections.ObservableList;
 
+import static com.cgvsu.math.matrix.MatrixUtils.multiplyToFloat;
+import static com.cgvsu.math.matrix.MatrixUtils.sumToFloat;
+
 
 public class Utils {
+
+    private static Vector3f cross(Vector3f v1, Vector3f v2) {
+        float x = sumToFloat(
+                multiplyToFloat(v1.getY(), v2.getZ()),
+                -multiplyToFloat(v1.getZ(), v2.getY())
+        );
+        float y = sumToFloat(
+                -multiplyToFloat(v1.getX(), v2.getZ()),
+                multiplyToFloat(v1.getZ(), v2.getX())
+        );
+        float z = sumToFloat(
+                multiplyToFloat(v1.getX(), v2.getY()),
+                -multiplyToFloat(v1.getY(), v2.getX())
+        );
+        return new Vector3f(x, y, z);
+    }
     public static Vector3f getNormal(Vector3f p1, Vector3f p2, Vector3f p3) {
         Vector3f p1p2 = new Vector3f(p2.getX() - p1.getX(), p2.getY() - p1.getY(), p2.getZ() - p1.getZ());
         Vector3f p1p3 = new Vector3f(p3.getX() - p1.getX(), p3.getY() - p1.getY(), p3.getZ() - p1.getZ());
-        com.cgvsu.math.vectors.vectorFloat.Vector3f.cross(p1p2, p1p3);
-        return (Vector3f) Vector3f.cross(p1p2, p1p3);
+        Vector3f vector3f = cross(p1p2, p1p3);
+        return vector3f;
     }
 
     public static double getZ(Vector3f p1, Vector3f p2, Vector3f p3, double x, double y) {

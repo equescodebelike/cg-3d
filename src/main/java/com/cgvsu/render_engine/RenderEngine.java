@@ -109,15 +109,12 @@ public class RenderEngine {
                             Color.BLACK, Color.BLACK,
                             zBufferForPolygonalGrid, camera, graphicsContext.getCanvas());
                 }
-                System.out.println(mesh.getTrianglePolygons().size());
             }
 
             if (mesh.isRasterized()) {
-                System.out.println(mesh.getTrianglePolygons().size());
-                System.exit(0);
-                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
-                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
-                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
+                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
+                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
+                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
                 Rasterization.fillTriangle(gr, new Vector3f(resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0).floatValue()),
                         new Vector3f(resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1).floatValue()),
                         new Vector3f(resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2).floatValue()),
@@ -125,9 +122,21 @@ public class RenderEngine {
                         new MyColor(0, 1, 0),
                         new MyColor(0, 0, 1),
                         zBuffer, camera,
-                        vector3f1,
-                        vector3f2,
-                        vector3f3, mesh);
+                        vector3f1,vector3f2,vector3f3,
+                        mesh);
+            }
+            else if (mesh.isTextureLoaded()) {
+                    Rasterization.fillTriangleWithTexture(gr,
+                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                            MyColor.RED, MyColor.RED, MyColor.RED, zBuffer, camera, mesh.image,
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
+                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)),
+                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)),
+                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)),
+                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)), mesh);
             }
         }
 

@@ -2,7 +2,7 @@ package com.cgvsu.rasterization;
 
 
 import com.cgvsu.GuiController;
-import com.cgvsu.Utils;
+import com.cgvsu.math.Utils;
 import com.cgvsu.math.Vector2f;
 import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class Rasterization {
             final GraphicsUtils gr,
             Vector3f p1, Vector3f p2, Vector3f p3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
-            Double[][] zBuffer, Camera camera, BufferedImage image,
+            Double[][] zBuffer, Camera camera, Image image,
             Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3,
             Vector3f pointIn3D1, Vector3f pointIn3D2, Vector3f pointIn3D3, ChangedModel mesh) {
 
@@ -176,7 +177,7 @@ public class Rasterization {
             double x2, double y2, double z2,
             double x3, double y3, double z3,
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
-            Double[][] zBuffer, Camera camera, BufferedImage image,
+            Double[][] zBuffer, Camera camera, Image image,
             Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3,
             Vector3f pointIn3D1, Vector3f pointIn3D2, Vector3f pointIn3D3, ChangedModel mesh){
         fillTriangleWithTexture(gr, new Vector3f((float) x1, (float) y1, (float) z1), new Vector3f((float) x2, (float) y2, (float) z2),
@@ -238,7 +239,7 @@ public class Rasterization {
             float x1, float x2, float x3,
             float y1, float y2, float y3,
             float z1, float z2, float z3,
-            Double[][] zBuffer, Camera camera, double cosLight, BufferedImage image,
+            Double[][] zBuffer, Camera camera, double cosLight, Image image,
             Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) {
 
         if (Double.compare(startX, endX) > 0) {
@@ -266,7 +267,7 @@ public class Rasterization {
             double x, double y,
             double x1, double x2, double x3,
             double y1, double y2, double y3,
-            BufferedImage image, Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) {
+            Image image, Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3, ChangedModel mesh) {
         if (!mesh.isTextureLoaded()) {
             double detT = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
 
@@ -295,7 +296,7 @@ public class Rasterization {
         }
     }
 
-    public static MyColor getColorTexture(double x0, double y0, BufferedImage image) {
+    public static MyColor getColorTexture(double x0, double y0, Image image) {
         int width = image.getWidth() - 1;
         int height = image.getHeight() - 1;
         int x = (int) (x0 * width);
