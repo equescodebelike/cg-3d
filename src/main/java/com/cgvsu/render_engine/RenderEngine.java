@@ -1,12 +1,13 @@
 package com.cgvsu.render_engine;
 
-import com.cgvsu.math.Vector3f;
+import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
 import com.cgvsu.rasterization.MyColor;
 import com.cgvsu.rasterization.Rasterization;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Point2f;
@@ -37,6 +38,7 @@ public class RenderEngine {
 
         final int nPolygons = mesh.getPolygons().size();
         Double[][] zBuffer = new Double[width][height];
+        Double[][] zBufferForPolygonalGrid = new Double[width][height];
 
         Point2f minPoint = new Point2f(10000, 10000);
         Point2f maxPoint = new Point2f();
@@ -47,7 +49,7 @@ public class RenderEngine {
 
             ArrayList<Point2f> resultPoints = new ArrayList<>();
             for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                Vector3f vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
+                com.cgvsu.math.Vector3f vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
 
                 javax.vecmath.Vector3f vertexVecmath = new javax.vecmath.Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
                 pointsZ.add((double) vertex.getZ());
@@ -73,42 +75,59 @@ public class RenderEngine {
 
             if (mesh.isGridLoaded()) {
                 for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                    graphicsContext.strokeLine(
-                            resultPoints.get(vertexInPolygonInd - 1).x,
-                            resultPoints.get(vertexInPolygonInd - 1).y,
-                            resultPoints.get(vertexInPolygonInd).x,
-                            resultPoints.get(vertexInPolygonInd).y);
-
+                    if (!mesh.isZBuffered())
+                        graphicsContext.strokeLine(
+                                resultPoints.get(vertexInPolygonInd - 1).x,
+                                resultPoints.get(vertexInPolygonInd - 1).y,
+                                resultPoints.get(vertexInPolygonInd).x,
+                                resultPoints.get(vertexInPolygonInd).y);
+                    else
+                        Rasterization.drawLineWithZbuffer(gr,
+                                resultPoints.get(vertexInPolygonInd - 1).x,
+                                resultPoints.get(vertexInPolygonInd - 1).y,
+                                pointsZ.get(vertexInPolygonInd - 1),
+                                resultPoints.get(vertexInPolygonInd).x,
+                                resultPoints.get(vertexInPolygonInd).y,
+                                pointsZ.get(vertexInPolygonInd),
+                                Color.BLACK, Color.BLACK,
+                                zBufferForPolygonalGrid, camera, graphicsContext.getCanvas());
                 }
-                if (nVerticesInPolygon > 0) {
+                if (nVerticesInPolygon > 0 && !mesh.isZBuffered()) {
                     graphicsContext.strokeLine(
                             resultPoints.get(nVerticesInPolygon - 1).x,
                             resultPoints.get(nVerticesInPolygon - 1).y,
                             resultPoints.get(0).x,
                             resultPoints.get(0).y);
+                } else {
+                    Rasterization.drawLineWithZbuffer(gr,
+                            resultPoints.get(nVerticesInPolygon - 1).x,
+                            resultPoints.get(nVerticesInPolygon - 1).y,
+                            pointsZ.get(nVerticesInPolygon - 1),
+                            resultPoints.get(0).x,
+                            resultPoints.get(0).y,
+                            pointsZ.get(0),
+                            Color.BLACK, Color.BLACK,
+                            zBufferForPolygonalGrid, camera, graphicsContext.getCanvas());
                 }
+                System.out.println(mesh.getTrianglePolygons().size());
             }
 
             if (mesh.isRasterized()) {
-                if (mesh.getTextureVertices().size() != 0)
-                    Rasterization.fillTriangle(gr,
-                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                            MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
-                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
-                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
-                            mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)), mesh);
-                else {
-                    Rasterization.fillTriangle(gr,
-                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
-                            MyColor.RED, MyColor.GREEN, MyColor.BLUE, zBuffer, camera,
-                            null,
-                            null,
-                            null, mesh);
-                }
+                System.out.println(mesh.getTrianglePolygons().size());
+                System.exit(0);
+                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
+                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
+                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getX(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getY(), mesh.getVertices().get(mesh.getTrianglePolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
+                Rasterization.fillTriangle(gr, new Vector3f(resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0).floatValue()),
+                        new Vector3f(resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1).floatValue()),
+                        new Vector3f(resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2).floatValue()),
+                        new MyColor(1, 0, 0),
+                        new MyColor(0, 1, 0),
+                        new MyColor(0, 0, 1),
+                        zBuffer, camera,
+                        vector3f1,
+                        vector3f2,
+                        vector3f3, mesh);
             }
         }
 
