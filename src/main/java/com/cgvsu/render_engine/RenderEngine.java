@@ -16,19 +16,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cgvsu.render_engine.GraphicConveyor.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.sin;
 
 public class RenderEngine {
+
+    static int velocity = 0;
 
     public static void render(
             final GraphicsContext graphicsContext,
             final Camera camera,
             final ChangedModel mesh,
             final int width,
-            final int height) throws IOException {
+            final int height,
+            final int ticks) throws IOException {
         Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
                 mesh.getScale(),
                 mesh.getTranslate());
 
+        if (true) {
+            float vel = (float) sin((ticks)*PI/180)*20;
+            javax.vecmath.Vector3f translateVector = new javax.vecmath.Vector3f(mesh.getTranslate().x, mesh.getTranslate().y+vel, mesh.getTranslate().z);
+            modelMatrix = rotateScaleTranslate(mesh.getRotate(),
+                    mesh.getScale(),
+                    translateVector);
+        }
         Matrix4f viewMatrix = camera.getViewMatrix();
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
