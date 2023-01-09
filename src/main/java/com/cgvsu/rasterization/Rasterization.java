@@ -11,8 +11,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import javafx.scene.image.Image;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -179,7 +179,7 @@ public class Rasterization {
             MyColor myColor1, MyColor myColor2, MyColor myColor3,
             Double[][] zBuffer, Camera camera, Image image,
             Vector2f texturePoint1, Vector2f texturePoint2, Vector2f texturePoint3,
-            Vector3f pointIn3D1, Vector3f pointIn3D2, Vector3f pointIn3D3, ChangedModel mesh){
+            Vector3f pointIn3D1, Vector3f pointIn3D2, Vector3f pointIn3D3, ChangedModel mesh) {
         fillTriangleWithTexture(gr, new Vector3f((float) x1, (float) y1, (float) z1), new Vector3f((float) x2, (float) y2, (float) z2),
                 new Vector3f((float) x3, (float) y3, (float) z3),
                 myColor1, myColor2, myColor3, zBuffer, camera, image, texturePoint1, texturePoint2, texturePoint3, pointIn3D1, pointIn3D2, pointIn3D3, mesh);
@@ -292,21 +292,37 @@ public class Rasterization {
 
             double resultX = alpha * texturePoint1.getX() + betta * texturePoint2.getX() + gamma * texturePoint3.getX();
             double resultY = alpha * texturePoint1.getY() + betta * texturePoint2.getY() + gamma * texturePoint3.getY();
-            return getColorTexture(resultX, resultY, image);
+            try {
+                return getColorTexture(resultX, resultY, image);
+            } catch (Exception e) {
+
+            }
+            return null;
         }
     }
 
-    public static MyColor getColorTexture(double x0, double y0, Image image) {
-        int width = image.getWidth() - 1;
+    public static MyColor getColorTexture(double x0, double y0, javafx.scene.image.Image image) throws IOException {
+
+
+        int width = (int) image.getWidth() - 1;
+        int height = (int) image.getHeight() - 1;
+        int x = (int) (x0 * width);
+        int y = (int) (y0 * height);
+
+        Color clr = image.getPixelReader().getColor(width - x, height - y);
+        /*        int width = image.getWidth() - 1;
         int height = image.getHeight() - 1;
         int x = (int) (x0 * width);
-        int y = (int) ((1 - y0) * height);
+        int y = (int) (y0 * height);
 
-        int color = image.getRGB(x, y);
-        double red = ((color & 0x00ff0000) >> 16) / 255.0f;
-        double green = ((color & 0x0000ff00) >> 8) / 255.0f;
-        double blue = (color & 0x000000ff) / 255.0f;
-        return new MyColor(red, green, blue);
+        // Getting pixel color by position x and y
+        int clr = image.getRGB(x, y);
+        int clr =
+        double red = ((clr & 0x00ff0000) >> 16) / 255.0f;
+        double green = ((clr & 0x0000ff00) >> 8) / 255.0f;
+        double blue = (clr & 0x000000ff) / 255.0f;
+        return new MyColor(red, green, blue);*/
+        return new MyColor(clr.getRed(), clr.getGreen(), clr.getBlue());
     }
 
 }

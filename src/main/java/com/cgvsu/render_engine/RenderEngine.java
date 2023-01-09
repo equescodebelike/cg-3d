@@ -75,43 +75,22 @@ public class RenderEngine {
 
             if (mesh.isGridLoaded()) {
                 for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                    if (!mesh.isZBuffered())
                         graphicsContext.strokeLine(
                                 resultPoints.get(vertexInPolygonInd - 1).x,
                                 resultPoints.get(vertexInPolygonInd - 1).y,
                                 resultPoints.get(vertexInPolygonInd).x,
                                 resultPoints.get(vertexInPolygonInd).y);
-                    else
-                        Rasterization.drawLineWithZbuffer(gr,
-                                resultPoints.get(vertexInPolygonInd - 1).x,
-                                resultPoints.get(vertexInPolygonInd - 1).y,
-                                pointsZ.get(vertexInPolygonInd - 1),
-                                resultPoints.get(vertexInPolygonInd).x,
-                                resultPoints.get(vertexInPolygonInd).y,
-                                pointsZ.get(vertexInPolygonInd),
-                                Color.BLACK, Color.BLACK,
-                                zBufferForPolygonalGrid, camera, graphicsContext.getCanvas());
                 }
-                if (nVerticesInPolygon > 0 && !mesh.isZBuffered()) {
+                if (nVerticesInPolygon > 0 ) {
                     graphicsContext.strokeLine(
                             resultPoints.get(nVerticesInPolygon - 1).x,
                             resultPoints.get(nVerticesInPolygon - 1).y,
                             resultPoints.get(0).x,
                             resultPoints.get(0).y);
-                } else {
-                    Rasterization.drawLineWithZbuffer(gr,
-                            resultPoints.get(nVerticesInPolygon - 1).x,
-                            resultPoints.get(nVerticesInPolygon - 1).y,
-                            pointsZ.get(nVerticesInPolygon - 1),
-                            resultPoints.get(0).x,
-                            resultPoints.get(0).y,
-                            pointsZ.get(0),
-                            Color.BLACK, Color.BLACK,
-                            zBufferForPolygonalGrid, camera, graphicsContext.getCanvas());
                 }
             }
 
-            if (mesh.isRasterized()) {
+            if (mesh.isRasterized() && !mesh.isTextureLoaded()) {
                 Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
                 Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
                 Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
@@ -126,6 +105,9 @@ public class RenderEngine {
                         mesh);
             }
             else if (mesh.isTextureLoaded()) {
+                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
+                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
+                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
                     Rasterization.fillTriangleWithTexture(gr,
                             resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
                             resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
@@ -134,9 +116,9 @@ public class RenderEngine {
                             mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
                             mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),
                             mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(2)),
-                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)),
-                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)),
-                            mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)), mesh);
+                            vector3f1,
+                            vector3f2,
+                            vector3f3, mesh);
             }
         }
 
