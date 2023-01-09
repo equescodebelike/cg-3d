@@ -28,13 +28,14 @@ public class RenderEngine {
             final Camera camera,
             final ChangedModel mesh,
             final int width,
-            final int height) throws IOException {
+            final int height,
+            final int ticks) throws IOException {
         Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
                 mesh.getScale(),
                 mesh.getTranslate());
 
         if (true) {
-            float vel = (float) sin((velocity++)*PI/180)*20;
+            float vel = (float) sin((ticks)*PI/180)*20;
             javax.vecmath.Vector3f translateVector = new javax.vecmath.Vector3f(mesh.getTranslate().x, mesh.getTranslate().y+vel, mesh.getTranslate().z);
             modelMatrix = rotateScaleTranslate(mesh.getRotate(),
                     mesh.getScale(),

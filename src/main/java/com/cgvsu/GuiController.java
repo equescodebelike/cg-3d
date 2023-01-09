@@ -140,7 +140,7 @@ public class GuiController {
         timeline.setCycleCount(Animation.INDEFINITE);
         //It's better to change. Updating every 15 millis aren't well.
         //I'll do it by myself @Nikitos
-        KeyFrame frame = new KeyFrame(Duration.millis(300), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(30), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -152,7 +152,7 @@ public class GuiController {
                 canvas.setOnMousePressed(this::handleMousePressed);
                 handleWheelScroll();
                 try {
-                    RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
+                    RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height, 0);
                 } catch (IOException e) {
                     new DialogException("Error with rendering!");
                 }
@@ -415,6 +415,6 @@ public class GuiController {
     }
 
     public void doScene(ActionEvent actionEvent) {
-        currentUIModel
+        //currentUIModel
     }
 }
