@@ -61,6 +61,8 @@ public class GuiController {
     private final SimpleObjectProperty<UIModel> currentUIModel = new SimpleObjectProperty<>(this, "currentUIModel");
 
     ModelSettings settings;
+    Boolean isClicked = false;
+    int ticks =0;
 
     @FXML
     AnchorPane modelSettings;
@@ -143,7 +145,10 @@ public class GuiController {
         KeyFrame frame = new KeyFrame(Duration.millis(300), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
-
+            if(isClicked){
+                ticks++;
+                scene.getCamera().get(numberCamera).setPositionLight(ticks);
+            }
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
 
@@ -415,6 +420,7 @@ public class GuiController {
     }
 
     public void doScene(ActionEvent actionEvent) {
-        currentUIModel
+        isClicked = true;
+
     }
 }

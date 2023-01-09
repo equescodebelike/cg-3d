@@ -41,7 +41,7 @@ public class Utils {
     public static double getCosLight(Camera camera, Vector3f p1, Vector3f p2, Vector3f p3) {
         Vector3f normal = getNormal(p1, p2, p3);
         normal.normalize();
-        Vector3f target = Utils.getNormalizedVector(Utils.minus(new Vector3f(camera.getPosition().x,camera.getPosition().y,camera.getPosition().z) ,new Vector3f(camera.getTarget().x,camera.getTarget().y,camera.getTarget().z)));
+        Vector3f target = Utils.getNormalizedVector(Utils.minus(new Vector3f(camera.getPositionLight().x,camera.getPositionLight().y,camera.getPositionLight().z) ,new Vector3f(camera.getTarget().x,camera.getTarget().y,camera.getTarget().z)));
         return Math.abs(dotProduct(normal, target));
     }
 
