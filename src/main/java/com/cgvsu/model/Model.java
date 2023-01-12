@@ -1,10 +1,10 @@
 package com.cgvsu.model;
 
 import com.cgvsu.objreader.ObjReaderExceptions;
-import com.cgvsu.math.Vector2f;
-import com.cgvsu.math.Vector3f;
 
 import javax.vecmath.Point2f;
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,8 +19,8 @@ public class Model {
 
     private String name;
 
-    private Point2f minPoint2f;
-    private Point2f maxPoint2f;
+    private Point2f minPoint2f = new Point2f();
+    private Point2f maxPoint2f = new Point2f();
 
     public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons, final List<Polygon> trianglePolygons) {
         this.vertices = vertices;

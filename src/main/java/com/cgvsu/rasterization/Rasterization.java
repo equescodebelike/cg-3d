@@ -3,8 +3,6 @@ package com.cgvsu.rasterization;
 
 import com.cgvsu.GuiController;
 import com.cgvsu.math.Utils;
-import com.cgvsu.math.Vector2f;
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.render_engine.Camera;
 import javafx.scene.canvas.Canvas;
@@ -13,6 +11,8 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.image.Image;
 
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,19 +29,19 @@ public class Rasterization {
 
         List<Vector3f> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
 
-        points.sort(Comparator.comparingDouble(Vector3f::getY));
+        points.sort(Comparator.comparingDouble(value -> value.y));
         double cosLight;
         if (mesh.isLighted()) cosLight = Utils.getCosLight(camera, pointIn3d1, pointIn3d2, pointIn3d3);
         else cosLight = 1;
-        final float x1 = points.get(0).getX();
-        final float x2 = points.get(1).getX();
-        final float x3 = points.get(2).getX();
-        final float y1 = points.get(0).getY();
-        final float y2 = points.get(1).getY();
-        final float y3 = points.get(2).getY();
-        final float z1 = points.get(0).getZ();
-        final float z2 = points.get(1).getZ();
-        final float z3 = points.get(2).getZ();
+        final float x1 = points.get(0).x;
+        final float x2 = points.get(1).x;
+        final float x3 = points.get(2).x;
+        final float y1 = points.get(0).y;
+        final float y2 = points.get(1).y;
+        final float y3 = points.get(2).y;
+        final float z1 = points.get(0).z;
+        final float z2 = points.get(1).z;
+        final float z3 = points.get(2).z;
 
         for (int y = (int) (y1 + 1); y <= y2; y++) {
             double startX = getX(y, x1, x2, y1, y2);
@@ -119,7 +119,7 @@ public class Rasterization {
         List<Vector3f> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
 
 
-        if (points.get(0).getY() > points.get(1).getY()) {
+        if (points.get(0).y > points.get(1).y) {
             Vector3f tmp = points.get(1);
             points.set(1, points.get(0));
             points.set(0, tmp);
@@ -127,14 +127,14 @@ public class Rasterization {
             texturePoint1 = texturePoint2;
             texturePoint2 = tmp1;
         }
-        if (points.get(1).getY() > points.get(2).getY()) {
+        if (points.get(1).y > points.get(2).y) {
             Vector3f tmp = points.get(2);
             points.set(2, points.get(1));
             points.set(1, tmp);
             Vector2f tmp1 = texturePoint2;
             texturePoint2 = texturePoint3;
             texturePoint3 = tmp1;
-            if (points.get(0).getY() > points.get(1).getY()) {
+            if (points.get(0).y > points.get(1).y) {
                 Vector3f tmp2 = points.get(1);
                 points.set(1, points.get(0));
                 points.set(0, tmp2);
@@ -148,15 +148,15 @@ public class Rasterization {
         if (mesh.isLighted())
             cosLight = Utils.getCosLight(camera, pointIn3D1, pointIn3D2, pointIn3D3);
         else cosLight = 1;
-        final float x1 = points.get(0).getX();
-        final float x2 = points.get(1).getX();
-        final float x3 = points.get(2).getX();
-        final float y1 = points.get(0).getY();
-        final float y2 = points.get(1).getY();
-        final float y3 = points.get(2).getY();
-        final float z1 = points.get(0).getZ();
-        final float z2 = points.get(1).getZ();
-        final float z3 = points.get(2).getZ();
+        final float x1 = points.get(0).x;
+        final float x2 = points.get(1).x;
+        final float x3 = points.get(2).x;
+        final float y1 = points.get(0).y;
+        final float y2 = points.get(1).y;
+        final float y3 = points.get(2).y;
+        final float z1 = points.get(0).z;
+        final float z2 = points.get(1).z;
+        final float z3 = points.get(2).z;
 
         for (int y = (int) (y1 + 1); y <= y2; y++) {
             double startX = getX(y, x1, x2, y1, y2);
@@ -290,8 +290,8 @@ public class Rasterization {
             float betta = (float) ((x3 - x) * (y1 - y) - (y3 - y) * (x1 - x)) * detT;
             float gamma = 1.0f - (alpha + betta);
 
-            double resultX = alpha * texturePoint1.getX() + betta * texturePoint2.getX() + gamma * texturePoint3.getX();
-            double resultY = alpha * texturePoint1.getY() + betta * texturePoint2.getY() + gamma * texturePoint3.getY();
+            double resultX = alpha * texturePoint1.x + betta * texturePoint2.x + gamma * texturePoint3.x;
+            double resultY = alpha * texturePoint1.y + betta * texturePoint2.y + gamma * texturePoint3.y;
             try {
                 return getColorTexture(resultX, resultY, image);
             } catch (Exception e) {

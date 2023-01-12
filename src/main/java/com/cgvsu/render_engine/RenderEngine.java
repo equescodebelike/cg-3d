@@ -1,16 +1,16 @@
 package com.cgvsu.render_engine;
 
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.model.ChangedModel;
 import com.cgvsu.rasterization.DrawUtilsJavaFX;
 import com.cgvsu.rasterization.GraphicsUtils;
 import com.cgvsu.rasterization.MyColor;
 import com.cgvsu.rasterization.Rasterization;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Point2f;
+import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ public class RenderEngine {
             final ChangedModel mesh,
             final int width,
             final int height) throws IOException {
-        Matrix4f modelMatrix = rotateScaleTranslate(mesh.getRotate(),
-                mesh.getScale(),
-                mesh.getTranslate());
+
+
+        Matrix4f modelMatrix = mesh.getTransform();
 
         Matrix4f viewMatrix = camera.getViewMatrix();
         Matrix4f projectionMatrix = camera.getProjectionMatrix();
@@ -38,7 +38,7 @@ public class RenderEngine {
 
         final int nPolygons = mesh.getPolygons().size();
         Double[][] zBuffer = new Double[width][height];
-        Double[][] zBufferForPolygonalGrid = new Double[width][height];
+//        Double[][] zBufferForPolygonalGrid = new Double[width][height];
 
         Point2f minPoint = new Point2f(10000, 10000);
         Point2f maxPoint = new Point2f();
@@ -49,10 +49,9 @@ public class RenderEngine {
 
             ArrayList<Point2f> resultPoints = new ArrayList<>();
             for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                com.cgvsu.math.Vector3f vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
 
-                javax.vecmath.Vector3f vertexVecmath = new javax.vecmath.Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
-                pointsZ.add((double) vertex.getZ());
+                javax.vecmath.Vector3f vertexVecmath =mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
+                pointsZ.add((double) vertexVecmath.z);
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
                 //вот здесь можно находить максимальную и минимальную координату
@@ -71,7 +70,7 @@ public class RenderEngine {
                 }
                 resultPoints.add(resultPoint);
             }
-            GraphicsUtils gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
+            DrawUtilsJavaFX gr = new DrawUtilsJavaFX(graphicsContext.getCanvas());
 
             if (mesh.isGridLoaded()) {
                 for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
@@ -91,12 +90,12 @@ public class RenderEngine {
             }
 
             if (mesh.isRasterized() && !mesh.isTextureLoaded()) {
-                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
-                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
-                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
-                Rasterization.fillTriangle(gr, new Vector3f(resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0).floatValue()),
-                        new Vector3f(resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1).floatValue()),
-                        new Vector3f(resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2).floatValue()),
+                Vector3f vector3f1 =mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0));
+                Vector3f vector3f2 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1));
+                Vector3f vector3f3 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2));
+                Rasterization.fillTriangle(gr, vector3f1,
+                        vector3f2,
+                        vector3f3,
                         new MyColor(1, 0, 0),
                         new MyColor(0, 1, 0),
                         new MyColor(0, 0, 1),
@@ -105,13 +104,12 @@ public class RenderEngine {
                         mesh);
             }
             else if (mesh.isTextureLoaded()) {
-                Vector3f vector3f1 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0)).getZ());
-                Vector3f vector3f2 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1)).getZ());
-                Vector3f vector3f3 = new Vector3f(mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getX(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getY(),mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2)).getZ());
-                    Rasterization.fillTriangleWithTexture(gr,
-                            resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
-                            resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
-                            resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
+                Vector3f vector3f1 =mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0));
+                Vector3f vector3f2 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1));
+                Vector3f vector3f3 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2));
+                Rasterization.fillTriangleWithTexture(gr,      resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0),
+                        resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1),
+                        resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2),
                             MyColor.RED, MyColor.RED, MyColor.RED, zBuffer, camera, mesh.image,
                             mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(0)),
                             mesh.getTextureVertices().get(mesh.getPolygons().get(polygonInd).getTextureVertexIndices().get(1)),

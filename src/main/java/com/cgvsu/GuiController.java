@@ -18,6 +18,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -80,10 +82,11 @@ public class GuiController {
     @FXML
     private ListView<UIModel> listView;
 
-    private int numberCamera = 0;
+    private int numberCamera = -1;
     private int numberMesh = 0;
 
     private Timeline timeline;
+
 
     @FXML
     private void initialize() {
@@ -94,7 +97,7 @@ public class GuiController {
         anchorPane.widthProperty().addListener((observableValue, number, t1) -> canvas.setWidth(t1.intValue()));
         anchorPane.heightProperty().addListener((observableValue, number, t1) -> canvas.setHeight(t1.intValue()));
 
-
+        addCamera();
         currentUIModel.addListener((observableValue, uiModel, t1) -> {
             isClickedOnModel = t1 != null;
             settings.setCurrentModel(t1);
@@ -141,45 +144,20 @@ public class GuiController {
         });
 
         changeTheme.getChildren().add(button);
-        timeline = new Timeline();
-        timeline.setCycleCount(Animation.INDEFINITE);
-        //It's better to change. Updating every 15 millis aren't well.
-        //I'll do it by myself @Nikitos
-        KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
-            double width = canvas.getWidth();
-            double height = canvas.getHeight();
 
-            canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
-            scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
+        canvas.boundsInLocalProperty().addListener((observableValue, bounds, t1) -> scene.getCamera().get(numberCamera).setAspectRatio((float) (t1.getWidth() / t1.getHeight())));
 
-            for (int i = 0; i < scene.loadedMeshes.size(); i++) {
 
-                canvas.setOnMousePressed(this::handleMousePressed);
-                handleWheelScroll();
-                try {
-                    RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
-                } catch (IOException e) {
-                    new DialogException("Error with rendering!");
-                }
-                UIModel a = uiModels.get(i);
-                Model model = scene.loadedMeshes.get(i);
-                Point2f minP = model.getMinPoint2f();
-                Point2f maxP = model.getMaxPoint2f();
-                a.setSize(minP, maxP);
-            }
-            if (isClickedOnModel) {
-                Border b = currentUIModel.get().getBorder();
-                canvas.getGraphicsContext2D().strokeRect(
-                        b.getScale().x,
-                        b.getScale().y,
-                        b.getWidth(),
-                        b.getHeight()
-                );
-            }
-        });
 
-        timeline.getKeyFrames().add(frame);
-        timeline.play();
+        canvas.setOnMousePressed(this::handleMousePressed);
+        handleWheelScroll();
+
+//        KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
+//
+//        });
+//
+//        timeline.getKeyFrames().add(frame);
+//        timeline.play();
     }
 
     private void handleWheelScroll() {
@@ -249,9 +227,35 @@ public class GuiController {
         model.setName(file.getName());
         ChangedModel changedModel = new ChangedModel(model);
 
+        changedModel.transformProperty().addListener((observableValue, matrix4f, t1) -> {
+            double width = canvas.getWidth();
+            double height = canvas.getHeight();
+            Border b  = currentUIModel.get().getBorder();
+            ChangedModel model1 = currentUIModel.get().getModel();
+            Point2f maxP;
+            Point2f minP /*= model1.getMinPoint2f()*/;
+
+//            canvas.getGraphicsContext2D().clearRect(minP.x, minP.y, b.getWidth(), b.getHeight());
+            canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
+
+            try {
+                RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), currentUIModel.get().getModel(), (int) width, (int) height);
+            } catch (IOException e) {
+                new DialogException("Error with rendering!");
+            }
+            UIModel a = currentUIModel.get();
+            model1 = a.getModel();
+            minP = model1.getMinPoint2f();
+            maxP = model1.getMaxPoint2f();
+            a.setSize(minP, maxP);
+        });
+
         scene.loadedMeshes.add(changedModel);
         UIModel a = new UIModel(changedModel);
         uiModels.add(a);
+
+        currentUIModel.set(a);
+        changedModel.initialize();
 
         ArrayList<Polygon> triangles = Triangle.triangulatePolygon(scene.loadedMeshes.get(numberMesh).getPolygons());
         scene.loadedMeshes.get(numberMesh).setPolygons(triangles);
@@ -326,14 +330,9 @@ public class GuiController {
                 model.getTranslate());
         Model model1 = new Model(model);
         model1.setVertices(new ArrayList<>());
-        for (com.cgvsu.math.Vector3f vertex : model.getVertices()) {
-            Vector3f vM = new Vector3f(vertex.getX(), vertex.getY(), vertex.getZ());
-            Vector3f resultVector = multiplyMatrix4ByVector3(rst, vM);
-            model1.getVertices().add(new com.cgvsu.math.Vector3f(
-                    resultVector.x,
-                    resultVector.y,
-                    resultVector.z
-            ));
+        for (Vector3f vertex : model.getVertices()) {
+            Vector3f resultVector = multiplyMatrix4ByVector3(rst, vertex);
+            model1.getVertices().add(resultVector);
 
         }
         try {
@@ -353,11 +352,51 @@ public class GuiController {
 
     @FXML
     public void addCamera() {
-        scene.getCamera().add(new Camera(
+        Camera camera = new Camera(
                 new Vector3f(0, 0, 100),
                 new Vector3f(0, 0, 0),
-                1.0F, 1, 0.01F, 100));
+                1.0F, 1, 0.01F, 100);
+
+        scene.getCamera().add(camera);
         numberCamera++;
+        camera.isChangedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (t1) {
+                    double width = canvas.getWidth();
+                    double height = canvas.getHeight();
+
+                    canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
+
+//            scene.getCamera().get(numberCamera).setAspectRatio((float) (width / height));
+                    for (int i = 0; i < scene.loadedMeshes.size(); i++) {
+
+                        try {
+                            RenderEngine.render(canvas.getGraphicsContext2D(), scene.getCamera().get(numberCamera), scene.loadedMeshes.get(i), (int) width, (int) height);
+                        } catch (IOException e) {
+                            new DialogException("Error with rendering!");
+                        }
+                        UIModel a = uiModels.get(i);
+                        Model model = scene.loadedMeshes.get(i);
+                        Point2f minP = model.getMinPoint2f();
+                        Point2f maxP = model.getMaxPoint2f();
+                        a.setSize(minP, maxP);
+                    }
+                    if (isClickedOnModel) {
+                        Border b = currentUIModel.get().getBorder();
+                        canvas.getGraphicsContext2D().strokeRect(
+                                b.getScale().x,
+                                b.getScale().y,
+                                b.getWidth(),
+                                b.getHeight()
+                        );
+                    }
+                    camera.setIsChanged(false);
+                }
+
+            }
+        });
+
     }
 
     @FXML

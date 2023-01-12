@@ -1,41 +1,34 @@
 package com.cgvsu.math;
 
-import com.cgvsu.math.vectors.Vector3;
-import com.cgvsu.math.vectors.vectorFloat.Vector3f;
 import com.cgvsu.render_engine.Camera;
 import javafx.collections.ObservableList;
-
-import static com.cgvsu.math.matrix.MatrixUtils.multiplyToFloat;
-import static com.cgvsu.math.matrix.MatrixUtils.sumToFloat;
+import javax.vecmath.Vector3f;
 
 
 public class Utils {
 
-    private static Vector3f cross(Vector3f v1, Vector3f v2) {
-        float x = sumToFloat(
-                multiplyToFloat(v1.getY(), v2.getZ()),
-                -multiplyToFloat(v1.getZ(), v2.getY())
-        );
-        float y = sumToFloat(
-                -multiplyToFloat(v1.getX(), v2.getZ()),
-                multiplyToFloat(v1.getZ(), v2.getX())
-        );
-        float z = sumToFloat(
-                multiplyToFloat(v1.getX(), v2.getY()),
-                -multiplyToFloat(v1.getY(), v2.getX())
-        );
-        return new Vector3f(x, y, z);
-    }
+//    private static Vector3f cross(Vector3f v1, Vector3f v2) {
+//        float x = sumToFloat(
+//                multiplyToFloat(v1.y, v2.z),
+//                -multiplyToFloat(v1.z, v2.y
+//        );
+//        float y = sumToFloat(
+//                -multiplyToFloat(v1.x, v2.z),
+//                multiplyToFloat(v1.z, v2.x)
+//        );
+//        float z =  v1.x + v2.z -(v1.z + v2.x);
+//        return new Vector3f(x, y, z);
+//    }
     public static Vector3f getNormal(Vector3f p1, Vector3f p2, Vector3f p3) {
-        Vector3f p1p2 = new Vector3f(p2.getX() - p1.getX(), p2.getY() - p1.getY(), p2.getZ() - p1.getZ());
-        Vector3f p1p3 = new Vector3f(p3.getX() - p1.getX(), p3.getY() - p1.getY(), p3.getZ() - p1.getZ());
-        Vector3f vector3f = cross(p1p2, p1p3);
-        return vector3f;
+        Vector3f p1p2 = new Vector3f(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+        Vector3f p1p3 = new Vector3f(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
+        p1p2.cross(p1p2,p1p3);
+        return p1p2;
     }
 
     public static double getZ(Vector3f p1, Vector3f p2, Vector3f p3, double x, double y) {
         Vector3f normal = getNormal(p1, p2, p3);
-        return (-normal.getX() * (x - p1.getX()) - normal.getY() * (y - p1.getY())) / normal.getZ() + p1.getZ();
+        return (-normal.x * (x - p1.x) - normal.y * (y - p1.y)) / normal.z + p1.z;
     }
 
     public static double getCosLight(Camera camera, Vector3f p1, Vector3f p2, Vector3f p3) {
@@ -46,9 +39,9 @@ public class Utils {
     }
 
     public static Vector3f getNormalizedVector(Vector3f vector) {
-        float length = (float)Math.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
+        float length = (float)Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
         if (length != 0)
-            return new Vector3f(vector.getX() / length, vector.getY() / length, vector.getZ() / length);
+            return new Vector3f(vector.x / length, vector.y / length, vector.z / length);
         return new Vector3f(0,0,0);
     }
 
@@ -65,10 +58,10 @@ public class Utils {
     }
 
     public static double dotProduct(Vector3f vector1, Vector3f vector2) {
-        return vector1.getX() * vector2.getX() + vector1.getY() * vector2.getY() + vector1.getZ() * vector2.getZ();
+        return vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z;
     }
 
     public static Vector3f minus(Vector3f vector1 , Vector3f vector2){
-        return new Vector3f(vector2.getX() - vector1.getX() , vector2.getY() - vector1.getY(), vector2.getZ() - vector1.getZ());
+        return new Vector3f(vector2.x - vector1.x , vector2.y - vector1.y, vector2.z - vector1.z);
     }
 }

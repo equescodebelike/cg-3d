@@ -1,9 +1,19 @@
 package com.cgvsu.render_engine;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 import javax.vecmath.Vector3f;
 import javax.vecmath.Matrix4f;
 
 public class Camera {
+
+    private Vector3f position;
+    private Vector3f target;
+    private float fov;
+    private float aspectRatio;
+    private float nearPlane;
+    private float farPlane;
+    SimpleBooleanProperty isChanged;
 
     public Camera(
             final Vector3f position,
@@ -18,6 +28,7 @@ public class Camera {
         this.aspectRatio = aspectRatio;
         this.nearPlane = nearPlane;
         this.farPlane = farPlane;
+        isChanged = new SimpleBooleanProperty(this, "isChanged", false);
     }
 
     public void setPosition(final Vector3f position) {
@@ -30,6 +41,7 @@ public class Camera {
 
     public void setAspectRatio(final float aspectRatio) {
         this.aspectRatio = aspectRatio;
+        isChanged.set(true);
     }
 
     public Vector3f getPosition() {
@@ -42,10 +54,12 @@ public class Camera {
 
     public void movePosition(final Vector3f translation) {
         this.position.add(translation);
+        isChanged.set(true);
     }
 
     public void moveTarget(final Vector3f translation) {
         this.target.add(target);
+        isChanged.set(true);
     }
 
     Matrix4f getViewMatrix() {
@@ -56,10 +70,11 @@ public class Camera {
         return GraphicConveyor.perspective(fov, aspectRatio, nearPlane, farPlane);
     }
 
-    private Vector3f position;
-    private Vector3f target;
-    private float fov;
-    private float aspectRatio;
-    private float nearPlane;
-    private float farPlane;
+    public void setIsChanged(boolean isChanged) {
+        this.isChanged.set(isChanged);
+    }
+
+    public SimpleBooleanProperty isChangedProperty() {
+        return isChanged;
+    }
 }

@@ -1,6 +1,7 @@
 package com.cgvsu.ui;
 
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -58,15 +59,17 @@ public class ModelSettings {
     }
 
 
-    public class ModelTransform {
+    public static class ModelTransform {
         Label nameOfTransform;
         ModelTransformByAxis modelTransformByX;
         ModelTransformByAxis modelTransformByY;
         ModelTransformByAxis modelTransformByZ;
 
+        SimpleBooleanProperty isChanged = new SimpleBooleanProperty(this, "isChanged", false);
+
         SimpleObjectProperty<Vector3f> vector = new SimpleObjectProperty<>(this, "vector", new Vector3f());
 
-        private class ModelTransformByAxis {
+        private static class ModelTransformByAxis {
             Label axis;
             TextField textField;
             Slider slider;
@@ -99,23 +102,29 @@ public class ModelSettings {
 
             BorderPane borderPaneX = (BorderPane) vBox.getChildren().get(1);
             modelTransformByX = new ModelTransformByAxis(borderPaneX);
-            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> vector.get().x = t1.floatValue());
+            modelTransformByX.currentValue.addListener((observableValue, number, t1) -> {
+                vector.get().x = t1.floatValue();
+                isChanged.set(true);
+            });
 
             BorderPane borderPaneY = (BorderPane) vBox.getChildren().get(2);
             modelTransformByY = new ModelTransformByAxis(borderPaneY);
-            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> vector.get().y = t1.floatValue());
+            modelTransformByY.currentValue.addListener((observableValue, number, t1) -> {
+                vector.get().y = t1.floatValue();
+                isChanged.set(true);
+            });
 
             BorderPane borderPaneZ = (BorderPane) vBox.getChildren().get(3);
             modelTransformByZ = new ModelTransformByAxis(borderPaneZ);
-            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> vector.get().z = t1.floatValue());
+            modelTransformByZ.currentValue.addListener((observableValue, number, t1) -> {
+                vector.get().z = t1.floatValue();
+                isChanged.set(true);
+            });
 
-            vector.addListener(new ChangeListener<Vector3f>() {
-                @Override
-                public void changed(ObservableValue<? extends Vector3f> observableValue, Vector3f vector3f, Vector3f t1) {
-                    modelTransformByX.textField.setText((int) t1.x + "");
-                    modelTransformByY.textField.setText((int) t1.y + "");
-                    modelTransformByZ.textField.setText((int) t1.z + "");
-                }
+            vector.addListener((observableValue, vector3f, t1) -> {
+                modelTransformByX.textField.setText((int) t1.x + "");
+                modelTransformByY.textField.setText((int) t1.y + "");
+                modelTransformByZ.textField.setText((int) t1.z + "");
             });
         }
 
@@ -174,13 +183,46 @@ public class ModelSettings {
 
         unloadTexture = (CheckBox) vBox.getChildren().get(6);
         unloadTexture.selectedProperty().addListener(this::uploadTextureChanged);
+        rotateTransform.isChanged.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (t1){
+                    currentModel.get().model.setRotate( new Vector3f(rotateTransform.vector.get()));
+                    rotateTransform.isChanged.setValue(false);
+                }
+            }
+        });
+
+        scaleTransform.isChanged.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (t1){
+                    currentModel.get().model.setScale( new Vector3f(scaleTransform.vector.get()));
+                    scaleTransform.isChanged.setValue(false);
+                }
+            }
+        });
+        translateTransform.isChanged.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (t1){
+                    currentModel.get().model.setTranslate( new Vector3f(translateTransform.vector.get()));
+                    translateTransform.isChanged.setValue(false);
+                }
+            }
+        });
+
         currentModel.addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends UIModel> observableValue, UIModel uiModel, UIModel t1) {
                 if (t1 != null) {
-                    rotateTransform.setVector(t1.model.getRotate());
-                    scaleTransform.setVector(t1.model.getScale());
-                    translateTransform.setVector(t1.model.getTranslate());
+
+                    Vector3f rotate = t1.model.getRotate();
+                    rotateTransform.setVector(new Vector3f(rotate));
+                    Vector3f scale = t1.model.getScale();
+                    scaleTransform.setVector(new Vector3f(scale));
+                    Vector3f translate = t1.model.getTranslate();
+                    translateTransform.setVector(new Vector3f(translate));
 
                     rasterization.setSelected(t1.model.isRasterized());
                     zBuffer.setSelected(t1.model.isZBuffered());
@@ -195,9 +237,6 @@ public class ModelSettings {
                         translateTransition.setFromX(175);
                         translateTransition.setToX(0);
                     }
-                    currentModel.get().model.setRotate(rotateTransform.vector.get());
-                    currentModel.get().model.setScale(scaleTransform.vector.get());
-                    currentModel.get().model.setTranslate(translateTransform.vector.get());
                 } else {
                     if (uiModel != null) {
 
