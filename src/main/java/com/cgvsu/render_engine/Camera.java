@@ -1,7 +1,5 @@
 package com.cgvsu.render_engine;
 
-import javafx.beans.property.SimpleBooleanProperty;
-
 import javax.vecmath.Vector3f;
 import javax.vecmath.Matrix4f;
 
@@ -13,6 +11,7 @@ public class Camera {
     private float aspectRatio;
     private float nearPlane;
     private float farPlane;
+    private Vector3f positionLight;
     SimpleBooleanProperty isChanged;
 
     public Camera(
@@ -23,6 +22,7 @@ public class Camera {
             final float nearPlane,
             final float farPlane) {
         this.position = position;
+        this.positionLight = new Vector3f(position);
         this.target = target;
         this.fov = fov;
         this.aspectRatio = aspectRatio;
@@ -76,5 +76,13 @@ public class Camera {
 
     public SimpleBooleanProperty isChangedProperty() {
         return isChanged;
+    }
+
+    public Vector3f getPositionLight() {
+        return positionLight;
+    }
+
+    public void setPositionLight(float tick) {
+        positionLight = new Vector3f(position.x*((float) Math.sin(tick*Math.PI/180)),0,position.y*((float) Math.cos(tick* Math.PI/180)));
     }
 }
