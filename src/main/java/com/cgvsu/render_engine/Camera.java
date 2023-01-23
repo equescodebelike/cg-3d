@@ -1,5 +1,7 @@
 package com.cgvsu.render_engine;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 import javax.vecmath.Vector3f;
 import javax.vecmath.Matrix4f;
 

@@ -246,5 +246,4 @@
             </VBox>
         </children>
     </AnchorPane>
-   <ToggleButton fx:id="loadScene" layoutX="8.0" layoutY="74.0" mnemonicParsing="false" onAction="#doScene" text="ToggleButton" />
 </AnchorPane>
