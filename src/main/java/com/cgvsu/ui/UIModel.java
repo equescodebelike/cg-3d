@@ -19,6 +19,7 @@ public class UIModel {
     public void setSize(Point2f minPoint2f, Point2f maxPoint2f) {
         border.setScale(minPoint2f);
         border.setRightTop(maxPoint2f);
+
     }
 
     public Border getBorder() {

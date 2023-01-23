@@ -14,13 +14,10 @@ import javafx.scene.image.Image;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Rasterization {
-
+    //todo: delete My class graphicsUtils and MyColor
     public static void fillTriangle(
             final GraphicsUtils gr,
             Vector3f p1, Vector3f p2, Vector3f p3,
@@ -28,11 +25,44 @@ public class Rasterization {
             Double[][] zBuffer, Camera camera, Vector3f pointIn3d1, Vector3f pointIn3d2, Vector3f pointIn3d3, ChangedModel mesh) {
 
         List<Vector3f> points = new ArrayList<>(Arrays.asList(p1, p2, p3));
+//        Map<Vector3f,MyColor> pointsAndColors = new TreeMap<>();
+        SortedMap<Vector3f,MyColor> pointsAndColors = new TreeMap<>((o1, o2) -> Float.compare(o1.y,o2.y));
+        pointsAndColors.put(p1,myColor1);
+        pointsAndColors.put(p2,myColor2);
+        pointsAndColors.put(p3,myColor3);
 
-        points.sort(Comparator.comparingDouble(value -> value.y));
+//        points.sort(Comparator.comparingDouble(value -> value.y));
+
+        //todo: get an account in gpt and separate p1,p2,p3 into x1,x2,x3 ... z3
+
         double cosLight;
         if (mesh.isLighted()) cosLight = Utils.getCosLight(camera, pointIn3d1, pointIn3d2, pointIn3d3);
         else cosLight = 1;
+
+//        float tmpX;
+//        float tmpY;
+//        float tmpZ;
+//        if (y1 <= y2 && y1 <= y3 ){
+//            if (y2 >= y3){
+//                tmpX = x3;
+//                tmpY = y3;
+//                tmpZ = z3;
+//                x3 = x2;
+//                y3 = y2;
+//                z3 = z2;
+//                x2 =tmpX;
+//                y2 =tmpY;
+//                z2 =tmpZ;
+//            }
+//        }
+//        else if (y1 > y2){
+//
+//        }
+//        pointsAndColors.
+//        Set<Vector3f> points = pointsAndColors.keySet();
+        for (Map.Entry<Vector3f, MyColor> vector3fMyColorEntry : pointsAndColors.entrySet()) {
+
+        }
         final float x1 = points.get(0).x;
         final float x2 = points.get(1).x;
         final float x3 = points.get(2).x;

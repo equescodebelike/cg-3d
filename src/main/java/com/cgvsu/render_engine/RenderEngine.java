@@ -45,13 +45,13 @@ public class RenderEngine {
 
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
             final int nVerticesInPolygon = mesh.getPolygons().get(polygonInd).getVertexIndices().size();
-            List<Double> pointsZ = new ArrayList<>();
+            List<Float> pointsZ = new ArrayList<>();
 
             ArrayList<Point2f> resultPoints = new ArrayList<>();
             for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
 
                 javax.vecmath.Vector3f vertexVecmath =mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
-                pointsZ.add((double) vertexVecmath.z);
+                pointsZ.add( vertexVecmath.z);
 
                 Point2f resultPoint = vertexToPoint(multiplyMatrix4ByVector3(modelViewProjectionMatrix, vertexVecmath), width, height);
                 //вот здесь можно находить максимальную и минимальную координату
@@ -93,9 +93,9 @@ public class RenderEngine {
                 Vector3f vector3f1 =mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(0));
                 Vector3f vector3f2 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(1));
                 Vector3f vector3f3 = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(2));
-                Rasterization.fillTriangle(gr, vector3f1,
-                        vector3f2,
-                        vector3f3,
+                Rasterization.fillTriangle(gr, new Vector3f(resultPoints.get(0).x, resultPoints.get(0).y, pointsZ.get(0)), //it's a vector. i don't know why someone did like this
+                        new Vector3f(resultPoints.get(1).x, resultPoints.get(1).y, pointsZ.get(1)),
+                        new Vector3f(resultPoints.get(2).x, resultPoints.get(2).y, pointsZ.get(2)),
                         new MyColor(1, 0, 0),
                         new MyColor(0, 1, 0),
                         new MyColor(0, 0, 1),
